@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://cokjsgiqx7yu3"]
+
+[ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_oxorg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mg3so"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Textbox" type="CanvasLayer"]
+
+[node name="ParentBox" type="MarginContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -180.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Background" type="Panel" parent="ParentBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mg3so")
+
+[node name="InnerBox" type="MarginContainer" parent="ParentBox/Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="TextField" type="Panel" parent="ParentBox/Background/InnerBox"]
+layout_mode = 2
+script = ExtResource("1_oxorg")
+
+[node name="Label" type="Label" parent="ParentBox/Background"]
+layout_mode = 0
+offset_left = 1097.0
+offset_top = 110.0
+offset_right = 1137.0
+offset_bottom = 133.0
+text = "v"
