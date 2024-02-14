@@ -1,31 +1,24 @@
+namespace MVM23.Scripts;
+
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using static Utilities.Tokenizer;
 
 public partial class TextField : Panel
 {
-    private enum TokenType
-    {
-        Undefined,
-        Normal,
-        Bold,
-        Quiet,
-        Shaking,
-    }
-    
-    private const string TestString = "The quick brown fox jumps *over* the lazy dog.";
+private const string TestString = "The [red]quick [green]brown[/green][/red][big]fox [blue]jumps over the[/blue][/big] [small]lazy[green] dog[/green][/small].";
 
-    private readonly List<(TokenType, string)> _visibleTokens = new();
-    private readonly List<(TokenType, string)> _remainingTokens = new();
+    private readonly List<Token> _visibleTokens = new();
+    private List<Token> _remainingTokens = new();
 
-    private (TokenType, string) _currentToken = (TokenType.Undefined, "null");
+    private Token _currentToken;
 
     private Font _font;
     private Label _endLabel;
 
     private bool _textRemaining;
-    private const float AlphaIncrement = 0.02F;
+    private const float AlphaIncrement = 0.015F;
     private float _curAlpha;
     
     
@@ -35,18 +28,10 @@ public partial class TextField : Panel
         _font = ThemeDB.FallbackFont;
         _endLabel = GetNode<Label>("../../Label");
         _endLabel.Visible = false;
-        
-        foreach (var word in TestString.Split(' '))
-        {
-            if (word.Contains('*'))
-            {
-                _remainingTokens.Add((TokenType.Bold, $"{Regex.Replace(word, "\\*", "")} "));
-            }
-            else
-            {
-                _remainingTokens.Add((TokenType.Normal, $"{word} "));
-            }
-        }
+
+        _remainingTokens = TokenizeString(TestString);
+
+        _currentToken = new Token("null", TokenType.Undefined);
 
         if (_remainingTokens.Count > 0)
         {
@@ -58,16 +43,14 @@ public partial class TextField : Panel
     {
         // var curLine = 1;
         var curLinePos = 0F;
-        const int fontSize = 20;
-        var height = _font.GetHeight(fontSize);
+        var height = _font.GetHeight(20);
         foreach (var visToken in _visibleTokens)
         {
-            var tokenColor = visToken.Item1 == TokenType.Normal ? Colors.White : Colors.Red;
-            DrawString(_font, new Vector2(curLinePos, height), visToken.Item2, HorizontalAlignment.Left, -1F, fontSize, tokenColor);
-            curLinePos += _font.GetStringSize(visToken.Item2, HorizontalAlignment.Left, -1F, fontSize).X;
+            DrawString(_font, new Vector2(curLinePos, height), visToken.Text, HorizontalAlignment.Left, -1F, visToken.FontSize, visToken.Color);
+            curLinePos += _font.GetStringSize(visToken.Text, HorizontalAlignment.Left, -1F, visToken.FontSize).X;
         }
 
-        if (_currentToken.Item1 == TokenType.Undefined)
+        if (_currentToken.Type == TokenType.Undefined)
         {
             if (_remainingTokens.Count > 0)
             {
@@ -83,16 +66,19 @@ public partial class TextField : Panel
             }
         }
         
-        var curTokenColor = _currentToken.Item1 == TokenType.Normal ? Colors.White : Colors.Red;
+        var curTokenColor = _currentToken.Color;
         curTokenColor.A = (float)Math.Min(_curAlpha + AlphaIncrement, 1.0);
         _curAlpha = curTokenColor.A;
-        DrawString(_font, new Vector2(curLinePos, height), _currentToken.Item2, HorizontalAlignment.Left, -1F, fontSize, curTokenColor);
+        DrawString(_font, new Vector2(curLinePos, height), _currentToken.Text, HorizontalAlignment.Left, -1F, _currentToken.FontSize, curTokenColor);
+        _currentToken.Color = curTokenColor;
 
         if (_curAlpha < 1.0F) return;
         
         _visibleTokens.Add(_currentToken);
-        _currentToken = (TokenType.Undefined, "null");
+        _currentToken = new Token("null", TokenType.Undefined);
     }
+
+
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)

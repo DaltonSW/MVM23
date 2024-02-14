@@ -10,14 +10,14 @@ config_version=5
 
 [application]
 
-config/name="MetroidvaniaMonth23"
+config/name="MVM23"
 run/main_scene="res://Scenes/textbox.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [dotnet]
 
-project/assembly_name="MetroidvaniaMonth23"
+project/assembly_name="MVM23"
 
 [rendering]
 

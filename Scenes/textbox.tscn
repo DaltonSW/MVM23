@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cokjsgiqx7yu3"]
 
-[ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_oxorg"]
+[ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_jxaen"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mg3so"]
 bg_color = Color(0, 0, 0, 1)
@@ -47,7 +47,7 @@ theme_override_constants/margin_bottom = 16
 
 [node name="TextField" type="Panel" parent="ParentBox/Background/InnerBox"]
 layout_mode = 2
-script = ExtResource("1_oxorg")
+script = ExtResource("1_jxaen")
 
 [node name="Label" type="Label" parent="ParentBox/Background"]
 layout_mode = 0
