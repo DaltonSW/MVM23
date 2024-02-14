@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cokjsgiqx7yu3"]
+[gd_scene load_steps=4 format=3 uid="uid://cokjsgiqx7yu3"]
 
 [ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_jxaen"]
 
@@ -13,6 +13,9 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ec8u2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Textbox" type="CanvasLayer"]
 
@@ -47,6 +50,7 @@ theme_override_constants/margin_bottom = 16
 
 [node name="TextField" type="Panel" parent="ParentBox/Background/InnerBox"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ec8u2")
 script = ExtResource("1_jxaen")
 
 [node name="Label" type="Label" parent="ParentBox/Background"]

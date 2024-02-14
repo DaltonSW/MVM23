@@ -11,95 +11,130 @@ public static class Tokenizer
     public class Token
     {
         public string Text { get; set; }
-        public TokenType Type { get; set; }
+        public TokenFlags Flags { get; set; }
         public Color Color { get; set; }
         public int FontSize { get; set; }
+        public FontFile Font { get; set; }
+        public float StringSize { get; set; }
 
-    public Token(string text, TokenType type)
+        public Token(string text, TokenFlags flags)
         {
-            Text = text;
-            Type = type;
-            Color = GetTokenColor(type);
-            FontSize = GetTokenFontSize(type);
+            Text = $"{text}{' ' }";
+            Flags = flags;
+            Color = GetColor();
+            FontSize = GetFontSize();
+            Font = GetFont();
+            StringSize = GetTokenStringSize();
+        }
+        
+        private Color GetColor()
+        {
+            var color = new Color(Colors.Black);
+            if (IsFlagSet(Flags, TokenFlags.Red))
+            {
+                color += Colors.Red;
+            }
+            if (IsFlagSet(Flags, TokenFlags.Green))
+            {
+                color += Colors.Green;
+            }
+            if (IsFlagSet(Flags, TokenFlags.Blue))
+            {
+                color += Colors.Blue;
+            }
+
+            if (color == Colors.Black)
+            {
+                color = Colors.White;
+            }
+
+            return color;
+        }
+
+        private int GetFontSize()
+        {
+            var size = ThemeConsts.RegularTextSize;
+        
+            if (IsFlagSet(Flags, TokenFlags.Big))
+            {
+                size += 5;
+            }
+            else if (IsFlagSet(Flags, TokenFlags.Small))
+            {
+                size -= 5;
+            }
+
+            return size;
+        }
+
+        private FontFile GetFont()
+        {
+            if (IsFlagSet(TokenFlags.Bold, Flags) && IsFlagSet(TokenFlags.Italic, Flags))
+            {
+                return ThemeConsts.BoldItalicText;
+            }
+            
+            if (IsFlagSet(TokenFlags.Bold, Flags))
+            {
+                return ThemeConsts.BoldText;
+            }
+            
+            if (IsFlagSet(TokenFlags.Italic, Flags))
+            {
+                return ThemeConsts.ItalicText;
+            }
+            
+            return ThemeConsts.RegularText;
+        }
+
+        private float GetTokenStringSize()
+        {
+            return Font.GetStringSize(Text, HorizontalAlignment.Left, -1F, FontSize).X;
         }
     }
     
     [Flags]
-    public enum TokenType
+    public enum TokenFlags
     {
         Undefined = -1,
         Normal = 0,
         Big = 1,
         Small = 2,
+        
         Red = 4,
         Green = 8,
         Blue = 16,
         
+        Bold = 32,
+        Italic = 64,
+        
         ClearFlag = int.MaxValue
     }
     
-    private static Color GetTokenColor(TokenType tokenType)
+
+
+    private static void SetFlag(TokenFlags flag)
     {
-        var color = new Color(Colors.Black);
-        if (IsFlagSet(tokenType, TokenType.Red))
-        {
-            color += Colors.Red;
-        }
-        if (IsFlagSet(tokenType, TokenType.Green))
-        {
-            color += Colors.Green;
-        }
-        if (IsFlagSet(tokenType, TokenType.Blue))
-        {
-            color += Colors.Blue;
-        }
-
-        if (color == Colors.Black)
-        {
-            color = Colors.White;
-        }
-
-        return color;
+        _currentFlags |= flag;
     }
 
-    private static int GetTokenFontSize(TokenType tokenType)
+    private static void RemoveFlag(TokenFlags flag)
     {
-        var size = 20;
-        
-        if (IsFlagSet(tokenType, TokenType.Big))
-        {
-            size += 5;
-        }
-        else if (IsFlagSet(tokenType, TokenType.Small))
-        {
-            size -= 5;
-        }
-
-        return size;
+        _currentFlags &= flag ^ TokenFlags.ClearFlag;
     }
 
-    private static void SetFlag(TokenType flag)
-    {
-        _currentType |= flag;
-    }
-
-    private static void RemoveFlag(TokenType flag)
-    {
-        _currentType &= flag ^ TokenType.ClearFlag;
-    }
-
-    public static bool IsFlagSet(TokenType overall, TokenType flag)
+    private static bool IsFlagSet(TokenFlags overall, TokenFlags flag)
     {
         return (overall & flag) > 0;
     }
 
-    private static TokenType _currentType = TokenType.Normal;
+    private static TokenFlags _currentFlags = TokenFlags.Normal;
 
     public static List<Token> TokenizeString(string text)
     {
         var tokens = new List<Token>();
 
-        const string pattern = @"\[[^\]]+\]|[^\[]+";
+        const string pattern = @"(\[\/?[^\]]+\])|(\w+)|([.,?!])";
         var matches = Regex.Matches(text, pattern);
         
         foreach (Match match in matches)
@@ -116,12 +151,19 @@ public static class Tokenizer
                 
                 var tokenType = tokenText switch
                 {
-                    "[big]" => TokenType.Big,
-                    "[small]" => TokenType.Small,
-                    "[red]" => TokenType.Red,
-                    "[green]" => TokenType.Green,
-                    "[blue]" => TokenType.Blue,
-                    _ => TokenType.Normal
+                    "[big]" => TokenFlags.Big,
+                    "[small]" => TokenFlags.Small,
+                    
+                    "[red]" => TokenFlags.Red,
+                    "[green]" => TokenFlags.Green,
+                    "[blue]" => TokenFlags.Blue,
+                    
+                    "[bold]" => TokenFlags.Bold,
+                    "[b]" => TokenFlags.Bold,
+                    "[italic]" => TokenFlags.Italic,
+                    "[i]" => TokenFlags.Italic,
+                    
+                    _ => TokenFlags.Normal
                 };
 
                 if (negate)
@@ -135,7 +177,7 @@ public static class Tokenizer
             }
             else
             {
-                tokens.Add(new Token(tokenText, _currentType));
+                tokens.Add(new Token(tokenText, _currentFlags));
             }
         }
         
