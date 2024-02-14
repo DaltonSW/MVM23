@@ -45,6 +45,7 @@ public class ThemeConsts
         GontserratItalic.LoadDynamicFont("res://Assets/Fonts/Gontserrat Italic.ttf");
 
         RegularText = GontserratRegular;
+        RegularText.FontStyle = TextServer.FontStyle.FixedWidth;
         BoldText = GontserratBold;
         BoldItalicText = GontserratBoldItalic;
         ItalicText = GontserratItalic;

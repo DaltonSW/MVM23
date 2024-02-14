@@ -21,12 +21,15 @@ public partial class TextField : Panel
 
     private Token _currentToken;
 
+    private bool _wordByWordMode;
+
     private Font _font;
     
     private Label _endLabel;
 
     private bool _textRemaining;
-    private const float AlphaIncrement = 0.033F;
+    private const float AlphaIncrement = 0.11F;
+    private int _curCharIndex;
     private float _curAlpha;
     private float _curLinePos;
     private float _curLineNum;
@@ -65,9 +68,80 @@ public partial class TextField : Panel
     public override void _Draw()
     {
         _textBoxSize = GetRect().Size;
-
         _curLineNum = 1;
         _curLinePos = 0F;
+
+        if (_wordByWordMode)
+        {
+            DrawWordByWord();
+        }
+        else
+        {
+            DrawCharByChar();
+        }
+    }
+
+    private void DrawCharByChar()
+    {
+        var height = ThemeConsts.RegularText.GetHeight(ThemeConsts.RegularTextSize);
+        
+        foreach (var visToken in _visibleTokens)
+        {
+            DrawString(visToken.Font, new Vector2(_curLinePos, height * _curLineNum), visToken.Text, HorizontalAlignment.Left, -1F, visToken.FontSize, visToken.Color);
+            _curLinePos += visToken.StringSize;
+            if (_curLinePos < _textBoxSize.X * 0.9) continue;
+            _curLineNum += 1;
+            _curLinePos = 0;
+
+            if (height * _curLineNum < _textBoxSize.Y) continue;
+            
+            _textRemaining = false;
+            _endLabel.Visible = true;
+            return;
+        }
+
+        if (_currentToken.Flags == TokenFlags.Undefined)
+        {
+            if (_remainingTokens.Count > 0)
+            {
+                _currentToken = _remainingTokens[0];
+                _remainingTokens.RemoveAt(0);    
+                _curAlpha = 0F;
+                _curCharIndex = 0;
+            }
+            else
+            {
+                _textRemaining = false;
+                _endLabel.Visible = true;
+                return;
+            }
+        }
+
+        var subStrToDraw = _currentToken.Text[.._curCharIndex];
+        DrawString(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), subStrToDraw, HorizontalAlignment.Left, -1F,_currentToken.FontSize, _currentToken.Color);
+        _curLinePos += _currentToken.Font.GetStringSize(subStrToDraw, fontSize: _currentToken.FontSize).X;
+        
+        var curCharColor = _currentToken.Color;
+        curCharColor.A = (float)Math.Min(_curAlpha + AlphaIncrement, 1.0);
+        _curAlpha = curCharColor.A;
+        var charToDraw = _currentToken.Text[_curCharIndex].ToString();
+        DrawChar(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), charToDraw, _currentToken.FontSize, curCharColor);
+        _curLinePos += _currentToken.Font.GetStringSize(charToDraw, fontSize: _currentToken.FontSize).X;
+        // _curLinePos += _currentToken.Font.GetCharSize()
+
+        if (_curAlpha < 1.0F) return;
+
+        _curAlpha = 0;
+        _curCharIndex++;
+        if (_curCharIndex < _currentToken.Text.Length) return;
+        
+        _curCharIndex = 0;
+        _visibleTokens.Add(_currentToken);
+        _currentToken = new Token("null", TokenFlags.Undefined);
+    }
+
+    private void DrawWordByWord()
+    {
         var height = ThemeConsts.RegularText.GetHeight(ThemeConsts.RegularTextSize);
         
         foreach (var visToken in _visibleTokens)
