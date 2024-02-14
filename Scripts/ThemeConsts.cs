@@ -12,12 +12,12 @@ public class ThemeConsts
     private static FontFile GontserratItalic { get; set; }
     private static FontFile GontserratBoldItalic { get; set; }
     
-    public static int RegularTextSize { get; set; }
-    public static FontFile RegularText { get; set; }
-    public static FontFile BoldText { get; set; }
-    public static FontFile ItalicText { get; set; }
-    public static FontFile BoldItalicText { get; set; }
-    public static FontFile CodeText { get; set; }
+    public static int RegularTextSize { get; private set; }
+    public static FontFile RegularText { get; private set; }
+    public static FontFile BoldText { get; private set; }
+    public static FontFile ItalicText { get; private set; }
+    public static FontFile BoldItalicText { get; private set; }
+    public static FontFile CodeText { get; private set; }
 
     public static void Initialize()
     {
@@ -47,9 +47,12 @@ public class ThemeConsts
         RegularText = GontserratRegular;
         RegularText.FontStyle = TextServer.FontStyle.FixedWidth;
         BoldText = GontserratBold;
+        BoldText.FontStyle = TextServer.FontStyle.FixedWidth;
         BoldItalicText = GontserratBoldItalic;
+        BoldItalicText.FontStyle = TextServer.FontStyle.FixedWidth;
         ItalicText = GontserratItalic;
-        
-        CodeText = AgaveRegular;
+        ItalicText.FontStyle = TextServer.FontStyle.FixedWidth;
+
+        CodeText = AgaveRegular; // Any `code` font should already be monospaced
     }
 }

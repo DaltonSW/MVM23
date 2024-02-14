@@ -69,6 +69,11 @@ public static class Tokenizer
 
         private FontFile GetFont()
         {
+            if (IsFlagSet(TokenFlags.Code, Flags))
+            {
+                return ThemeConsts.CodeText;
+            }
+            
             if (IsFlagSet(TokenFlags.Bold, Flags) && IsFlagSet(TokenFlags.Italic, Flags))
             {
                 return ThemeConsts.BoldItalicText;
@@ -107,6 +112,7 @@ public static class Tokenizer
         
         Bold = 32,
         Italic = 64,
+        Code = 128,
         
         ClearFlag = int.MaxValue
     }
