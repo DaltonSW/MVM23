@@ -19,7 +19,7 @@ public static class Tokenizer
 
         public Token(string text, TokenFlags flags)
         {
-            Text = $"{text}{' ' }";
+            Text = text;
             Flags = flags;
             Color = GetColor();
             FontSize = GetFontSize();
@@ -130,7 +130,70 @@ public static class Tokenizer
 
     private static TokenFlags _currentFlags = TokenFlags.Normal;
 
-    public static List<Token> TokenizeString(string text)
+    public static List<Token> TokenizeStringComplex(string text)
+    {
+        var step1Tokens = Regex.Split(text, @"(\[\/?[^\]]+\])");
+
+        // Pattern to handle words, punctuation marks separately, and ensure spaces are included correctly
+        const string pattern = @"([\w+']+[\s]?)|([.,?!]\s?)";
+
+        var tokens = new List<Token>();
+        foreach (var token in step1Tokens)
+        {
+            if (token.StartsWith("["))
+            {
+                var negate = false;
+                var tokenText = token;
+                if (token.Contains('/'))
+                {
+                    negate = true;
+                    tokenText = Regex.Replace(token, "/", "");
+                }
+                
+                var tokenType = tokenText switch
+                {
+                    "[big]" => TokenFlags.Big,
+                    "[small]" => TokenFlags.Small,
+                    
+                    "[red]" => TokenFlags.Red,
+                    "[green]" => TokenFlags.Green,
+                    "[blue]" => TokenFlags.Blue,
+                    
+                    "[bold]" => TokenFlags.Bold,
+                    "[b]" => TokenFlags.Bold,
+                    "[italic]" => TokenFlags.Italic,
+                    "[i]" => TokenFlags.Italic,
+                    
+                    _ => TokenFlags.Normal
+                };
+
+                if (negate)
+                {
+                    RemoveFlag(tokenType);
+                }
+                else
+                {
+                    SetFlag(tokenType);
+                }
+            }
+            else
+            {
+                // Non-tag, apply further splitting
+                var matches = Regex.Matches(token, pattern);
+                foreach (Match match in matches)
+                {
+                    if (!string.IsNullOrEmpty(match.Value))
+                    {
+                        tokens.Add(new Token(match.Value, _currentFlags));
+                    }
+                }
+            }
+        }
+
+        return tokens;
+    }
+    
+    public static List<Token> TokenizeStringRegex(string text)
     {
         var tokens = new List<Token>();
 

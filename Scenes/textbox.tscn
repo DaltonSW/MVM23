@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cokjsgiqx7yu3"]
+[gd_scene load_steps=6 format=3 uid="uid://cokjsgiqx7yu3"]
 
 [ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_jxaen"]
 
@@ -16,6 +16,17 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ec8u2"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="FontFile" id="FontFile_5ed8p"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_lnvqc"]
+font = SubResource("FontFile_5ed8p")
 
 [node name="Textbox" type="CanvasLayer"]
 
@@ -53,10 +64,11 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ec8u2")
 script = ExtResource("1_jxaen")
 
-[node name="Label" type="Label" parent="ParentBox/Background"]
+[node name="EndLabel" type="Label" parent="ParentBox/Background"]
 layout_mode = 0
-offset_left = 1097.0
-offset_top = 110.0
-offset_right = 1137.0
-offset_bottom = 133.0
-text = "v"
+offset_left = 1093.0
+offset_top = 105.0
+offset_right = 1133.0
+offset_bottom = 128.0
+text = "V"
+label_settings = SubResource("LabelSettings_lnvqc")

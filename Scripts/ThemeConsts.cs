@@ -33,16 +33,16 @@ public class ThemeConsts
         LemonMilk.LoadDynamicFont("res://Assets/Fonts/LEMONMILK.OTF");
 
         GontserratRegular = new FontFile();
-        GontserratRegular.LoadDynamicFont("res://Assets/Fonts/Gontserrat Regular.OTF");
+        GontserratRegular.LoadDynamicFont("res://Assets/Fonts/Gontserrat Regular.ttf");
         
         GontserratBold = new FontFile();
-        GontserratBold.LoadDynamicFont("res://Assets/Fonts/Gontserrat Bold.OTF");
+        GontserratBold.LoadDynamicFont("res://Assets/Fonts/Gontserrat Bold.ttf");
         
         GontserratBoldItalic = new FontFile();
-        GontserratBoldItalic.LoadDynamicFont("res://Assets/Fonts/Gontserrat Bold Italic.OTF");
+        GontserratBoldItalic.LoadDynamicFont("res://Assets/Fonts/Gontserrat Bold Italic.ttf");
         
         GontserratItalic = new FontFile();
-        GontserratItalic.LoadDynamicFont("res://Assets/Fonts/Gontserrat Italic.OTF");
+        GontserratItalic.LoadDynamicFont("res://Assets/Fonts/Gontserrat Italic.ttf");
 
         RegularText = GontserratRegular;
         BoldText = GontserratBold;
