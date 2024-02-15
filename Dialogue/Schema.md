@@ -33,4 +33,14 @@ conversation:
 
 ## In-Engine Information
 
+### Tests
+
+These are all theoretical right now, but I think they'd be good to implement and have run
+- Tokenize each string
+  - **Verify** that there are as many opening brackets as there are closing brackets
+  - **Verify** that brackets are closed in the order they are opened
+- Run through the calculations of printing the string if it were entirely visible
+  - **Verify** that the string doesn't overflow the box
+- 
+
 ### To-Do

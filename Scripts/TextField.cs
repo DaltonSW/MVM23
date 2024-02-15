@@ -50,7 +50,7 @@ public partial class TextField : Panel
         _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
         _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
-        _initialTokens = TokenizeStringComplex(TestStringComplex);
+        _initialTokens = TokenizeStringWordByWord(TestStringComplex);
         
         foreach (var token in _initialTokens)
         {
