@@ -117,12 +117,6 @@ public static class Tokenizer
         ClearFlag = int.MaxValue
     }
 
-    public enum TokenizingModes
-    {
-        WordByWord = 0,
-        CharByChar = 1,
-        CharByCharButWholeWordStrong = 2,
-    }
     
 
 
@@ -143,7 +137,7 @@ public static class Tokenizer
 
     private static TokenFlags _currentFlags = TokenFlags.Normal;
 
-    public static List<Token> TokenizeStringWordByWord(string text)
+    public static List<Token> TokenizeString(string text)
     {
         var step1Tokens = Regex.Split(text, @"(\[\/?[^\]]+\])");
 
@@ -206,7 +200,7 @@ public static class Tokenizer
         return tokens;
     }
     
-    public static List<Token> TokenizeStringRegex(string text)
+    private static List<Token> TokenizeStringOriginal(string text)
     {
         var tokens = new List<Token>();
 

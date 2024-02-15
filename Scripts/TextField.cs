@@ -21,7 +21,6 @@ public partial class TextField : Panel
 
     private Token _currentToken;
 
-    private bool _wordByWordMode;
 
     private Font _font;
     
@@ -38,6 +37,16 @@ public partial class TextField : Panel
     private double _endLabelTimeVisible;
     
     
+    public enum DrawModes
+    {
+        WordByWord = 0,
+        CharByChar = 1,
+        CharButWholeStrong = 2,
+    }
+    
+    private DrawModes _drawMode = DrawModes.WordByWord;
+
+    
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -50,7 +59,7 @@ public partial class TextField : Panel
         _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
         _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
-        _initialTokens = TokenizeStringWordByWord(TestStringComplex);
+        _initialTokens = TokenizeString(TestStringComplex);
         
         foreach (var token in _initialTokens)
         {
@@ -71,14 +80,20 @@ public partial class TextField : Panel
         _curLineNum = 1;
         _curLinePos = 0F;
 
-        if (_wordByWordMode)
+        switch (_drawMode)
         {
-            DrawWordByWord();
+            case DrawModes.CharByChar:
+                DrawCharByChar();
+                break;
+            case DrawModes.WordByWord:
+                DrawWordByWord();
+                break;
+            case DrawModes.CharButWholeStrong:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        else
-        {
-            DrawCharByChar();
-        }
+
     }
 
     private void DrawCharByChar()
