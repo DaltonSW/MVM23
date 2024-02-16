@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cokjsgiqx7yu3"]
+[gd_scene load_steps=8 format=3 uid="uid://cokjsgiqx7yu3"]
 
 [ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_jxaen"]
+[ext_resource type="Script" path="res://Scenes/Textbox.cs" id="1_lb83q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mg3so"]
 bg_color = Color(0, 0, 0, 1)
@@ -15,7 +16,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ec8u2"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+bg_color = Color(0.6, 0.6, 0.6, 0.2)
 
 [sub_resource type="FontFile" id="FontFile_5ed8p"]
 cache/0/16/0/ascent = 0.0
@@ -28,14 +29,17 @@ cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 [sub_resource type="LabelSettings" id="LabelSettings_lnvqc"]
 font = SubResource("FontFile_5ed8p")
 
+[sub_resource type="LabelSettings" id="LabelSettings_c3f8c"]
+
 [node name="Textbox" type="CanvasLayer"]
+script = ExtResource("1_lb83q")
 
 [node name="ParentBox" type="MarginContainer" parent="."]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -180.0
+offset_top = -220.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_left = 16
@@ -55,7 +59,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 16
+theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 16
 
@@ -66,9 +70,20 @@ script = ExtResource("1_jxaen")
 
 [node name="EndLabel" type="Label" parent="ParentBox/Background"]
 layout_mode = 0
-offset_left = 1093.0
-offset_top = 105.0
-offset_right = 1133.0
-offset_bottom = 128.0
+offset_left = 1095.0
+offset_top = 147.0
+offset_right = 1135.0
+offset_bottom = 170.0
 text = "V"
 label_settings = SubResource("LabelSettings_lnvqc")
+
+[node name="SpeakerName" type="Label" parent="ParentBox/Background"]
+layout_mode = 2
+offset_left = 33.0
+offset_top = 17.0
+offset_right = 154.0
+offset_bottom = 40.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "skdjflkdsjflkdsjf"
+label_settings = SubResource("LabelSettings_c3f8c")

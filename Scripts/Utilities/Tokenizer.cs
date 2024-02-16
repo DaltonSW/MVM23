@@ -7,7 +7,6 @@ namespace MVM23.Scripts.Utilities;
 
 public static class Tokenizer
 {
-    // TODO: Pivot this to having each token store its font size, color, etc so we don't need to calculate on the fly when printing
     public class Token
     {
         public string Text { get; set; }
@@ -94,6 +93,10 @@ public static class Tokenizer
 
         private float GetTokenStringSize()
         {
+            if (Font == null)
+            {
+                return 0;
+            }
             return Font.GetStringSize(Text, HorizontalAlignment.Left, -1F, FontSize).X;
         }
     }

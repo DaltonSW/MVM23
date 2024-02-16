@@ -18,10 +18,13 @@ public class ThemeConsts
     public static FontFile ItalicText { get; private set; }
     public static FontFile BoldItalicText { get; private set; }
     public static FontFile CodeText { get; private set; }
+    
+    public static TextField.DrawModes DefaultDrawMode { get; private set; }
 
     public static void Initialize()
     {
         RegularTextSize = 20;
+        DefaultDrawMode = TextField.DrawModes.CharByChar;
         
         AgaveRegular = new FontFile();
         AgaveRegular.LoadDynamicFont("res://Assets/Fonts/Agave Regular.TTF");

@@ -1,19 +1,17 @@
+using MVM23.Scripts.Utilities;
+
 namespace MVM23.Scripts;
 
 using Godot;
 using System;
 using System.Collections.Generic;
-using static Utilities.Tokenizer;
+using static Tokenizer;
+
 
 public partial class TextField : Panel
 {
-    private const string TestStringFormatting = "The [red]quick [green]brown[/green][/red][big]fox [blue]jumps over the[/blue][/big] [small]lazy[green] dog[/green][/small].";
-
-    private const string TestStringWrapping =
-        "Hendrerit et sea. Est nonumy amet ea ut imperdiet lorem diam et sea diam velit tation dolor erat velit ea. Dolore duo dolores accusam at tempor accusam et eos eos dignissim sadipscing justo vulputate accusam vel. Erat sed ea sea takimata eum odio kasd iusto consetetur illum erat. Stet lorem sed ea dolor dolore no amet vel in.";
-
-    private const string TestStringComplex =
-        "What...? I have [b]NO [/b] idea what you're talking about! You are out of your [red][big]DAMN [/big][/red]MIND!!! I [i]cannot [/i]believe you're coming to me with these accusations.";
+    [Signal]
+    public delegate void TextFinishedPrintingEventHandler();
     
     private readonly List<Token> _visibleTokens = new();
     private readonly List<Token> _remainingTokens = new();
@@ -21,10 +19,7 @@ public partial class TextField : Panel
 
     private Token _currentToken;
 
-
     private Font _font;
-    
-    private Label _endLabel;
 
     private bool _textRemaining;
     private const float AlphaIncrement = 0.11F;
@@ -34,48 +29,44 @@ public partial class TextField : Panel
     private float _curLineNum;
     private Vector2 _textBoxSize;
 
-    private double _endLabelTimeVisible;
-    
     
     public enum DrawModes
     {
+        Undefined = -1,
         WordByWord = 0,
         CharByChar = 1,
-        CharButWholeStrong = 2,
+        CharButWholeStrongWord = 2,
     }
     
     private DrawModes _drawMode = DrawModes.WordByWord;
 
-    
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    public void DrawParagraph(string paragraph, DrawModes drawMode)
     {
-        ThemeConsts.Initialize();
-
-        _font = ThemeDB.FallbackFont;
-        
-        _endLabel = GetNode<Label>("../../EndLabel");
-        _endLabel.Visible = false;
-        _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
-        _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
-
-        _initialTokens = TokenizeString(TestStringComplex);
-        
+        _drawMode = drawMode;
+        _initialTokens = TokenizeString(paragraph);
+        _drawMode = drawMode;
         foreach (var token in _initialTokens)
         {
             _remainingTokens.Add(token);
         }
 
-        _currentToken = new Token("null", TokenFlags.Undefined);
+        _textRemaining = true;
+    }
+    
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        _font = ThemeDB.FallbackFont;
 
-        if (_remainingTokens.Count > 0)
-        {
-            _textRemaining = true;
-        }
+        _currentToken = new Token("null", TokenFlags.Undefined);
     }
 
     public override void _Draw()
     {
+        if (!_textRemaining)
+        {
+            return;
+        }
         _textBoxSize = GetRect().Size;
         _curLineNum = 1;
         _curLinePos = 0F;
@@ -88,7 +79,7 @@ public partial class TextField : Panel
             case DrawModes.WordByWord:
                 DrawWordByWord();
                 break;
-            case DrawModes.CharButWholeStrong:
+            case DrawModes.CharButWholeStrongWord:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -110,8 +101,7 @@ public partial class TextField : Panel
 
             if (height * _curLineNum < _textBoxSize.Y) continue;
             
-            _textRemaining = false;
-            _endLabel.Visible = true;
+            TextFinished();
             return;
         }
 
@@ -126,8 +116,7 @@ public partial class TextField : Panel
             }
             else
             {
-                _textRemaining = false;
-                _endLabel.Visible = true;
+                TextFinished();
                 return;
             }
         }
@@ -169,8 +158,7 @@ public partial class TextField : Panel
 
             if (height * _curLineNum < _textBoxSize.Y) continue;
             
-            _textRemaining = false;
-            _endLabel.Visible = true;
+            TextFinished();
             return;
         }
 
@@ -184,9 +172,7 @@ public partial class TextField : Panel
             }
             else
             {
-                _textRemaining = false;
-                _endLabel.Visible = true;
-                return;
+                TextFinished();
             }
         }
         
@@ -206,32 +192,30 @@ public partial class TextField : Panel
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (_textRemaining)
+        if (!_textRemaining) return;
+        if (Input.IsActionJustPressed("ui_accept"))
         {
-            if (Input.IsActionJustPressed("ui_accept"))
+            _visibleTokens.Clear();
+            foreach (var token in _initialTokens)
             {
-                _visibleTokens.Clear();
-                foreach (var token in _initialTokens)
-                {
-                    var color = token.Color;
-                    color.A = 1F;
-                    token.Color = color;
-                    _visibleTokens.Add(token);
-                }
-                _textRemaining = false;
-                _endLabel.Visible = true;
-                _currentToken.Flags = TokenFlags.Undefined;
+                var color = token.Color;
+                color.A = 1F;
+                token.Color = color;
+                _visibleTokens.Add(token);
             }
-            QueueRedraw();
+            _textRemaining = false;
+            _currentToken.Flags = TokenFlags.Undefined;
         }
+        QueueRedraw();
+    }
 
-        if (!_endLabel.Visible) return;
-        _endLabelTimeVisible += delta;
-        var pos = _endLabel.Position;
-        pos.Y += (float)Math.Sin(_endLabelTimeVisible * 7) * 0.1F;
-        _endLabel.Position = pos;
+    private void TextFinished()
+    {
+        _textRemaining = false;
+        EmitSignal(SignalName.TextFinishedPrinting);
     }
 }
+
 
 // "Proper way" to implement that will account for kerning:
 // extends Control
