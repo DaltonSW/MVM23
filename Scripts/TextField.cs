@@ -232,3 +232,34 @@ public partial class TextField : Panel
         _endLabel.Position = pos;
     }
 }
+
+// "Proper way" to implement that will account for kerning:
+// extends Control
+//
+// var glyphs = []
+//
+// func _ready() -> void:
+//      var font = get_theme_font("font")
+//      var font_size = 16
+//
+//      # Preprocessing
+//      var text_line = TextLine.new()
+//      text_line.add_string("text", font, font_size) # You can add multiple spans of text with different font and size.
+//
+//      var ts = TextServerManager.get_primary_interface()
+//      glyphs = ts.shaped_text_get_glyphs(text_line.get_rid()) # Store "glyphs" for actual rendering
+//
+//  func _draw() -> void:
+//      var color = Color(1, 0, 0)
+//      var position = Vector2(100, 100)
+//      var ci = get_canvas_item()
+//
+//      var ts = TextServerManager.get_primary_interface()
+//      # Draw shaped glyphs left-to-right.
+//      for gl in glyphs:
+//          if gl["font_rid"].is_valid():
+//              ts.font_draw_glyph(gl["font_rid"], ci, gl["font_size"], position + gl["offset"], gl["index"], color) # Do your custom drawing, you can check which part of original string glyph correspong to by checeking gl["start"] and gl["end"]
+//          else:
+//              ts.draw_hex_code_box(ci, gl["font_size"], position + gl["offset"], gl["index"], color) # Glyph not found in the font.
+//
+//          position.x = position.x + gl["advance"]
