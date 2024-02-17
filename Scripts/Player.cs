@@ -1,66 +1,70 @@
 using Godot;
 using System;
+using MVM23.Scripts.AuxiliaryScripts;
+
+// Credits:
+// Bruno Guedes - https://medium.com/@brazmogu/physics-for-game-dev-a-platformer-physics-cheatsheet-f34b09064558
 
 public partial class Player : CharacterBody2D
 {
-    private enum PlayerState
-    {
-        Idle,
-        Running,
-        Jumping
-    }
-
-    // Get the gravity from the project settings to be synced with RigidBody nodes.
-    public const float Speed = 300.0f;
-    public const float JumpVelocity = -400.0f;
-    public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+    [Export] public const float RunSpeed = 300.0f;
+    
+    [Export] private const float JumpHeight = 50F; // I believe this is pixels
+    [Export] private const float TimeInAir = 0.2F; // No idea what this unit is. Definitely NOT seconds
+    public float Gravity;
+    public float JumpSpeed;
 
     private PlayerState _currentState;
 
+    public class InputInfo
+    {
+        public Vector2 InputDirection { get; set; }
+        public bool IsPushingJump { get; set; }
+        public bool IsPushingCrouch { get; set; }
+    }
+
     public override void _Ready()
     {
-        _currentState = PlayerState.Idle;
+        Gravity = (float)(JumpHeight / (2 * Math.Pow(TimeInAir, 2)));
+        JumpSpeed = (float)Math.Sqrt(2 * JumpHeight * Gravity);
+        
+        // Set project gravity so it syncs to other nodes
+        ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
+        
+        _currentState = IsOnFloor() ? new IdleState() : new JumpState();
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        // GetInputs();
-        var direction = Input.GetVector("move_left", "move_right", "ui_up", "ui_down");
-        var isJumping = Input.IsActionJustPressed("jump");
+        var inputs = GetInputs();
         
-        switch (_currentState)
+        var newState = _currentState.HandleInput(this, inputs, delta);
+        if (newState != null)
         {
-            case PlayerState.Idle:
-                break;
-            case PlayerState.Running:
-                break;
-            case PlayerState.Jumping:
-                break;
-            default:
-                throw new InvalidOperationException();
+            ChangeState(newState);
         }
-        var velocity = Velocity;
-
-        // Add the gravity.
-        if (!IsOnFloor())
-            velocity.Y += Gravity * (float)delta;
-
-        // Handle Jump.
-        if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-            velocity.Y = JumpVelocity;
-
-        // Get the input direction and handle the movement/deceleration.
-        // As good practice, you should replace UI actions with custom gameplay actions.
-        if (direction != Vector2.Zero)
-        {
-            velocity.X = direction.X * Speed;
-        }
-        else
-        {
-            velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-        }
-
-        Velocity = velocity;
         MoveAndSlide();
+    }
+
+    private void ChangeState(PlayerState newState)
+    {
+        GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
+        _currentState = newState;
+        
+        // TODO: Implement a "push down automaton"(?) pattern
+        //  Basically just a stack that stores the previous states
+        //  If you can "shoot" from idle or running or jumping, it shouldn't need to keep track of specific prev state
+        //  It should be able to return something like PlayerState.Previous to go back to whatever the last one was
+    }
+
+    private static InputInfo GetInputs()
+    {
+        var inputInfo = new InputInfo
+        {
+            InputDirection = Input.GetVector("move_left", "move_right", "ui_up", "ui_down"),
+            IsPushingJump = Input.IsActionJustPressed("jump")
+        };
+        
+        return inputInfo;
     }
 }
