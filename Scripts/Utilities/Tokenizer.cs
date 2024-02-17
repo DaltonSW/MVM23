@@ -120,9 +120,6 @@ public static class Tokenizer
         ClearFlag = int.MaxValue
     }
 
-    
-
-
     private static void SetFlag(TokenFlags flag)
     {
         _currentFlags |= flag;

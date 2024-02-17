@@ -2,21 +2,43 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using MVM23.Scripts;
-using MVM23.Scripts.Utilities;
-using static MVM23.Scripts.Utilities.Tokenizer;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 // Credits:
 // https://www.youtube.com/watch?v=QEHOiORnXIk - Shoutouts to Jon Topielski for the world's most efficient tutorial
 
 public class Dialogue
 {
-    public string Name { get; set; }
-    public List<string> Paragraphs { get; set; }
+    public string Name { get; set;  }
+    public List<string> Paragraphs { get; set;  }
+
+    public Dialogue()
+    {
+        // Needs to exist for YAML Deserialization and to not have angry squiggles
+    }
 
     public Dialogue(string name, List<string> paragraphs)
     {
         Name = name;
         Paragraphs = paragraphs;
+    }
+}
+
+public class Conversation
+{
+    public List<Dialogue> Dialogues { get; set; }
+    public string Description { get; set; }
+
+    public Conversation()
+    {
+        // Needs to exist for YAML Deserialization and to not have angry squiggles
+    }
+
+    public Conversation(List<Dialogue> dialogues, string description)
+    {
+        Dialogues = dialogues;
+        Description = description;
     }
 }
 
@@ -32,10 +54,7 @@ public partial class Textbox : CanvasLayer
 
     private State _currentState = State.Ready;
     
-    private const string TestStringComplex =
-        "What...? I have [b]NO [/b] idea what you're talking about! You are out of your [red][big]DAMN [/big][/red]MIND!!! I [i]cannot [/i]believe you're coming to me with these accusations.";
-    
-    private List<Dialogue> _conversation;
+    private Conversation _conversation;
     
     private Dialogue _currentDialogue;
     
@@ -55,12 +74,15 @@ public partial class Textbox : CanvasLayer
     public override void _Ready()
     {       
         // TODO: Parse conversation
-        _conversation = new List<Dialogue>
-        {
-            new ("Dalton", new List<string> { "Wow that's a line", "And here's another one!" }),
-            new ("Brandon", new List<string> { "Yeah those sure are!" }),
-            new ("Jasper", new List<string> { "Bark bark", "Bark bark bark bark", "woof woof" })
-        };
+        // _conversation = new Conversation(new List<Dialogue>()
+        // {
+        //     new ("Dalton", new List<string> { "[b]Wow [/b] that's a line", "And here's [i]another [/i] one!" }),
+        //     new ("Brandon", new List<string> { "[green]Yeah [/green] those sure [red]are [/red]!" }),
+        //     new ("Jasper", new List<string> { "[small]bark bark[/small]", "Bark bark [big]Bark BARK[/big]", "[b][big]woof woof[/big][/b]" })
+        // },
+        //     "Testing");
+
+        _conversation = LoadConversation("sample");
 
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
@@ -125,6 +147,14 @@ public partial class Textbox : CanvasLayer
         }
     }
 
+    private static Conversation LoadConversation(string filename)
+    {
+        var deserializer = new DeserializerBuilder().WithNamingConvention(UnderscoredNamingConvention.Instance).Build();
+        
+        var conversation = deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{filename}.yaml"));
+        return conversation;
+    }
+
     private void WhenTextFinished()
     {
         _endLabel.Visible = true;
@@ -135,9 +165,9 @@ public partial class Textbox : CanvasLayer
     {
         if (_currentDialogue == null)
         {
-            if (_conversation.Count <= 0) return false;
-            _currentDialogue = _conversation[0];
-            _conversation.RemoveAt(0);
+            if (_conversation.Dialogues.Count <= 0) return false;
+            _currentDialogue = _conversation.Dialogues[0];
+            _conversation.Dialogues.RemoveAt(0);
             _curParagraph = _currentDialogue.Paragraphs[0];
             _currentDialogue.Paragraphs.RemoveAt(0);
             return true;
@@ -150,10 +180,10 @@ public partial class Textbox : CanvasLayer
             return true;
         }
 
-        if (_conversation.Count <= 0) return false;
+        if (_conversation.Dialogues.Count <= 0) return false;
 
-        _currentDialogue = _conversation[0];
-        _conversation.RemoveAt(0);
+        _currentDialogue = _conversation.Dialogues[0];
+        _conversation.Dialogues.RemoveAt(0);
         _curParagraph = _currentDialogue.Paragraphs[0];
         _currentDialogue.Paragraphs.RemoveAt(0);
         return true;
@@ -162,7 +192,7 @@ public partial class Textbox : CanvasLayer
 
     private void ChangeState(State newState)
     {
-        GD.Print($"Changing from {_currentState} to {newState}");
+        // GD.Print($"Changing from {_currentState} to {newState}");
         _currentState = newState;
     }
 }
