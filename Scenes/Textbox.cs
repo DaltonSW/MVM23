@@ -69,6 +69,8 @@ public partial class Textbox : CanvasLayer
     
     private double _endLabelTimeVisible;
 
+    [Export] public string DialogueName = "sample";
+
     
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -82,8 +84,7 @@ public partial class Textbox : CanvasLayer
         // },
         //     "Testing");
 
-        _conversation = LoadConversation("sample");
-
+        LoadConversation();
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
         _textField = GetNode<TextField>("ParentBox/Background/InnerBox/TextField");
@@ -147,12 +148,12 @@ public partial class Textbox : CanvasLayer
         }
     }
 
-    private static Conversation LoadConversation(string filename)
+    private void LoadConversation()
     {
         var deserializer = new DeserializerBuilder().WithNamingConvention(UnderscoredNamingConvention.Instance).Build();
         
-        var conversation = deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{filename}.yaml"));
-        return conversation;
+        var conversation = deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueName}.yaml"));
+        _conversation = conversation;
     }
 
     private void WhenTextFinished()
