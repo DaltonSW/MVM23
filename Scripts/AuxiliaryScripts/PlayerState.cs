@@ -64,6 +64,7 @@ public class JumpState : PlayerState
             velocity.Y += player.Gravity * (float)delta;
 
         player.Velocity = velocity;
+        
         if (player.IsOnFloor())
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
         
@@ -82,7 +83,7 @@ public class RunState : PlayerState
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
             // Change sprite
-            velocity.Y += (float)(player.Gravity * delta);
+            velocity.Y -= player.JumpSpeed;
             player.Velocity = velocity;
             return new JumpState();
         }
