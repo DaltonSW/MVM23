@@ -1,11 +1,13 @@
 using Godot;
 namespace MVM23.Scripts.AuxiliaryScripts;
 
-public class PlayerState
+public interface PlayerState
 {
-    public virtual string Name => "BaseState"; 
+    public string Name { get; }
+
+    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
     
-    protected static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta)
+    public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta)
     {
         var velocity = player.Velocity;
         
@@ -19,20 +21,15 @@ public class PlayerState
 
         return velocity;
     }
-    
-    public virtual PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
-    {
-        return null;
-    }
 }
 
 public class IdleState : PlayerState
 {
-    public override string Name => "IdleState";
+    public string Name => "IdleState";
 
-    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = GenericPositionUpdates(player, inputs, delta);
+        var velocity = PlayerState.GenericPositionUpdates(player, inputs, delta);
         
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
@@ -56,11 +53,11 @@ public class IdleState : PlayerState
 
 public class JumpState : PlayerState
 {
-    public override string Name => "JumpState";
+    public string Name => "JumpState";
 
-    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = GenericPositionUpdates(player, inputs, delta);
+        var velocity = PlayerState.GenericPositionUpdates(player, inputs, delta);
         
         // Add the gravity.
         if (!player.IsOnFloor())
@@ -76,11 +73,11 @@ public class JumpState : PlayerState
 
 public class RunState : PlayerState
 {       
-    public override string Name => "RunState";
+    public string Name => "RunState";
 
-    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = GenericPositionUpdates(player, inputs, delta);
+        var velocity = PlayerState.GenericPositionUpdates(player, inputs, delta);
         
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
