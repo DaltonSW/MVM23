@@ -44,7 +44,7 @@ public class Conversation
 
 public partial class Textbox : CanvasLayer
 {
-    private enum State
+    private enum TextboxState
     {
         Ready,    // Neutral state. Not printing, ready to go
         Printing, // Currently printing text
@@ -52,7 +52,7 @@ public partial class Textbox : CanvasLayer
         Empty     // Out of dialogue to print. Should close the box  
     }
 
-    private State _currentState = State.Ready;
+    private TextboxState _currentState = TextboxState.Ready;
     
     private Conversation _conversation;
     
@@ -105,10 +105,10 @@ public partial class Textbox : CanvasLayer
     {
         switch(_currentState)
         {
-            case State.Empty:
+            case TextboxState.Empty:
                 Visible = false;
                 return;
-            case State.Printing:
+            case TextboxState.Printing:
                 // TODO: Fix "hit action to insta-advance"
                 // if (Input.IsActionJustPressed("ui_accept"))
                 // {
@@ -119,21 +119,21 @@ public partial class Textbox : CanvasLayer
                 // }
                 return;
                 
-            case State.Ready:
+            case TextboxState.Ready:
                 if (!LoadMoreDialogue())
                 {
-                    ChangeState(State.Empty);
+                    ChangeState(TextboxState.Empty);
                     return;
                 }
                 _textField.DrawParagraph(_curParagraph, ThemeConsts.DefaultDrawMode);
                 _nameLabel.Text = _currentDialogue.Name;
                 _nameLabel.Visible = true;
-                ChangeState(State.Printing);
+                ChangeState(TextboxState.Printing);
                 return;
-            case State.Finished:
+            case TextboxState.Finished:
                 if (Input.IsActionJustPressed("ui_accept"))
                 {
-                    ChangeState(State.Ready);
+                    ChangeState(TextboxState.Ready);
                     _endLabel.Visible = false;
                     return;
                 }
@@ -143,7 +143,7 @@ public partial class Textbox : CanvasLayer
                 _endLabel.Position = pos;
                 return;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new InvalidOperationException();
         }
     }
 
@@ -158,7 +158,7 @@ public partial class Textbox : CanvasLayer
     private void WhenTextFinished()
     {
         _endLabel.Visible = true;
-        ChangeState(State.Finished);
+        ChangeState(TextboxState.Finished);
     }
 
     private bool LoadMoreDialogue()
@@ -190,7 +190,7 @@ public partial class Textbox : CanvasLayer
 
     }
 
-    private void ChangeState(State newState)
+    private void ChangeState(TextboxState newState)
     {
         // GD.Print($"Changing from {_currentState} to {newState}");
         _currentState = newState;
