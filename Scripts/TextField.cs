@@ -22,7 +22,7 @@ public partial class TextField : Panel
     private Font _font;
 
     private bool _textRemaining;
-    private const float AlphaIncrement = 0.11F;
+    private const float AlphaIncrement = 0.15F;
     private int _curCharIndex;
     private float _curAlpha;
     private float _curLinePos;
@@ -42,6 +42,7 @@ public partial class TextField : Panel
 
     public void DrawParagraph(string paragraph, DrawModes drawMode)
     {
+        ClearTokens();
         _drawMode = drawMode;
         _initialTokens = TokenizeString(paragraph);
         _drawMode = drawMode;
@@ -52,7 +53,14 @@ public partial class TextField : Panel
 
         _textRemaining = true;
     }
-    
+
+    private void ClearTokens()
+    {
+        _visibleTokens.Clear();
+        _initialTokens.Clear();
+        _remainingTokens.Clear();
+    }
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -193,20 +201,21 @@ public partial class TextField : Panel
     public override void _Process(double delta)
     {
         if (!_textRemaining) return;
-        if (Input.IsActionJustPressed("ui_accept"))
-        {
-            _visibleTokens.Clear();
-            foreach (var token in _initialTokens)
-            {
-                var color = token.Color;
-                color.A = 1F;
-                token.Color = color;
-                _visibleTokens.Add(token);
-            }
-            _textRemaining = false;
-            _currentToken.Flags = TokenFlags.Undefined;
-        }
         QueueRedraw();
+    }
+
+    public void FinishCurrentPrint()
+    {
+        _visibleTokens.Clear();
+        foreach (var token in _initialTokens)
+        {
+            var color = token.Color;
+            color.A = 1F;
+            token.Color = color;
+            _visibleTokens.Add(token);
+        }
+        _currentToken.Flags = TokenFlags.Undefined;
+        EmitSignal(SignalName.TextFinishedPrinting);
     }
 
     private void TextFinished()
