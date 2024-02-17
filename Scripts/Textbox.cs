@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 // Credits:
-// https://www.youtube.com/watch?v=QEHOiORnXIk - Shoutouts to Jon Topielski for the world's most efficient tutorial
+// Jon Topielski - https://www.youtube.com/watch?v=QEHOiORnXIk
 
 public class Dialogue
 {
