@@ -23,7 +23,7 @@ public class ThemeConsts
 
     public static void Initialize()
     {
-        RegularTextSize = 20;
+        RegularTextSize = 14;
         DefaultDrawMode = TextField.DrawModes.CharByChar;
         
         AgaveRegular = new FontFile();

@@ -17,6 +17,7 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ec8u2"]
 bg_color = Color(0.6, 0.6, 0.6, 0.2)
+draw_center = false
 
 [sub_resource type="FontFile" id="FontFile_5ed8p"]
 cache/0/16/0/ascent = 0.0
@@ -39,7 +40,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -220.0
+offset_top = -172.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_left = 16
@@ -59,7 +60,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 48
+theme_override_constants/margin_top = 38
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 16
 
@@ -70,19 +71,19 @@ script = ExtResource("1_jxaen")
 
 [node name="EndLabel" type="Label" parent="ParentBox/Background"]
 layout_mode = 0
-offset_left = 1095.0
-offset_top = 147.0
-offset_right = 1135.0
-offset_bottom = 170.0
+offset_left = 589.0
+offset_top = 108.0
+offset_right = 629.0
+offset_bottom = 131.0
 text = "V"
 label_settings = SubResource("LabelSettings_lnvqc")
 
 [node name="SpeakerName" type="Label" parent="ParentBox/Background"]
 layout_mode = 2
 offset_left = 33.0
-offset_top = 17.0
+offset_top = 12.0
 offset_right = 154.0
-offset_bottom = 40.0
+offset_bottom = 35.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "skdjflkdsjflkdsjf"
