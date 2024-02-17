@@ -75,7 +75,6 @@ public partial class Textbox : CanvasLayer
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {       
-        // TODO: Parse conversation
         // _conversation = new Conversation(new List<Dialogue>()
         // {
         //     new ("Dalton", new List<string> { "[b]Wow [/b] that's a line", "And here's [i]another [/i] one!" }),

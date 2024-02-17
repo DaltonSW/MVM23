@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://co3marnlrukwe"]
+
+[ext_resource type="Texture2D" uid="uid://cuyeitenxs863" path="res://Assets/Sprites/hippie.png" id="1_iq8fc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
+size = Vector2(20, 32)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_iq8fc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cfoin")
