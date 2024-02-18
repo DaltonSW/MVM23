@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b5nkd7g0qhcli"]
 
-[ext_resource type="Texture2D" uid="uid://6ahg25topaux" path="res://Assets/Sprites/SMB_Tiles.png" id="1_3yqkb"]
+[ext_resource type="Texture2D" uid="uid://b7subhbig80i0" path="res://Assets/Sprites/SMB_Tiles.png" id="1_3yqkb"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player.tscn" id="2_qeceo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mtdig"]

@@ -15,14 +15,19 @@ public partial class Player : CharacterBody2D
     public float JumpSpeed;
 
     private AnimatedSprite2D _sprite;
+    private CpuParticles2D _dashParticles;
+    private Node2D _reticle;
 
     private IPlayerState _currentState;
+    private bool _reticleFrozen; // TODO: control with _currentState method
+    private Vector2 _reticleFreezePos;
 
     public class InputInfo
     {
         public Vector2 InputDirection { get; set; }
         public bool IsPushingJump { get; set; }
         public bool IsPushingCrouch { get; set; }
+        public bool IsPushingDash { get; set; }
     }
 
     public override void _Ready()
@@ -34,8 +39,26 @@ public partial class Player : CharacterBody2D
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
         
         _currentState = IsOnFloor() ? new IdleState() : new JumpState();
+        _reticleFrozen = false;
+        _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
+        _dashParticles = GetNode<CpuParticles2D>("DashParticles");
+        _reticle = GetNode<Node2D>("Reticle");
+    }
+
+    public override void _Process(double delta)
+    {
+        if (_reticleFrozen)
+        {
+            _reticle.GlobalPosition = _reticleFreezePos;
+        }
+        else
+        {
+            var mousePosition = GetViewport().GetMousePosition();
+            _reticle.LookAt(mousePosition);
+            _reticle.Position = Vector2.Zero;
+        }
     }
 
     public override void _PhysicsProcess(double delta)
@@ -66,7 +89,8 @@ public partial class Player : CharacterBody2D
         var inputInfo = new InputInfo
         {
             InputDirection = Input.GetVector("move_left", "move_right", "ui_up", "ui_down"),
-            IsPushingJump = Input.IsActionJustPressed("jump")
+            IsPushingJump = Input.IsActionJustPressed("jump"),
+            IsPushingDash = Input.IsActionJustPressed("dash"),
         };
         
         return inputInfo;
@@ -78,5 +102,24 @@ public partial class Player : CharacterBody2D
         
         if (_sprite.Animation != animation)
             _sprite.Play(animation);
+    }
+
+    public void SetEmittingDashParticles(bool emit)
+    {
+        _dashParticles.Emitting = emit;
+    }
+
+    public float GetAngleToMouse()
+        => GetAngleTo(GetViewport().GetMousePosition());
+
+    public void FreezeReticle()
+    {
+        _reticleFrozen = true;
+        _reticleFreezePos = _reticle.GlobalPosition;
+    }
+
+    public void RestoreReticle()
+    {
+        _reticleFrozen = false;
     }
 }

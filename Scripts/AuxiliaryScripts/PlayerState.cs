@@ -5,6 +5,8 @@ public interface IPlayerState
 {
     public string Name { get; }
 
+    /// Must be called exactly once per _PhysicsProcess,
+    /// and nowhere else.
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
     
     public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta)
@@ -31,6 +33,9 @@ public class IdleState : IPlayerState
     {
         player.ChangeAnimation("idle");
         var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+
+        if (inputs.IsPushingDash)
+            return new DashState(player.GetAngleToMouse());
 
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
@@ -71,6 +76,9 @@ public class JumpState : IPlayerState
         if (player.IsOnFloor())
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
         
+        if (inputs.IsPushingDash)
+            return new DashState(player.GetAngleToMouse());
+
         return null;
     }
 }
@@ -96,7 +104,48 @@ public class RunState : IPlayerState
         player.Velocity = velocity;
         if (inputs.InputDirection == Vector2.Zero & player.Velocity == Vector2.Zero)
             return new IdleState();
+
+        if (inputs.IsPushingDash)
+            return new DashState(player.GetAngleToMouse());
         
         return null;
     }
 }
+
+public class DashState : IPlayerState
+{       
+    private const float DURATION_SECONDS = 0.04f; 
+    private const double SPEED = 100000; 
+
+    private float _angle;
+
+    private double _timeElapsed;
+
+    public DashState(float angle)
+    {
+        _angle = angle;
+        _timeElapsed = 0;
+    }
+
+    public string Name => "DashState";
+
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    {
+        _timeElapsed += delta;
+        player.ChangeAnimation("jump");
+        player.SetEmittingDashParticles(true);
+        player.FreezeReticle();
+
+        player.Velocity = Vector2.FromAngle(_angle) * (float) (SPEED * delta);
+
+        if (_timeElapsed >= DURATION_SECONDS)
+        {
+            player.RestoreReticle();
+            player.SetEmittingDashParticles(false);
+            return new IdleState();
+        }
+                
+        return null;
+    }
+}
+
