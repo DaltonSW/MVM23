@@ -75,14 +75,6 @@ public partial class Textbox : CanvasLayer
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {       
-        // _conversation = new Conversation(new List<Dialogue>()
-        // {
-        //     new ("Dalton", new List<string> { "[b]Wow [/b] that's a line", "And here's [i]another [/i] one!" }),
-        //     new ("Brandon", new List<string> { "[green]Yeah [/green] those sure [red]are [/red]!" }),
-        //     new ("Jasper", new List<string> { "[small]bark bark[/small]", "Bark bark [big]Bark BARK[/big]", "[b][big]woof woof[/big][/b]" })
-        // },
-        //     "Testing");
-
         LoadConversation();
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 

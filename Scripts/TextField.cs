@@ -101,7 +101,8 @@ public partial class TextField : Panel
         
         foreach (var visToken in _visibleTokens)
         {
-            DrawString(visToken.Font, new Vector2(_curLinePos, height * _curLineNum), visToken.Text, HorizontalAlignment.Left, -1F, visToken.FontSize, visToken.Color);
+            DrawString(visToken.Font, new Vector2(_curLinePos, height * _curLineNum),
+                visToken.Text, HorizontalAlignment.Left, -1F, visToken.FontSize, visToken.Color);
             _curLinePos += visToken.StringSize;
             if (_curLinePos < _textBoxSize.X * 0.9) continue;
             _curLineNum += 1;
@@ -130,14 +131,16 @@ public partial class TextField : Panel
         }
 
         var subStrToDraw = _currentToken.Text[.._curCharIndex];
-        DrawString(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), subStrToDraw, HorizontalAlignment.Left, -1F,_currentToken.FontSize, _currentToken.Color);
+        DrawString(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), subStrToDraw,
+            HorizontalAlignment.Left, -1F,_currentToken.FontSize, _currentToken.Color);
         _curLinePos += _currentToken.Font.GetStringSize(subStrToDraw, fontSize: _currentToken.FontSize).X;
         
         var curCharColor = _currentToken.Color;
         curCharColor.A = (float)Math.Min(_curAlpha + AlphaIncrement, 1.0);
         _curAlpha = curCharColor.A;
         var charToDraw = _currentToken.Text[_curCharIndex].ToString();
-        DrawChar(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), charToDraw, _currentToken.FontSize, curCharColor);
+        DrawChar(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), charToDraw,
+            _currentToken.FontSize, curCharColor);
         _curLinePos += _currentToken.Font.GetStringSize(charToDraw, fontSize: _currentToken.FontSize).X;
         // _curLinePos += _currentToken.Font.GetCharSize()
 
@@ -158,7 +161,8 @@ public partial class TextField : Panel
         
         foreach (var visToken in _visibleTokens)
         {
-            DrawString(visToken.Font, new Vector2(_curLinePos, height * _curLineNum), visToken.Text, HorizontalAlignment.Left, -1F, visToken.FontSize, visToken.Color);
+            DrawString(visToken.Font, new Vector2(_curLinePos, height * _curLineNum), visToken.Text,
+                HorizontalAlignment.Left, -1F, visToken.FontSize, visToken.Color);
             _curLinePos += visToken.StringSize;
             if (_curLinePos < _textBoxSize.X * 0.9) continue;
             _curLineNum += 1;
@@ -187,7 +191,8 @@ public partial class TextField : Panel
         var curTokenColor = _currentToken.Color;
         curTokenColor.A = (float)Math.Min(_curAlpha + AlphaIncrement, 1.0);
         _curAlpha = curTokenColor.A;
-        DrawString(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), _currentToken.Text, HorizontalAlignment.Left, -1F, _currentToken.FontSize, curTokenColor);
+        DrawString(_currentToken.Font, new Vector2(_curLinePos, height * _curLineNum), _currentToken.Text,
+            HorizontalAlignment.Left, -1F, _currentToken.FontSize, curTokenColor);
         _currentToken.Color = curTokenColor;
 
         if (_curAlpha < 1.0F) return;
@@ -251,7 +256,8 @@ public partial class TextField : Panel
 //      # Draw shaped glyphs left-to-right.
 //      for gl in glyphs:
 //          if gl["font_rid"].is_valid():
-//              ts.font_draw_glyph(gl["font_rid"], ci, gl["font_size"], position + gl["offset"], gl["index"], color) # Do your custom drawing, you can check which part of original string glyph correspong to by checeking gl["start"] and gl["end"]
+//              ts.font_draw_glyph(gl["font_rid"], ci, gl["font_size"], position + gl["offset"], gl["index"], color)
+//              # Do your custom drawing, you can check which part of original string glyph correspond to by checking gl["start"] and gl["end"]
 //          else:
 //              ts.draw_hex_code_box(ci, gl["font_size"], position + gl["offset"], gl["index"], color) # Glyph not found in the font.
 //

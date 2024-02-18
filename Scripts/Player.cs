@@ -14,7 +14,7 @@ public partial class Player : CharacterBody2D
     public float Gravity;
     public float JumpSpeed;
 
-    private PlayerState _currentState;
+    private IPlayerState _currentState;
 
     public class InputInfo
     {
@@ -46,7 +46,7 @@ public partial class Player : CharacterBody2D
         MoveAndSlide();
     }
 
-    private void ChangeState(PlayerState newState)
+    private void ChangeState(IPlayerState newState)
     {
         GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
         _currentState = newState;

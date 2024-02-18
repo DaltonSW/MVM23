@@ -1,11 +1,11 @@
 using Godot;
 namespace MVM23.Scripts.AuxiliaryScripts;
 
-public interface PlayerState
+public interface IPlayerState
 {
     public string Name { get; }
 
-    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
     
     public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta)
     {
@@ -23,13 +23,13 @@ public interface PlayerState
     }
 }
 
-public class IdleState : PlayerState
+public class IdleState : IPlayerState
 {
     public string Name => "IdleState";
 
-    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = PlayerState.GenericPositionUpdates(player, inputs, delta);
+        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
         
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
@@ -51,13 +51,13 @@ public class IdleState : PlayerState
     }
 }
 
-public class JumpState : PlayerState
+public class JumpState : IPlayerState
 {
     public string Name => "JumpState";
 
-    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = PlayerState.GenericPositionUpdates(player, inputs, delta);
+        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
         
         // Add the gravity.
         if (!player.IsOnFloor())
@@ -72,13 +72,13 @@ public class JumpState : PlayerState
     }
 }
 
-public class RunState : PlayerState
+public class RunState : IPlayerState
 {       
     public string Name => "RunState";
 
-    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = PlayerState.GenericPositionUpdates(player, inputs, delta);
+        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
         
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
