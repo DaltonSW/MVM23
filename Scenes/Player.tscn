@@ -1,17 +1,80 @@
-[gd_scene load_steps=4 format=3 uid="uid://co3marnlrukwe"]
+[gd_scene load_steps=12 format=3 uid="uid://co3marnlrukwe"]
 
-[ext_resource type="Texture2D" uid="uid://cuyeitenxs863" path="res://Assets/Sprites/hippie.png" id="1_iq8fc"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_l6vq3"]
+[ext_resource type="Texture2D" uid="uid://bwxqhskirw1xl" path="res://Assets/Sprites/hippie_crouch.png" id="2_h0dwu"]
+[ext_resource type="Texture2D" uid="uid://b7onbwkk81gmj" path="res://Assets/Sprites/hippie_fall.png" id="3_7xwn8"]
+[ext_resource type="Texture2D" uid="uid://c5lw1xx24nuu2" path="res://Assets/Sprites/hippie_idle_0.png" id="4_p45dx"]
+[ext_resource type="Texture2D" uid="uid://6j02bjd44tqc" path="res://Assets/Sprites/hippie_idle_1.png" id="5_exl6s"]
+[ext_resource type="Texture2D" uid="uid://dvnfoiu34iak2" path="res://Assets/Sprites/hippie_jump.png" id="6_yvlty"]
+[ext_resource type="Texture2D" uid="uid://yj6vdo33ye3v" path="res://Assets/Sprites/hippie_run_0.png" id="7_rpiki"]
+[ext_resource type="Texture2D" uid="uid://pduxlm6xenaq" path="res://Assets/Sprites/hippie_run_1.png" id="8_tpnyh"]
+[ext_resource type="Texture2D" uid="uid://decupecngqf51" path="res://Assets/Sprites/hippie_run_2.png" id="9_a3emj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
 size = Vector2(20, 32)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_agbor"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_h0dwu")
+}],
+"loop": true,
+"name": &"crouch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_7xwn8")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_p45dx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_exl6s")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_yvlty")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_rpiki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tpnyh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_a3emj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tpnyh")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_l6vq3")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture_filter = 1
-texture = ExtResource("1_iq8fc")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cfoin")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_agbor")
+animation = &"run"

@@ -14,6 +14,8 @@ public partial class Player : CharacterBody2D
     public float Gravity;
     public float JumpSpeed;
 
+    private AnimatedSprite2D _sprite;
+
     private IPlayerState _currentState;
 
     public class InputInfo
@@ -32,6 +34,8 @@ public partial class Player : CharacterBody2D
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
         
         _currentState = IsOnFloor() ? new IdleState() : new JumpState();
+
+        _sprite = GetNode<AnimatedSprite2D>("Sprite");
     }
 
     public override void _PhysicsProcess(double delta)
@@ -66,5 +70,13 @@ public partial class Player : CharacterBody2D
         };
         
         return inputInfo;
+    }
+
+    public void ChangeAnimation(string animation)
+    {
+        _sprite.FlipH = Velocity.X >= 0;
+        
+        if (_sprite.Animation != animation)
+            _sprite.Play(animation);
     }
 }

@@ -29,8 +29,9 @@ public class IdleState : IPlayerState
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
+        player.ChangeAnimation("idle");
         var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-        
+
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
             // Change sprite
@@ -57,8 +58,10 @@ public class JumpState : IPlayerState
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        player.ChangeAnimation(player.Velocity.Y <= 0 ? "jump" : "fall");
         
+        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+
         // Add the gravity.
         if (!player.IsOnFloor())
             velocity.Y += player.Gravity * (float)delta;
@@ -78,8 +81,10 @@ public class RunState : IPlayerState
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta)
     {
-        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        player.ChangeAnimation("run");
         
+        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+
         if (inputs.IsPushingJump && player.IsOnFloor())
         {
             // Change sprite
