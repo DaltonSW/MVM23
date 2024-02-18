@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5nkd7g0qhcli"]
+[gd_scene load_steps=6 format=3 uid="uid://b5nkd7g0qhcli"]
 
 [ext_resource type="Texture2D" uid="uid://6ahg25topaux" path="res://Assets/Sprites/SMB_Tiles.png" id="1_3yqkb"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player.tscn" id="2_qeceo"]
+[ext_resource type="Script" path="res://Scripts/Utilities/DebugLabel.cs" id="3_ggdbu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mtdig"]
 texture = ExtResource("1_3yqkb")
@@ -1761,3 +1762,11 @@ layer_0/tile_data = PackedInt32Array(1179648, 131072, 0, 1245184, 131072, 0, 131
 
 [node name="Player" parent="." instance=ExtResource("2_qeceo")]
 position = Vector2(299, 233)
+
+[node name="DebugLabel" type="Label" parent="."]
+offset_left = 19.0
+offset_top = 19.0
+offset_right = 73.0
+offset_bottom = 42.0
+text = "Debug"
+script = ExtResource("3_ggdbu")

@@ -31,7 +31,7 @@ public class IdleState : IPlayerState {
         var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (inputs.IsPushingDash)
-            return new DashState(player.GetAngleToMouse());
+            return new DashState(player);
 
         if (inputs.IsPushingJump && player.IsOnFloor()) {
             // Change sprite
@@ -69,7 +69,7 @@ public class JumpState : IPlayerState {
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
 
         if (inputs.IsPushingDash)
-            return new DashState(player.GetAngleToMouse());
+            return new DashState(player);
 
         return null;
     }
@@ -95,7 +95,7 @@ public class RunState : IPlayerState {
             return new IdleState();
 
         if (inputs.IsPushingDash)
-            return new DashState(player.GetAngleToMouse());
+            return new DashState(player);
 
         return null;
     }
@@ -105,13 +105,16 @@ public class DashState : IPlayerState {
     private const float DurationSeconds = 0.04f;
     private const double Speed = 100000;
 
-    private float _angle;
+    private readonly float _angle;
 
     private double _timeElapsed;
 
-    public DashState(float angle) {
-        _angle = angle;
+    private readonly Vector2 _prevPlayerVelocity;
+
+    public DashState(Player player) {
+        _angle = player.GetAngleToMouse();
         _timeElapsed = 0;
+        _prevPlayerVelocity = player.Velocity;
     }
 
     public string Name => "DashState";
@@ -127,7 +130,8 @@ public class DashState : IPlayerState {
         if (_timeElapsed >= DurationSeconds) {
             player.RestoreReticle();
             player.SetEmittingDashParticles(false);
-            return new IdleState();
+            player.Velocity = _prevPlayerVelocity;
+            return player.IsOnFloor() ? new IdleState() : new JumpState();
         }
 
         return null;
