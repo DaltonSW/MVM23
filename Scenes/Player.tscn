@@ -1,14 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://co3marnlrukwe"]
+[gd_scene load_steps=13 format=3 uid="uid://co3marnlrukwe"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_l6vq3"]
-[ext_resource type="Texture2D" uid="uid://bwxqhskirw1xl" path="res://Assets/Sprites/hippie_crouch.png" id="2_h0dwu"]
-[ext_resource type="Texture2D" uid="uid://b7onbwkk81gmj" path="res://Assets/Sprites/hippie_fall.png" id="3_7xwn8"]
-[ext_resource type="Texture2D" uid="uid://c5lw1xx24nuu2" path="res://Assets/Sprites/hippie_idle_0.png" id="4_p45dx"]
-[ext_resource type="Texture2D" uid="uid://6j02bjd44tqc" path="res://Assets/Sprites/hippie_idle_1.png" id="5_exl6s"]
-[ext_resource type="Texture2D" uid="uid://dvnfoiu34iak2" path="res://Assets/Sprites/hippie_jump.png" id="6_yvlty"]
-[ext_resource type="Texture2D" uid="uid://yj6vdo33ye3v" path="res://Assets/Sprites/hippie_run_0.png" id="7_rpiki"]
-[ext_resource type="Texture2D" uid="uid://pduxlm6xenaq" path="res://Assets/Sprites/hippie_run_1.png" id="8_tpnyh"]
-[ext_resource type="Texture2D" uid="uid://decupecngqf51" path="res://Assets/Sprites/hippie_run_2.png" id="9_a3emj"]
+[ext_resource type="Texture2D" uid="uid://dov4rq4qnmlf5" path="res://Assets/Sprites/hippie_crouch.png" id="2_h0dwu"]
+[ext_resource type="Texture2D" uid="uid://bdwh8sgybaqvg" path="res://Assets/Sprites/hippie_fall.png" id="3_7xwn8"]
+[ext_resource type="Texture2D" uid="uid://b5of6a8hhwan2" path="res://Assets/Sprites/hippie_idle_0.png" id="4_p45dx"]
+[ext_resource type="Texture2D" uid="uid://bt5vfgamdqxay" path="res://Assets/Sprites/hippie_idle_1.png" id="5_exl6s"]
+[ext_resource type="Texture2D" uid="uid://bs3jsmo3pekao" path="res://Assets/Sprites/hippie_jump.png" id="6_yvlty"]
+[ext_resource type="Texture2D" uid="uid://cevjs5mi36fe6" path="res://Assets/Sprites/hippie_run_0.png" id="7_rpiki"]
+[ext_resource type="Texture2D" uid="uid://cwchhtq206r7u" path="res://Assets/Sprites/hippie_run_1.png" id="8_tpnyh"]
+[ext_resource type="Texture2D" uid="uid://xhhngdl4uhjf" path="res://Assets/Sprites/hippie_run_2.png" id="9_a3emj"]
+[ext_resource type="Texture2D" uid="uid://v5tdjophadqo" path="res://Assets/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
 size = Vector2(20, 32)
@@ -78,3 +79,13 @@ shape = SubResource("RectangleShape2D_cfoin")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_agbor")
 animation = &"run"
+
+[node name="DashParticles" type="CPUParticles2D" parent="."]
+emitting = false
+
+[node name="Reticle" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Reticle"]
+scale = Vector2(-1, 1)
+texture = ExtResource("10_kjnoh")
+offset = Vector2(-24, 0)
