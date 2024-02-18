@@ -8,44 +8,36 @@ using YamlDotNet.Serialization.NamingConventions;
 // Credits:
 // Jon Topielski - https://www.youtube.com/watch?v=QEHOiORnXIk
 
-public class Dialogue
-{
-    public string Name { get; set;  }
-    public List<string> Paragraphs { get; set;  }
+public class Dialogue {
+    public string Name { get; set; }
+    public List<string> Paragraphs { get; set; }
 
-    public Dialogue()
-    {
+    public Dialogue() {
         // Needs to exist for YAML Deserialization and to not have angry squiggles
     }
 
-    public Dialogue(string name, List<string> paragraphs)
-    {
+    public Dialogue(string name, List<string> paragraphs) {
         Name = name;
         Paragraphs = paragraphs;
     }
 }
 
-public class Conversation
-{
+public class Conversation {
     public List<Dialogue> Dialogues { get; set; }
     public string Description { get; set; }
 
-    public Conversation()
-    {
+    public Conversation() {
         // Needs to exist for YAML Deserialization and to not have angry squiggles
     }
 
-    public Conversation(List<Dialogue> dialogues, string description)
-    {
+    public Conversation(List<Dialogue> dialogues, string description) {
         Dialogues = dialogues;
         Description = description;
     }
 }
 
-public partial class Textbox : CanvasLayer
-{
-    private enum TextboxState
-    {
+public partial class Textbox : CanvasLayer {
+    private enum TextboxState {
         Ready,    // Neutral state. Not printing, ready to go
         Printing, // Currently printing text
         Finished, // Finished printing, awaiting for input
@@ -53,39 +45,38 @@ public partial class Textbox : CanvasLayer
     }
 
     private TextboxState _currentState = TextboxState.Ready;
-    
+
     private Conversation _conversation;
-    
+
     private Dialogue _currentDialogue;
-    
+
     private string _curParagraph;
-    
+
     private Label _nameLabel;
     private Label _endLabel;
 
     private TextField _textField;
 
     private bool _paragraphIsPrinting;
-    
+
     private double _endLabelTimeVisible;
 
     [Export] public string DialogueName = "sample";
 
-    
+
     // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {       
+    public override void _Ready() {
         LoadConversation();
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
         _textField = GetNode<TextField>("ParentBox/Background/InnerBox/TextField");
         _textField.TextFinishedPrinting += WhenTextFinished;
-        
+
         _nameLabel = GetNode<Label>("ParentBox/Background/SpeakerName");
         _nameLabel.Visible = false;
         _nameLabel.LabelSettings.Font = ThemeConsts.BoldText;
         _nameLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
-        
+
         _endLabel = GetNode<Label>("ParentBox/Background/EndLabel");
         _endLabel.Visible = false;
         _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
@@ -93,10 +84,8 @@ public partial class Textbox : CanvasLayer
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-        switch(_currentState)
-        {
+    public override void _Process(double delta) {
+        switch (_currentState) {
             case TextboxState.Empty:
                 Visible = false;
                 return;
@@ -110,10 +99,9 @@ public partial class Textbox : CanvasLayer
                 //     return;    
                 // }
                 return;
-                
+
             case TextboxState.Ready:
-                if (!LoadMoreDialogue())
-                {
+                if (!LoadMoreDialogue()) {
                     ChangeState(TextboxState.Empty);
                     return;
                 }
@@ -123,8 +111,7 @@ public partial class Textbox : CanvasLayer
                 ChangeState(TextboxState.Printing);
                 return;
             case TextboxState.Finished:
-                if (Input.IsActionJustPressed("ui_accept"))
-                {
+                if (Input.IsActionJustPressed("ui_accept")) {
                     ChangeState(TextboxState.Ready);
                     _endLabel.Visible = false;
                     return;
@@ -139,24 +126,21 @@ public partial class Textbox : CanvasLayer
         }
     }
 
-    private void LoadConversation()
-    {
+    private void LoadConversation() {
         var deserializer = new DeserializerBuilder().WithNamingConvention(UnderscoredNamingConvention.Instance).Build();
-        
-        var conversation = deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueName}.yaml"));
+
+        var conversation =
+            deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueName}.yaml"));
         _conversation = conversation;
     }
 
-    private void WhenTextFinished()
-    {
+    private void WhenTextFinished() {
         _endLabel.Visible = true;
         ChangeState(TextboxState.Finished);
     }
 
-    private bool LoadMoreDialogue()
-    {
-        if (_currentDialogue == null)
-        {
+    private bool LoadMoreDialogue() {
+        if (_currentDialogue == null) {
             if (_conversation.Dialogues.Count <= 0) return false;
             _currentDialogue = _conversation.Dialogues[0];
             _conversation.Dialogues.RemoveAt(0);
@@ -164,9 +148,8 @@ public partial class Textbox : CanvasLayer
             _currentDialogue.Paragraphs.RemoveAt(0);
             return true;
         }
-        
-        if (_currentDialogue.Paragraphs.Count > 0)
-        {
+
+        if (_currentDialogue.Paragraphs.Count > 0) {
             _curParagraph = _currentDialogue.Paragraphs[0];
             _currentDialogue.Paragraphs.RemoveAt(0);
             return true;
@@ -182,8 +165,7 @@ public partial class Textbox : CanvasLayer
 
     }
 
-    private void ChangeState(TextboxState newState)
-    {
+    private void ChangeState(TextboxState newState) {
         // GD.Print($"Changing from {_currentState} to {newState}");
         _currentState = newState;
     }

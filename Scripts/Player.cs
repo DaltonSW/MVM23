@@ -5,10 +5,9 @@ using MVM23.Scripts.AuxiliaryScripts;
 // Credits:
 // Bruno Guedes - https://medium.com/@brazmogu/physics-for-game-dev-a-platformer-physics-cheatsheet-f34b09064558
 
-public partial class Player : CharacterBody2D
-{
+public partial class Player : CharacterBody2D {
     [Export] public const float RunSpeed = 300.0f;
-    
+
     [Export] private const float JumpHeight = 50F; // I believe this is pixels
     [Export] private const float TimeInAir = 0.2F; // No idea what this unit is. Definitely NOT seconds
     public float Gravity;
@@ -22,22 +21,20 @@ public partial class Player : CharacterBody2D
     private bool _reticleFrozen; // TODO: control with _currentState method
     private Vector2 _reticleFreezePos;
 
-    public class InputInfo
-    {
-        public Vector2 InputDirection { get; set; }
-        public bool IsPushingJump { get; set; }
-        public bool IsPushingCrouch { get; set; }
-        public bool IsPushingDash { get; set; }
+    public class InputInfo {
+        public Vector2 InputDirection { get; init; }
+        public bool IsPushingJump { get; init; }
+        public bool IsPushingCrouch { get; init; }
+        public bool IsPushingDash { get; init; }
     }
 
-    public override void _Ready()
-    {
+    public override void _Ready() {
         Gravity = (float)(JumpHeight / (2 * Math.Pow(TimeInAir, 2)));
         JumpSpeed = (float)Math.Sqrt(2 * JumpHeight * Gravity);
-        
+
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
-        
+
         _currentState = IsOnFloor() ? new IdleState() : new JumpState();
         _reticleFrozen = false;
         _reticleFreezePos = Vector2.Zero;
@@ -47,79 +44,68 @@ public partial class Player : CharacterBody2D
         _reticle = GetNode<Node2D>("Reticle");
     }
 
-    public override void _Process(double delta)
-    {
-        if (_reticleFrozen)
-        {
+    public override void _Process(double delta) {
+        if (_reticleFrozen) {
             _reticle.GlobalPosition = _reticleFreezePos;
         }
-        else
-        {
+        else {
             var mousePosition = GetViewport().GetMousePosition();
             _reticle.LookAt(mousePosition);
             _reticle.Position = Vector2.Zero;
         }
     }
 
-    public override void _PhysicsProcess(double delta)
-    {
+    public override void _PhysicsProcess(double delta) {
         var inputs = GetInputs();
-        
+
         var newState = _currentState.HandleInput(this, inputs, delta);
-        if (newState != null)
-        {
+        if (newState != null) {
             ChangeState(newState);
         }
         MoveAndSlide();
     }
 
-    private void ChangeState(IPlayerState newState)
-    {
+    private void ChangeState(IPlayerState newState) {
         GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
         _currentState = newState;
-        
+
         // TODO: Implement a "push down automaton"(?) pattern
         //  Basically just a stack that stores the previous states
         //  If you can "shoot" from idle or running or jumping, it shouldn't need to keep track of specific prev state
         //  It should be able to return something like PlayerState.Previous to go back to whatever the last one was
     }
 
-    private static InputInfo GetInputs()
-    {
+    private static InputInfo GetInputs() {
         var inputInfo = new InputInfo
         {
             InputDirection = Input.GetVector("move_left", "move_right", "ui_up", "ui_down"),
             IsPushingJump = Input.IsActionJustPressed("jump"),
+            IsPushingCrouch = Input.IsActionJustPressed("crouch"),
             IsPushingDash = Input.IsActionJustPressed("dash"),
         };
-        
+
         return inputInfo;
     }
 
-    public void ChangeAnimation(string animation)
-    {
+    public void ChangeAnimation(string animation) {
         _sprite.FlipH = Velocity.X >= 0;
-        
+
         if (_sprite.Animation != animation)
             _sprite.Play(animation);
     }
 
-    public void SetEmittingDashParticles(bool emit)
-    {
+    public void SetEmittingDashParticles(bool emit) {
         _dashParticles.Emitting = emit;
     }
 
-    public float GetAngleToMouse()
-        => GetAngleTo(GetViewport().GetMousePosition());
+    public float GetAngleToMouse() => GetAngleTo(GetViewport().GetMousePosition());
 
-    public void FreezeReticle()
-    {
+    public void FreezeReticle() {
         _reticleFrozen = true;
         _reticleFreezePos = _reticle.GlobalPosition;
     }
 
-    public void RestoreReticle()
-    {
+    public void RestoreReticle() {
         _reticleFrozen = false;
     }
 }
