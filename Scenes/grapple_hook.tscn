@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://2vufcy3wn607"]
+
+[ext_resource type="Texture2D" uid="uid://c4lqcae2ewi8w" path="res://Assets/Sprites/grappling_hook.png" id="1_lt2ac"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6emkg"]
+radius = 0.637424
+height = 5.65685
+
+[node name="GrappleHook" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_lt2ac")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(2, -2)
+rotation = 2.35619
+shape = SubResource("CapsuleShape2D_6emkg")

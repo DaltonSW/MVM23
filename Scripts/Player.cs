@@ -28,6 +28,14 @@ public partial class Player : CharacterBody2D {
         public bool IsPushingDash { get; init; }
     }
 
+    public DashMode _dashMode = DashMode.NoExtraMomentum;
+
+    public enum DashMode {
+        NoExtraMomentum,
+        MoreThanMoveMaxMomentum,
+        MoveMaxMomentum
+    }
+  
     public override void _Ready() {
         Gravity = (float)(JumpHeight / (2 * Math.Pow(TimeInAir, 2)));
         JumpSpeed = (float)Math.Sqrt(2 * JumpHeight * Gravity);
@@ -45,6 +53,17 @@ public partial class Player : CharacterBody2D {
     }
 
     public override void _Process(double delta) {
+
+        if (Input.IsKeyPressed(Key.Key1)) {
+            _dashMode = DashMode.NoExtraMomentum;
+        }
+        else if (Input.IsKeyPressed(Key.Key2)) {
+            _dashMode = DashMode.MoreThanMoveMaxMomentum;
+        }
+        else if (Input.IsKeyPressed(Key.Key3)) {
+            _dashMode = DashMode.MoveMaxMomentum;
+        }
+        
         if (_reticleFrozen) {
             _reticle.GlobalPosition = _reticleFreezePos;
         }

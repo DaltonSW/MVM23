@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5nkd7g0qhcli"]
+[gd_scene load_steps=7 format=3 uid="uid://b5nkd7g0qhcli"]
 
 [ext_resource type="Texture2D" uid="uid://6ahg25topaux" path="res://Assets/Sprites/SMB_Tiles.png" id="1_3yqkb"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player.tscn" id="2_qeceo"]
@@ -1753,6 +1753,9 @@ texture = ExtResource("1_3yqkb")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_mtdig")
 
+[sub_resource type="LabelSettings" id="LabelSettings_ubrif"]
+font_size = 15
+
 [node name="TestLevel" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -1770,3 +1773,15 @@ offset_right = 73.0
 offset_bottom = 42.0
 text = "Debug"
 script = ExtResource("3_ggdbu")
+
+[node name="DashDebug" type="Label" parent="."]
+offset_left = 255.0
+offset_top = 18.0
+offset_right = 622.0
+offset_bottom = 117.0
+text = "(Hit num to select)
+1. Momentum returns to what it was when on click
+2. More than max move speed extra momentum
+3. Just max move speed as extra momentum"
+label_settings = SubResource("LabelSettings_ubrif")
+horizontal_alignment = 2
