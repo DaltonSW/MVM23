@@ -1,18 +1,46 @@
-[gd_scene load_steps=13 format=3 uid="uid://co3marnlrukwe"]
+[gd_scene load_steps=17 format=3 uid="uid://co3marnlrukwe"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_l6vq3"]
-[ext_resource type="Texture2D" uid="uid://bwxqhskirw1xl" path="res://Scenes/Player/Sprites/hippie_crouch.png" id="2_h0dwu"]
-[ext_resource type="Texture2D" uid="uid://b7onbwkk81gmj" path="res://Scenes/Player/Sprites/hippie_fall.png" id="3_7xwn8"]
-[ext_resource type="Texture2D" uid="uid://c5lw1xx24nuu2" path="res://Scenes/Player/Sprites/hippie_idle_0.png" id="4_p45dx"]
-[ext_resource type="Texture2D" uid="uid://6j02bjd44tqc" path="res://Scenes/Player/Sprites/hippie_idle_1.png" id="5_exl6s"]
-[ext_resource type="Texture2D" uid="uid://dvnfoiu34iak2" path="res://Scenes/Player/Sprites/hippie_jump.png" id="6_yvlty"]
-[ext_resource type="Texture2D" uid="uid://yj6vdo33ye3v" path="res://Scenes/Player/Sprites/hippie_run_0.png" id="7_rpiki"]
-[ext_resource type="Texture2D" uid="uid://pduxlm6xenaq" path="res://Scenes/Player/Sprites/hippie_run_1.png" id="8_tpnyh"]
-[ext_resource type="Texture2D" uid="uid://decupecngqf51" path="res://Scenes/Player/Sprites/hippie_run_2.png" id="9_a3emj"]
-[ext_resource type="Texture2D" uid="uid://dxfdesm0su656" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
+[ext_resource type="Texture2D" uid="uid://c66nj6oyedw30" path="res://Scenes/Player/Sprites/hippie_crouch.png" id="2_h0dwu"]
+[ext_resource type="Texture2D" uid="uid://dpdn78cbfs20a" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
+[ext_resource type="Texture2D" uid="uid://b52gjexdgmppl" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
+[ext_resource type="Texture2D" uid="uid://d1bg57c3l3bk7" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
+[ext_resource type="Texture2D" uid="uid://bbd061fklk2th" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
 size = Vector2(20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttd6e"]
+atlas = ExtResource("5_24xm3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbjb5"]
+atlas = ExtResource("4_4n0h4")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8vt4y"]
+atlas = ExtResource("4_4n0h4")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w10jk"]
+atlas = ExtResource("5_24xm3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvmca"]
+atlas = ExtResource("7_xaavf")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6c0ko"]
+atlas = ExtResource("7_xaavf")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g3gru"]
+atlas = ExtResource("7_xaavf")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mfjn"]
+atlas = ExtResource("7_xaavf")
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_agbor"]
 animations = [{
@@ -26,7 +54,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_7xwn8")
+"texture": SubResource("AtlasTexture_ttd6e")
 }],
 "loop": true,
 "name": &"fall",
@@ -34,10 +62,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_p45dx")
+"texture": SubResource("AtlasTexture_pbjb5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_exl6s")
+"texture": SubResource("AtlasTexture_8vt4y")
 }],
 "loop": true,
 "name": &"idle",
@@ -45,7 +73,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_yvlty")
+"texture": SubResource("AtlasTexture_w10jk")
 }],
 "loop": true,
 "name": &"jump",
@@ -53,16 +81,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("7_rpiki")
+"texture": SubResource("AtlasTexture_gvmca")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_tpnyh")
+"texture": SubResource("AtlasTexture_6c0ko")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_a3emj")
+"texture": SubResource("AtlasTexture_g3gru")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_tpnyh")
+"texture": SubResource("AtlasTexture_8mfjn")
 }],
 "loop": true,
 "name": &"run",
@@ -78,7 +106,7 @@ shape = SubResource("RectangleShape2D_cfoin")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_agbor")
-animation = &"run"
+animation = &"crouch"
 
 [node name="DashParticles" type="CPUParticles2D" parent="."]
 emitting = false
