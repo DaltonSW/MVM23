@@ -105,7 +105,7 @@ public class RunState : IPlayerState {
 public class DashState : IPlayerState {
     [Export] private const float DurationSeconds = 0.04f;
     [Export] private const double Speed = 100000;
-    
+
     private const float AdditionalMomentumExitSpeedMult = 1.5f;
     [Export] private const double NoInputExitSpeed = 0.5f;
 
@@ -132,7 +132,7 @@ public class DashState : IPlayerState {
         player.Velocity = Vector2.FromAngle(_angle) * (float)(Speed * delta);
 
         if (_timeElapsed < DurationSeconds) return null;
-        
+
         player.RestoreReticle();
         player.SetEmittingDashParticles(false);
         player.Velocity = GetExitVelocity(player, inputs);
@@ -140,12 +140,12 @@ public class DashState : IPlayerState {
     }
 
     private Vector2 GetExitVelocity(Player player, Player.InputInfo inputs) {
-        return player._dashMode switch
+        return player.DashMode switch
         {
-            Player.DashMode.NoExtraMomentum => _prevPlayerVelocity,
-            Player.DashMode.MoveMaxMomentum => new Vector2((float)(Player.RunSpeed * Math.Cos(_angle)),
+            Player.TestDashMode.NoExtraMomentum => _prevPlayerVelocity,
+            Player.TestDashMode.MoveMaxMomentum => new Vector2((float)(Player.RunSpeed * Math.Cos(_angle)),
                 (float)(player.JumpSpeed * Math.Sin(_angle))),
-            Player.DashMode.MoreThanMoveMaxMomentum => new Vector2(
+            Player.TestDashMode.MoreThanMoveMaxMomentum => new Vector2(
                 (float)(Player.RunSpeed * Math.Cos(_angle) * AdditionalMomentumExitSpeedMult),
                 (float)(player.JumpSpeed * Math.Sin(_angle) * AdditionalMomentumExitSpeedMult)),
             _ => Vector2.Zero
