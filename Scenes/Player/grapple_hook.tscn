@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://2vufcy3wn607"]
 
-[ext_resource type="Texture2D" uid="uid://c4lqcae2ewi8w" path="res://Assets/Sprites/grappling_hook.png" id="1_lt2ac"]
+[ext_resource type="Texture2D" uid="uid://c4lqcae2ewi8w" path="res://Scenes/Player/Sprites/grappling_hook.png" id="1_lt2ac"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6emkg"]
 radius = 0.637424
