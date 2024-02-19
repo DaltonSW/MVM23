@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://cokjsgiqx7yu3"]
 
-[ext_resource type="Script" path="res://Scripts/TextField.cs" id="1_jxaen"]
-[ext_resource type="Script" path="res://Scripts/Textbox.cs" id="1_lb83q"]
+[ext_resource type="Script" path="res://Scenes/UI/textbox/TextField.cs" id="1_jxaen"]
+[ext_resource type="Script" path="res://Scenes/UI/textbox/Textbox.cs" id="1_lb83q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mg3so"]
 bg_color = Color(0, 0, 0, 1)
