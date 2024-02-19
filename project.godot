@@ -32,6 +32,10 @@ project/assembly_name="MVM23"
 
 enabled=PackedStringArray()
 
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 move_left={
