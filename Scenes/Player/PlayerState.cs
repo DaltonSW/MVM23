@@ -41,9 +41,7 @@ public class IdleState : IPlayerState {
             return new DashState(player);
 
         if (player.CanJump(inputs)) {
-            velocity.Y -= player.JumpSpeed;
-            player.Velocity = velocity;
-            return new JumpState();
+            return new JumpState(player);
         }
 
         player.Velocity = velocity;
@@ -61,9 +59,12 @@ public class IdleState : IPlayerState {
 public class JumpState : IPlayerState {
     public string Name => "JumpState";
 
-    //TODO (#3): Coyote time 
     //TODO (#4): Jump buffering
     //TODO (#6): Jump corner protection
+
+    public JumpState(Player player) {
+        player.Velocity = new Vector2(player.Velocity.X, player.Velocity.Y - player.JumpSpeed);
+    }
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("jump");
@@ -93,11 +94,27 @@ public class FallState : IPlayerState {
 
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
-        if (player.CanJump(inputs))
-            return new JumpState();
+        if (!player.CoyoteTimeExpired) {
+            if (player.CoyoteTimeCounter >= Player.CoyoteTimeBuffer) {
+                player.CoyoteTimeCounter = 0;
+                player.CoyoteTimeExpired = true;
+            }
+            else {
+                player.CoyoteTimeCounter += delta;
+            }
+        }
 
-        if (player.IsOnFloor())
+        if (player.CanJump(inputs)) {
+             player.CoyoteTimeExpired = false;
+             player.CoyoteTimeCounter = 0;
+             return new JumpState(player);
+        }
+
+        if (player.IsOnFloor()) {
+            player.CoyoteTimeExpired = false;
+            player.CoyoteTimeCounter = 0;
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
+        }
 
 
         return null;
@@ -110,21 +127,19 @@ public class RunState : IPlayerState {
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("run");
 
-        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-
-        if (inputs.IsPushingJump && player.IsOnFloor()) {
-            // Change sprite
-            velocity.Y -= player.JumpSpeed;
-            player.Velocity = velocity;
-            return new JumpState();
-        }
-
-        player.Velocity = velocity;
-        if (inputs.InputDirection == Vector2.Zero & player.Velocity == Vector2.Zero)
-            return new IdleState();
-
+        player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        
         if (inputs.IsPushingDash)
             return new DashState(player);
+
+        if (player.CanJump(inputs))
+            return new JumpState(player);
+        
+        if (!player.IsOnFloor())
+            return new FallState();
+
+        if (inputs.InputDirection == Vector2.Zero & player.Velocity == Vector2.Zero)
+            return new IdleState();
 
         return null;
     }
@@ -166,7 +181,7 @@ public class DashState : IPlayerState {
         player.RestoreReticle();
         player.SetEmittingDashParticles(false);
         player.Velocity = GetExitVelocity(player, inputs);
-        return player.IsOnFloor() ? new IdleState() : new JumpState();
+        return player.IsOnFloor() ? new IdleState() : new JumpState(player);
     }
 
     private Vector2 GetExitVelocity(Player player, Player.InputInfo inputs) {
