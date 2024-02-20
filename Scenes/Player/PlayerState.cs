@@ -19,13 +19,16 @@ public interface IPlayerState {
             velocity.X = Mathf.MoveToward(velocity.X, 0, Player.RunSpeed);
 
         if (!player.IsOnFloor()) {
-            var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
-            velocity.Y += player.Gravity * (float)delta;
+            // var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
+            var grav = player.Gravity;
+            velocity.Y += grav * (float)delta;
         }
 
         return velocity;
     }
 }
+
+// TODO: Consider "IGroundedState" and "IAerialState" ???
 
 public class IdleState : IPlayerState {
     public string Name => "IdleState";
@@ -33,24 +36,24 @@ public class IdleState : IPlayerState {
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
         var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-        
+
         if (inputs.IsPushingDash)
             return new DashState(player);
 
-        if (inputs.IsPushingJump && player.IsOnFloor()) {
-            // Change sprite
+        if (player.CanJump(inputs)) {
             velocity.Y -= player.JumpSpeed;
             player.Velocity = velocity;
             return new JumpState();
         }
 
-        if (inputs.InputDirection != Vector2.Zero) {
-            // Change sprite
-            player.Velocity = velocity;
-            return new RunState();
-        }
-
         player.Velocity = velocity;
+
+        if (!player.IsOnFloor())
+            return new FallState();
+
+        if (inputs.InputDirection != Vector2.Zero)
+            return new RunState();
+
         return null;
     }
 }
@@ -58,27 +61,44 @@ public class IdleState : IPlayerState {
 public class JumpState : IPlayerState {
     public string Name => "JumpState";
 
-   //TODO (#3): Coyote time 
-   //TODO (#4): Jump buffering
-   //TODO (#5): Halved-gravity @ apex of jump (Probably a range of velocities close to 0?)
-   //TODO (#6): Jump corner protection
-    
+    //TODO (#3): Coyote time 
+    //TODO (#4): Jump buffering
+    //TODO (#6): Jump corner protection
+
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        player.ChangeAnimation(player.Velocity.Y <= 0 ? "jump" : "fall");
+        player.ChangeAnimation("jump");
 
         var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
-        // Add the gravity.
-        if (!player.IsOnFloor())
-            velocity.Y += player.Gravity * (float)delta;
-
         player.Velocity = velocity;
+
+        if (inputs.IsPushingDash)
+            return new DashState(player);
+
+        if (player.Velocity.Y > 0)
+            return new FallState();
 
         if (player.IsOnFloor())
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
 
-        if (inputs.IsPushingDash)
-            return new DashState(player);
+        return null;
+    }
+}
+
+public class FallState : IPlayerState {
+    public string Name => "FallState";
+
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        player.ChangeAnimation("fall");
+
+        player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+
+        if (player.CanJump(inputs))
+            return new JumpState();
+
+        if (player.IsOnFloor())
+            return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
+
 
         return null;
     }
@@ -116,7 +136,7 @@ public class DashState : IPlayerState {
 
     private const float AdditionalMomentumExitSpeedMult = 1.5f;
     [Export] private const double NoInputExitSpeed = 0.5f;
-    
+
     //TODO (#7): Dash corner protection
 
     private readonly float _angle;

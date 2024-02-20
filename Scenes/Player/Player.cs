@@ -13,8 +13,10 @@ public partial class Player : CharacterBody2D {
     [Export] public const float CoyoteTimeBuffer = 0.2f;
     [Export] public const float EarlyJumpInputBuffer = 0.2f;
 
-    private float _coyoteTimeCounter;
-    private float _earlyJumpInputCounter;
+    public float CoyoteTimeCounter;
+    public bool CoyoteTimeExpired;
+    public float EarlyJumpInputCounter;
+    public bool EarlyJumpTimeExpired;
     
     [ExportSubgroup("Constant Setters")]
     [Export] private const float JumpHeight = 50F; // I believe this is pixels
@@ -130,6 +132,10 @@ public partial class Player : CharacterBody2D {
         };
 
         return inputInfo;
+    }
+
+    public bool CanJump(InputInfo inputs) {
+        return inputs.IsPushingJump && (IsOnFloor() || !CoyoteTimeExpired);
     }
 
     public void ChangeAnimation(string animation) {
