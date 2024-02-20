@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bbd061fklk2th" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
-size = Vector2(20, 32)
+size = Vector2(20, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ttd6e"]
 atlas = ExtResource("5_24xm3")
@@ -101,12 +101,13 @@ animations = [{
 script = ExtResource("1_l6vq3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(6, 2)
 shape = SubResource("RectangleShape2D_cfoin")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_agbor")
-animation = &"crouch"
+animation = &"idle"
 
 [node name="DashParticles" type="CPUParticles2D" parent="."]
 emitting = false
