@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using Godot;
 namespace MVM23.Scripts.AuxiliaryScripts;
 
@@ -18,11 +17,11 @@ public interface IPlayerState {
         else
             velocity.X = Mathf.MoveToward(velocity.X, 0, Player.RunSpeed);
 
-        if (!player.IsOnFloor()) {
-            var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
-            velocity.Y += grav * (float)delta;
-        }
-
+        if (player.IsOnFloor())
+            return velocity;
+        
+        var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
+        velocity.Y += grav * (float)delta;
         return velocity;
     }
 }
@@ -49,10 +48,10 @@ public class IdleState : IPlayerState {
         if (!player.IsOnFloor())
             return new FallState();
 
-        if (inputs.InputDirection != Vector2.Zero)
-            return new RunState();
-
-        return null;
+        // ReSharper disable once ConvertIfStatementToReturnStatement
+        if (inputs.InputDirection == Vector2.Zero) return null;
+        
+        return new RunState();
     }
 }
 
@@ -120,12 +119,10 @@ public class FallState : IPlayerState {
             }
         }
 
-        if (player.IsOnFloor()) {
-            player.ResetJumpBuffers();
-            return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
-        }
-
-        return null;
+        if (!player.IsOnFloor()) return null;
+        
+        player.ResetJumpBuffers();
+        return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
     }
 }
 

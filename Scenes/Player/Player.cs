@@ -1,10 +1,12 @@
 using Godot;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using MVM23.Scripts.AuxiliaryScripts;
 
 // Credits:
 // Bruno Guedes - https://medium.com/@brazmogu/physics-for-game-dev-a-platformer-physics-cheatsheet-f34b09064558
 
+[SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 public partial class Player : CharacterBody2D {
     [Export] public const float RunSpeed = 300.0f;
 
@@ -16,8 +18,8 @@ public partial class Player : CharacterBody2D {
 
     public double CoyoteTimeCounter;
     public bool CoyoteTimeExpired;
-    public double EarlyJumpInputCounter;
-    public bool EarlyJumpTimeExpired;
+    //public double EarlyJumpInputCounter;
+    //public bool EarlyJumpTimeExpired;
     
     [ExportSubgroup("Constant Setters")]
     [Export] private const float JumpHeight = 90F; // I believe this is pixels
@@ -176,7 +178,7 @@ public partial class Player : CharacterBody2D {
         _reticleFrozen = false;
     }
 
-    public void OnGrappleStruck() {
-        return;
-    }
+    // public void OnGrappleStruck() {
+    //     return;
+    // }
 }
