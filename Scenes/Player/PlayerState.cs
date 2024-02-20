@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Godot;
 namespace MVM23.Scripts.AuxiliaryScripts;
 
@@ -17,8 +18,10 @@ public interface IPlayerState {
         else
             velocity.X = Mathf.MoveToward(velocity.X, 0, Player.RunSpeed);
 
-        if (!player.IsOnFloor())
+        if (!player.IsOnFloor()) {
+            var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
             velocity.Y += player.Gravity * (float)delta;
+        }
 
         return velocity;
     }
@@ -55,6 +58,11 @@ public class IdleState : IPlayerState {
 public class JumpState : IPlayerState {
     public string Name => "JumpState";
 
+   //TODO (#3): Coyote time 
+   //TODO (#4): Jump buffering
+   //TODO (#5): Halved-gravity @ apex of jump (Probably a range of velocities close to 0?)
+   //TODO (#6): Jump corner protection
+    
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation(player.Velocity.Y <= 0 ? "jump" : "fall");
 
@@ -108,6 +116,8 @@ public class DashState : IPlayerState {
 
     private const float AdditionalMomentumExitSpeedMult = 1.5f;
     [Export] private const double NoInputExitSpeed = 0.5f;
+    
+    //TODO (#7): Dash corner protection
 
     private readonly float _angle;
 
