@@ -30,7 +30,7 @@ public class IdleState : IPlayerState {
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
         var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-
+        
         if (inputs.IsPushingDash)
             return new DashState(player);
 

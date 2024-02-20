@@ -26,8 +26,11 @@ public partial class Player : CharacterBody2D {
         public bool IsPushingJump { get; init; }
         public bool IsPushingCrouch { get; init; }
         public bool IsPushingDash { get; init; }
+        public bool IsPushingGrapple { get; init; }
     }
 
+    private PackedScene _grappleScene;
+    
     public TestDashMode DashMode = TestDashMode.NoExtraMomentum;
 
     public enum TestDashMode {
@@ -50,6 +53,8 @@ public partial class Player : CharacterBody2D {
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
         _reticle = GetNode<Node2D>("Reticle");
+
+        _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
     }
 
     public override void _Process(double delta) {
@@ -81,6 +86,14 @@ public partial class Player : CharacterBody2D {
         if (newState != null) {
             ChangeState(newState);
         }
+
+        if (inputs.IsPushingGrapple) {
+            var grappleHook = _grappleScene.Instantiate<GrappleHook>();
+            grappleHook.Position = GlobalPosition;
+            grappleHook.Rotation = GetAngleToMouse();
+            GetParent().AddChild(grappleHook);
+        }
+        
         MoveAndSlide();
     }
 
@@ -101,6 +114,7 @@ public partial class Player : CharacterBody2D {
             IsPushingJump = Input.IsActionJustPressed("jump"),
             IsPushingCrouch = Input.IsActionJustPressed("crouch"),
             IsPushingDash = Input.IsActionJustPressed("dash"),
+            IsPushingGrapple = Input.IsActionJustPressed("grapple")
         };
 
         return inputInfo;
@@ -126,5 +140,9 @@ public partial class Player : CharacterBody2D {
 
     public void RestoreReticle() {
         _reticleFrozen = false;
+    }
+
+    public void OnGrappleStruck() {
+        return;
     }
 }
