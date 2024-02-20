@@ -8,10 +8,23 @@ using MVM23.Scripts.AuxiliaryScripts;
 public partial class Player : CharacterBody2D {
     [Export] public const float RunSpeed = 300.0f;
 
+    [ExportGroup("Jump Properties")]
+    [Export] public const float ApexGravityVelRange = 5F;
+    [Export] public const float CoyoteTimeBuffer = 0.2f;
+    [Export] public const float EarlyJumpInputBuffer = 0.2f;
+
+    public float CoyoteTimeCounter;
+    public bool CoyoteTimeExpired;
+    public float EarlyJumpInputCounter;
+    public bool EarlyJumpTimeExpired;
+    
+    [ExportSubgroup("Constant Setters")]
     [Export] private const float JumpHeight = 50F; // I believe this is pixels
     [Export] private const float TimeInAir = 0.2F; // No idea what this unit is. Definitely NOT seconds
     public float Gravity;
     public float JumpSpeed;
+    public float ApexGravity;
+    
 
     private AnimatedSprite2D _sprite;
     private CpuParticles2D _dashParticles;
@@ -41,6 +54,7 @@ public partial class Player : CharacterBody2D {
 
     public override void _Ready() {
         Gravity = (float)(JumpHeight / (2 * Math.Pow(TimeInAir, 2)));
+        ApexGravity = Gravity / 2;
         JumpSpeed = (float)Math.Sqrt(2 * JumpHeight * Gravity);
 
         // Set project gravity so it syncs to other nodes
@@ -87,12 +101,12 @@ public partial class Player : CharacterBody2D {
             ChangeState(newState);
         }
 
-        if (inputs.IsPushingGrapple) {
-            var grappleHook = _grappleScene.Instantiate<GrappleHook>();
-            grappleHook.Position = GlobalPosition;
-            grappleHook.Rotation = GetAngleToMouse();
-            GetParent().AddChild(grappleHook);
-        }
+        // if (inputs.IsPushingGrapple) {
+        //     var grappleHook = _grappleScene.Instantiate<GrappleHook>();
+        //     grappleHook.Position = GlobalPosition;
+        //     grappleHook.Rotation = GetAngleToMouse();
+        //     GetParent().AddChild(grappleHook);
+        // }
         
         MoveAndSlide();
     }
@@ -118,6 +132,10 @@ public partial class Player : CharacterBody2D {
         };
 
         return inputInfo;
+    }
+
+    public bool CanJump(InputInfo inputs) {
+        return inputs.IsPushingJump && (IsOnFloor() || !CoyoteTimeExpired);
     }
 
     public void ChangeAnimation(string animation) {
