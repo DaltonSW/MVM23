@@ -19,8 +19,7 @@ public interface IPlayerState {
             velocity.X = Mathf.MoveToward(velocity.X, 0, Player.RunSpeed);
 
         if (!player.IsOnFloor()) {
-            // var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
-            var grav = player.Gravity;
+            var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
             velocity.Y += grav * (float)delta;
         }
 
@@ -35,16 +34,17 @@ public class IdleState : IPlayerState {
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
-        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (inputs.IsPushingDash)
             return new DashState(player);
 
-        if (player.CanJump(inputs)) {
-            return new JumpState(player);
+        if (inputs.IsPushingJump) {
+            var jumpType = player.CanJump();
+            if (jumpType != Player.JumpType.None) {
+                return new JumpState(player, jumpType);
+            }
         }
-
-        player.Velocity = velocity;
 
         if (!player.IsOnFloor())
             return new FallState();
@@ -62,8 +62,16 @@ public class JumpState : IPlayerState {
     //TODO (#4): Jump buffering
     //TODO (#6): Jump corner protection
 
-    public JumpState(Player player) {
-        player.Velocity = new Vector2(player.Velocity.X, player.Velocity.Y - player.JumpSpeed);
+    public JumpState(Player player, Player.JumpType jumpType) {
+        var jumpSpeed = player.JumpSpeed;
+        
+        // If this was a CT jump, add additional jump speed proportional to how long the player has spent in CT
+        if (jumpType == Player.JumpType.CoyoteTime)
+            jumpSpeed += (float)(player.JumpSpeed * player.CoyoteTimeCounter);
+        
+        player.ResetJumpBuffers();
+        player.CoyoteTimeExpired = true; // Set it to true so you can't infinitely jump up
+        player.Velocity = new Vector2(player.Velocity.X, player.Velocity.Y - jumpSpeed);
     }
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
@@ -104,18 +112,18 @@ public class FallState : IPlayerState {
             }
         }
 
-        if (player.CanJump(inputs)) {
-             player.CoyoteTimeExpired = false;
-             player.CoyoteTimeCounter = 0;
-             return new JumpState(player);
+        if (inputs.IsPushingJump) {
+            var jumpType = player.CanJump();
+            if (jumpType != Player.JumpType.None) {
+                player.ResetJumpBuffers();
+                return new JumpState(player, jumpType);
+            }
         }
 
         if (player.IsOnFloor()) {
-            player.CoyoteTimeExpired = false;
-            player.CoyoteTimeCounter = 0;
+            player.ResetJumpBuffers();
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
         }
-
 
         return null;
     }
@@ -128,13 +136,17 @@ public class RunState : IPlayerState {
         player.ChangeAnimation("run");
 
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-        
+
         if (inputs.IsPushingDash)
             return new DashState(player);
 
-        if (player.CanJump(inputs))
-            return new JumpState(player);
-        
+        if (inputs.IsPushingJump) {
+            var jumpType = player.CanJump();
+            if (jumpType != Player.JumpType.None) {
+                return new JumpState(player, jumpType);
+            }
+        }
+
         if (!player.IsOnFloor())
             return new FallState();
 
@@ -181,7 +193,7 @@ public class DashState : IPlayerState {
         player.RestoreReticle();
         player.SetEmittingDashParticles(false);
         player.Velocity = GetExitVelocity(player, inputs);
-        return player.IsOnFloor() ? new IdleState() : new JumpState(player);
+        return player.IsOnFloor() ? new IdleState() : new JumpState(player, Player.JumpType.Normal);
     }
 
     private Vector2 GetExitVelocity(Player player, Player.InputInfo inputs) {

@@ -135,8 +135,23 @@ public partial class Player : CharacterBody2D {
         return inputInfo;
     }
 
-    public bool CanJump(InputInfo inputs) {
-        return inputs.IsPushingJump && (IsOnFloor() || !CoyoteTimeExpired);
+    public enum JumpType {
+        None = 0,
+        Normal = 1,
+        CoyoteTime = 2,
+    }
+
+    public JumpType CanJump() {
+        if (!IsOnFloor() && !CoyoteTimeExpired)
+            return JumpType.CoyoteTime;
+        if (IsOnFloor())
+            return JumpType.Normal;
+        return JumpType.None;
+    }
+
+    public void ResetJumpBuffers() {
+        CoyoteTimeExpired = false;
+        CoyoteTimeCounter = 0;
     }
 
     public void ChangeAnimation(string animation) {
