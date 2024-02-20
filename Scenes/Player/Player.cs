@@ -10,16 +10,17 @@ public partial class Player : CharacterBody2D {
 
     [ExportGroup("Jump Properties")]
     [Export] public const float ApexGravityVelRange = 5F;
-    [Export] public const float CoyoteTimeBuffer = 0.2f;
-    [Export] public const float EarlyJumpInputBuffer = 0.2f;
+    // Both of the below are in seconds
+    [Export] public const double CoyoteTimeBuffer = 2.2;
+    [Export] public const double EarlyJumpInputBuffer = 0.2;
 
-    public float CoyoteTimeCounter;
+    public double CoyoteTimeCounter;
     public bool CoyoteTimeExpired;
-    public float EarlyJumpInputCounter;
+    public double EarlyJumpInputCounter;
     public bool EarlyJumpTimeExpired;
     
     [ExportSubgroup("Constant Setters")]
-    [Export] private const float JumpHeight = 50F; // I believe this is pixels
+    [Export] private const float JumpHeight = 90F; // I believe this is pixels
     [Export] private const float TimeInAir = 0.2F; // No idea what this unit is. Definitely NOT seconds
     public float Gravity;
     public float JumpSpeed;
@@ -60,7 +61,7 @@ public partial class Player : CharacterBody2D {
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
 
-        _currentState = IsOnFloor() ? new IdleState() : new JumpState();
+        _currentState = new IdleState();
         _reticleFrozen = false;
         _reticleFreezePos = Vector2.Zero;
 
@@ -134,8 +135,23 @@ public partial class Player : CharacterBody2D {
         return inputInfo;
     }
 
-    public bool CanJump(InputInfo inputs) {
-        return inputs.IsPushingJump && (IsOnFloor() || !CoyoteTimeExpired);
+    public enum JumpType {
+        None = 0,
+        Normal = 1,
+        CoyoteTime = 2,
+    }
+
+    public JumpType CanJump() {
+        if (!IsOnFloor() && !CoyoteTimeExpired)
+            return JumpType.CoyoteTime;
+        if (IsOnFloor())
+            return JumpType.Normal;
+        return JumpType.None;
+    }
+
+    public void ResetJumpBuffers() {
+        CoyoteTimeExpired = false;
+        CoyoteTimeCounter = 0;
     }
 
     public void ChangeAnimation(string animation) {
