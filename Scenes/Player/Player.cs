@@ -13,7 +13,7 @@ public partial class Player : CharacterBody2D {
     [ExportGroup("Jump Properties")]
     [Export] public const float ApexGravityVelRange = 5F;
     // Both of the below are in seconds
-    [Export] public const double CoyoteTimeBuffer = 2.2;
+    [Export] public const double CoyoteTimeBuffer = 0.1;
     [Export] public const double EarlyJumpInputBuffer = 0.2;
     [Export] public const float MaxVerticalVelocity = RunSpeed;
 
