@@ -12,14 +12,14 @@ public interface IPlayerState {
     public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
         var velocity = player.Velocity;
 
-        if (inputs.InputDirection != Vector2.Zero)
-            velocity.X = inputs.InputDirection.X * Player.RunSpeed;
+        if (inputs.InputDirection.X != 0)
+            velocity.X = inputs.InputDirection.X < 0 ? -Player.RunSpeed : Player.RunSpeed;
         else
             velocity.X = Mathf.MoveToward(velocity.X, 0, Player.RunSpeed);
 
         if (player.IsOnFloor())
             return velocity;
-        
+
         var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
         velocity.Y += grav * (float)delta;
         return velocity;
@@ -36,7 +36,7 @@ public class IdleState : IPlayerState {
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (inputs.IsPushingDash)
-            return new DashState(player);
+            return new DashState(player, inputs);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -50,7 +50,7 @@ public class IdleState : IPlayerState {
 
         // ReSharper disable once ConvertIfStatementToReturnStatement
         if (inputs.InputDirection == Vector2.Zero) return null;
-        
+
         return new RunState();
     }
 }
@@ -63,11 +63,11 @@ public class JumpState : IPlayerState {
 
     public JumpState(Player player, Player.JumpType jumpType) {
         var jumpSpeed = player.JumpSpeed;
-        
+
         // If this was a CT jump, add additional jump speed proportional to how long the player has spent in CT
         if (jumpType == Player.JumpType.CoyoteTime)
-            jumpSpeed += (float)(player.JumpSpeed * player.CoyoteTimeCounter);
-        
+            jumpSpeed += (float)(player.JumpSpeed * player.CoyoteTimeElapsed);
+
         player.ResetJumpBuffers();
         player.CoyoteTimeExpired = true; // Set it to true so you can't infinitely jump up
         player.Velocity = new Vector2(player.Velocity.X, player.Velocity.Y - jumpSpeed);
@@ -81,7 +81,7 @@ public class JumpState : IPlayerState {
         player.Velocity = velocity;
 
         if (inputs.IsPushingDash)
-            return new DashState(player);
+            return new DashState(player, inputs);
 
         if (player.Velocity.Y > 0)
             return new FallState();
@@ -102,15 +102,18 @@ public class FallState : IPlayerState {
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (!player.CoyoteTimeExpired) {
-            if (player.CoyoteTimeCounter >= Player.CoyoteTimeBuffer) {
-                player.CoyoteTimeCounter = 0;
+            if (player.CoyoteTimeElapsed >= Player.CoyoteTimeBuffer) {
+                player.CoyoteTimeElapsed = 0;
                 player.CoyoteTimeExpired = true;
             }
             else {
-                player.CoyoteTimeCounter += delta;
+                player.CoyoteTimeElapsed += delta;
             }
         }
 
+        if (inputs.IsPushingDash)
+            return new DashState(player, inputs);
+        
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
             if (jumpType != Player.JumpType.None) {
@@ -120,7 +123,7 @@ public class FallState : IPlayerState {
         }
 
         if (!player.IsOnFloor()) return null;
-        
+
         player.ResetJumpBuffers();
         return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
     }
@@ -135,7 +138,7 @@ public class RunState : IPlayerState {
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (inputs.IsPushingDash)
-            return new DashState(player);
+            return new DashState(player, inputs);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -155,9 +158,55 @@ public class RunState : IPlayerState {
 }
 
 public class DashState : IPlayerState {
-    [Export] private const float DurationSeconds = 0.04f;
-    [Export] private const double Speed = 100000;
+    public string Name => "DashState";
 
+    public DashState(Player player, Player.InputInfo inputs) {
+        player.DashTimeElapsed = 0;
+        player.DashStoredVelocity = player.Velocity;
+        player.DashCurrentAngle = inputs.InputDirection;
+    }
+
+    private static Vector2 GetDashDirection(Player.InputInfo inputs) {
+        var direction = inputs.InputDirection;
+        var directions = new Vector2[]
+        {
+            Vector2.Up, Vector2.Down, Vector2.Left, Vector2.Right, new Vector2(1, 1).Normalized(), // Up-right
+            new Vector2(-1, 1).Normalized(),                                                       // Up-left
+            new Vector2(1, -1).Normalized(),                                                       // Down-right
+            new Vector2(-1, -1).Normalized()                                                       // Down-left
+        };
+
+        var closestDirection = direction;
+        var highestDot = -1.0f;
+        foreach (var dir in directions) {
+            var dot = direction.Dot(dir);
+            if (dot < highestDot) continue;
+
+            highestDot = dot;
+            closestDirection = dir;
+        }
+        return closestDirection;
+    }
+
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        player.DashTimeElapsed += delta;
+        player.ChangeAnimation("jump");
+        player.SetEmittingDashParticles(true);
+
+        player.Velocity = player.DashCurrentAngle * (float)Player.DashSpeed;
+
+        if (player.DashTimeElapsed < Player.DashDuration) return null;
+
+        player.SetEmittingDashParticles(false);
+        if (player.Velocity.Y != 0) {
+            var tempVel = player.Velocity.Y < 0 ? -Player.MaxVerticalVelocity : Player.MaxVerticalVelocity;
+            player.Velocity = new Vector2(player.Velocity.X, tempVel);
+        }
+        return player.IsOnFloor() ? new IdleState() : new FallState();
+    }
+}
+
+public class FullCircleDashState : IPlayerState {
     private const float AdditionalMomentumExitSpeedMult = 1.5f;
     [Export] private const double NoInputExitSpeed = 0.5f;
 
@@ -169,7 +218,7 @@ public class DashState : IPlayerState {
 
     private readonly Vector2 _prevPlayerVelocity;
 
-    public DashState(Player player) {
+    public FullCircleDashState(Player player) {
         _angle = player.GetAngleToMouse();
         _timeElapsed = 0;
         _prevPlayerVelocity = player.Velocity;
@@ -183,9 +232,9 @@ public class DashState : IPlayerState {
         player.SetEmittingDashParticles(true);
         player.FreezeReticle();
 
-        player.Velocity = Vector2.FromAngle(_angle) * (float)(Speed * delta);
+        player.Velocity = Vector2.FromAngle(_angle) * (float)(Player.DashSpeed * delta);
 
-        if (_timeElapsed < DurationSeconds) return null;
+        if (_timeElapsed < Player.DashDuration) return null;
 
         player.RestoreReticle();
         player.SetEmittingDashParticles(false);
