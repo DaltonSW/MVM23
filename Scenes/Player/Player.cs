@@ -8,26 +8,33 @@ using MVM23.Scripts.AuxiliaryScripts;
 
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 public partial class Player : CharacterBody2D {
-    [Export] public const float RunSpeed = 300.0f;
+    [Export] public const float RunSpeed = 150.0f;
 
     [ExportGroup("Jump Properties")]
     [Export] public const float ApexGravityVelRange = 5F;
     // Both of the below are in seconds
-    [Export] public const double CoyoteTimeBuffer = 2.2;
+    [Export] public const double CoyoteTimeBuffer = 0.1;
     [Export] public const double EarlyJumpInputBuffer = 0.2;
+    [Export] public const float MaxVerticalVelocity = RunSpeed;
 
-    public double CoyoteTimeCounter;
+    public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
     //public double EarlyJumpInputCounter;
     //public bool EarlyJumpTimeExpired;
     
     [ExportSubgroup("Constant Setters")]
-    [Export] private const float JumpHeight = 90F; // I believe this is pixels
-    [Export] private const float TimeInAir = 0.2F; // No idea what this unit is. Definitely NOT seconds
+    [Export] private const float JumpHeight = 70F; // I believe this is pixels
+    [Export] private const float TimeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
     public float Gravity;
     public float JumpSpeed;
     public float ApexGravity;
-    
+
+    [ExportGroup("Dash Properties")]
+    [Export] public const float DashDuration = 0.08f;
+    [Export] public const double DashSpeed = RunSpeed * 6F;
+    public double DashTimeElapsed;
+    public Vector2 DashStoredVelocity;
+    public Vector2 DashCurrentAngle;
 
     private AnimatedSprite2D _sprite;
     private CpuParticles2D _dashParticles;
@@ -70,6 +77,7 @@ public partial class Player : CharacterBody2D {
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
         _reticle = GetNode<Node2D>("Reticle");
+        _reticle.Visible = false;
 
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
     }
@@ -127,7 +135,7 @@ public partial class Player : CharacterBody2D {
     private static InputInfo GetInputs() {
         var inputInfo = new InputInfo
         {
-            InputDirection = Input.GetVector("move_left", "move_right", "ui_up", "ui_down"),
+            InputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down"),
             IsPushingJump = Input.IsActionJustPressed("jump"),
             IsPushingCrouch = Input.IsActionJustPressed("crouch"),
             IsPushingDash = Input.IsActionJustPressed("dash"),
@@ -153,7 +161,7 @@ public partial class Player : CharacterBody2D {
 
     public void ResetJumpBuffers() {
         CoyoteTimeExpired = false;
-        CoyoteTimeCounter = 0;
+        CoyoteTimeElapsed = 0;
     }
 
     public void ChangeAnimation(string animation) {
