@@ -16,9 +16,11 @@ public partial class Player : CharacterBody2D {
     [Export] public const double CoyoteTimeBuffer = 0.1;
     [Export] public const double EarlyJumpInputBuffer = 0.2;
     [Export] public const float MaxVerticalVelocity = RunSpeed;
+    [Export] public const float SuperJumpVelocity = MaxVerticalVelocity * 5;
 
     [Export] public const double SuperJumpMinChargeTime = 0.25;
     public double SuperJumpCurrentChargeTime;
+    public bool CanSuperJump;
     
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
@@ -38,13 +40,15 @@ public partial class Player : CharacterBody2D {
     public double DashTimeElapsed;
     public Vector2 DashStoredVelocity;
     public Vector2 DashCurrentAngle;
-    public bool IsDashing { get; set; }
+
+    private bool IsDashing { get; set; }
+    private bool PlayerCanDash { get; set; }
 
     private AnimatedSprite2D _sprite;
     private CpuParticles2D _dashParticles;
     private Node2D _reticle;
 
-    private IPlayerState _currentState;
+    public IPlayerState CurrentState { get; private set; }
     private bool _reticleFrozen; // TODO: control with _currentState method
     private Vector2 _reticleFreezePos;
 
@@ -66,8 +70,9 @@ public partial class Player : CharacterBody2D {
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
 
-        _currentState = new IdleState();
+        CurrentState = new IdleState();
         _reticleFrozen = false;
+        PlayerCanDash = true;
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
@@ -92,7 +97,7 @@ public partial class Player : CharacterBody2D {
     public override void _PhysicsProcess(double delta) {
         var inputs = GetInputs();
 
-        var newState = _currentState.HandleInput(this, inputs, delta);
+        var newState = CurrentState.HandleInput(this, inputs, delta);
         if (newState != null) {
             ChangeState(newState);
         }
@@ -108,8 +113,8 @@ public partial class Player : CharacterBody2D {
     }
 
     private void ChangeState(IPlayerState newState) {
-        GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
-        _currentState = newState;
+        GD.Print($"Changing from {CurrentState.Name} to {newState.Name}");
+        CurrentState = newState;
 
         // TODO: Implement a "push down automaton"(?) pattern
         //  Basically just a stack that stores the previous states
@@ -137,6 +142,11 @@ public partial class Player : CharacterBody2D {
         SuperJump
     }
 
+
+    public bool CanDash() {
+        return PlayerCanDash;
+    }
+    
     public JumpType CanJump() {
         if (!IsOnFloor() && !CoyoteTimeExpired)
             return JumpType.CoyoteTime;

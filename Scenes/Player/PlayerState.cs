@@ -35,7 +35,7 @@ public class IdleState : IPlayerState {
         player.ChangeAnimation("idle");
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
-        if (inputs.IsPushingDash)
+        if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
 
         if (inputs.IsPushingJump) {
@@ -52,6 +52,32 @@ public class IdleState : IPlayerState {
         if (inputs.InputDirection == Vector2.Zero) return null;
 
         return new RunState();
+    }
+}
+
+public class ChargeState : IPlayerState {
+    public string Name => "ChargeState";
+
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        if (!inputs.IsPushingCrouch)
+            return player.CanSuperJump ? new SuperJumpState() : new IdleState();
+
+        player.SuperJumpCurrentChargeTime += delta;
+        if (player.SuperJumpCurrentChargeTime >= Player.SuperJumpMinChargeTime)
+            player.CanSuperJump = true;
+        
+        return null;
+    }
+}
+
+public class SuperJumpState : IPlayerState {
+    public string Name => "SuperJumpState";
+
+    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        if (inputs.IsPushingCrouch)
+            return new IdleState();
+        player.Velocity = new Vector2(0, Player.SuperJumpVelocity);
+        return null;
     }
 }
 
@@ -80,7 +106,7 @@ public class JumpState : IPlayerState {
 
         player.Velocity = velocity;
 
-        if (inputs.IsPushingDash)
+        if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
 
         if (player.Velocity.Y > 0)
@@ -111,7 +137,7 @@ public class FallState : IPlayerState {
             }
         }
 
-        if (inputs.IsPushingDash)
+        if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
         
         if (inputs.IsPushingJump) {
@@ -137,7 +163,7 @@ public class RunState : IPlayerState {
 
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
-        if (inputs.IsPushingDash)
+        if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
 
         if (inputs.IsPushingJump) {
@@ -195,13 +221,20 @@ public class DashState : IPlayerState {
 
         player.Velocity = player.DashCurrentAngle * (float)Player.DashSpeed;
 
-        if (player.DashTimeElapsed < Player.DashDuration) return null;
+        if (player.IsOnFloor() && inputs.IsPushingCrouch)
+            return new ChargeState();
+        
+        if (player.DashTimeElapsed < Player.DashDuration) 
+            return null;
 
         player.SetEmittingDashParticles(false);
+        
+        // ReSharper disable once InvertIf
         if (player.Velocity.Y != 0) {
             var tempVel = player.Velocity.Y < 0 ? -Player.MaxVerticalVelocity : Player.MaxVerticalVelocity;
             player.Velocity = new Vector2(player.Velocity.X, tempVel);
         }
+        
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
 }

@@ -13,6 +13,6 @@ public partial class DebugLabel : Label {
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        Text = $"X Vel: {_player.Velocity.X}\nY Vel: {_player.Velocity.Y}";
+        Text = $"X Vel: {_player.Velocity.X}\nY Vel: {_player.Velocity.Y}\nState: {_player.CurrentState}";
     }
 }

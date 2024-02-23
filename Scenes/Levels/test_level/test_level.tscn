@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://b5nkd7g0qhcli"]
 
-[ext_resource type="Texture2D" uid="uid://b8e1t6ul0ujq" path="res://Scenes/Levels/test_level/SMB_Tiles.png" id="1_ajnvo"]
-[ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/Player.tscn" id="2_l5o3i"]
+[ext_resource type="Texture2D" uid="uid://6ahg25topaux" path="res://Scenes/Levels/test_level/SMB_Tiles.png" id="1_ajnvo"]
+[ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_l5o3i"]
 [ext_resource type="Script" path="res://Scenes/Levels/test_level/DebugLabel.cs" id="3_rvw6x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mtdig"]
