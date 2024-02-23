@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://l1pht3bvo7gc"]
+
+[ext_resource type="Texture2D" uid="uid://kbkm66q0trwb" path="res://Scenes/Enemies/cone_walk.png" id="1_4c6ve"]
+[ext_resource type="Script" path="res://Scenes/Enemies/ConeWalker.cs" id="1_ldup0"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7svgw"]
+radius = 5.0
+height = 34.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wgsxi"]
+atlas = ExtResource("1_4c6ve")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ata20"]
+atlas = ExtResource("1_4c6ve")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fd8j"]
+atlas = ExtResource("1_4c6ve")
+region = Rect2(16, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ihqyt"]
+atlas = ExtResource("1_4c6ve")
+region = Rect2(32, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w2cux"]
+atlas = ExtResource("1_4c6ve")
+region = Rect2(48, 0, 16, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ukps6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wgsxi")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ata20")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fd8j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ihqyt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w2cux")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="ConeWalker" type="CharacterBody2D"]
+script = ExtResource("1_ldup0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 7)
+shape = SubResource("CapsuleShape2D_7svgw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ukps6")
+animation = &"idle"
