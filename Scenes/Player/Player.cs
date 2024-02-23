@@ -17,6 +17,9 @@ public partial class Player : CharacterBody2D {
     [Export] public const double EarlyJumpInputBuffer = 0.2;
     [Export] public const float MaxVerticalVelocity = RunSpeed;
 
+    [Export] public const double SuperJumpMinChargeTime = 0.25;
+    public double SuperJumpCurrentChargeTime;
+    
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
     //public double EarlyJumpInputCounter;
@@ -35,6 +38,7 @@ public partial class Player : CharacterBody2D {
     public double DashTimeElapsed;
     public Vector2 DashStoredVelocity;
     public Vector2 DashCurrentAngle;
+    public bool IsDashing { get; set; }
 
     private AnimatedSprite2D _sprite;
     private CpuParticles2D _dashParticles;
@@ -54,14 +58,6 @@ public partial class Player : CharacterBody2D {
 
     private PackedScene _grappleScene;
     
-    public TestDashMode DashMode = TestDashMode.NoExtraMomentum;
-
-    public enum TestDashMode {
-        NoExtraMomentum,
-        MoreThanMoveMaxMomentum,
-        MoveMaxMomentum
-    }
-
     public override void _Ready() {
         Gravity = (float)(JumpHeight / (2 * Math.Pow(TimeInAir, 2)));
         ApexGravity = Gravity / 2;
@@ -83,17 +79,6 @@ public partial class Player : CharacterBody2D {
     }
 
     public override void _Process(double delta) {
-
-        if (Input.IsKeyPressed(Key.Key1)) {
-            DashMode = TestDashMode.NoExtraMomentum;
-        }
-        else if (Input.IsKeyPressed(Key.Key2)) {
-            DashMode = TestDashMode.MoreThanMoveMaxMomentum;
-        }
-        else if (Input.IsKeyPressed(Key.Key3)) {
-            DashMode = TestDashMode.MoveMaxMomentum;
-        }
-
         if (_reticleFrozen) {
             _reticle.GlobalPosition = _reticleFreezePos;
         }
@@ -146,9 +131,10 @@ public partial class Player : CharacterBody2D {
     }
 
     public enum JumpType {
-        None = 0,
-        Normal = 1,
-        CoyoteTime = 2,
+        None,
+        Normal,
+        CoyoteTime,
+        SuperJump
     }
 
     public JumpType CanJump() {
