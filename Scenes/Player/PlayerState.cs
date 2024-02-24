@@ -5,6 +5,8 @@ namespace MVM23.Scripts.AuxiliaryScripts;
 public interface IPlayerState {
     public string Name { get; }
 
+    public static float ApexGravityVelRange => 5F;
+
     /// Must be called exactly once per _PhysicsProcess,
     /// and nowhere else.
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
@@ -20,7 +22,7 @@ public interface IPlayerState {
         if (player.IsOnFloor())
             return velocity;
 
-        var grav = Math.Abs(velocity.Y) < player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
+        var grav = Math.Abs(velocity.Y) < ApexGravityVelRange ? player.ApexGravity : player.Gravity;
         velocity.Y += grav * (float)delta;
         return velocity;
     }
@@ -39,7 +41,7 @@ public class IdleState : IPlayerState {
             return new ChargeState();
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(player, inputs);
+            return new DashState(inputs);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -60,17 +62,22 @@ public class IdleState : IPlayerState {
 
 public class ChargeState : IPlayerState {
     public string Name => "ChargeState";
+    
+    [Export] public double MinChargeTime = 1.00;
+
+    private double _currentChargeTime;
+
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.Velocity = Vector2.Zero;
         if (!inputs.IsPushingCrouch) {
             player.ChangeColor(Colors.White);
-            player.SuperJumpCurrentChargeTime = 0;
+            _currentChargeTime = 0;
             return player.CanSuperJump ? new SuperJumpState() : new IdleState();
         }
 
-        player.SuperJumpCurrentChargeTime += delta;
-        if (player.SuperJumpCurrentChargeTime < player.SuperJumpMinChargeTime) return null;
+        _currentChargeTime += delta;
+        if (_currentChargeTime < MinChargeTime) return null;
         
         player.CanSuperJump = true;
         player.ChangeColor(Colors.Red);
@@ -81,13 +88,15 @@ public class ChargeState : IPlayerState {
 
 public class SuperJumpState : IPlayerState {
     public string Name => "SuperJumpState";
+    
+    [Export] public float SuperJumpVelocity = -750f;
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         if (inputs.IsPushingCrouch) {
             player.CanSuperJump = false;
             return new IdleState();
         }
-        player.Velocity = new Vector2(0, -player.SuperJumpVelocity);
+        player.Velocity = new Vector2(0, SuperJumpVelocity);
         return null;
     }
 }
@@ -118,7 +127,7 @@ public class JumpState : IPlayerState {
         player.Velocity = velocity;
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(player, inputs);
+            return new DashState(inputs);
 
         if (player.Velocity.Y > 0)
             return new FallState();
@@ -132,6 +141,8 @@ public class JumpState : IPlayerState {
 
 public class FallState : IPlayerState {
     public string Name => "FallState";
+    
+    [Export] public double CoyoteTimeBuffer = 0.1;
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("fall");
@@ -139,7 +150,7 @@ public class FallState : IPlayerState {
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (!player.CoyoteTimeExpired) {
-            if (player.CoyoteTimeElapsed >= player.CoyoteTimeBuffer) {
+            if (player.CoyoteTimeElapsed >= CoyoteTimeBuffer) {
                 player.CoyoteTimeElapsed = 0;
                 player.CoyoteTimeExpired = true;
             }
@@ -149,7 +160,7 @@ public class FallState : IPlayerState {
         }
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(player, inputs);
+            return new DashState(inputs);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -178,7 +189,7 @@ public class RunState : IPlayerState {
             return new ChargeState();
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(player, inputs);
+            return new DashState(inputs);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -199,57 +210,64 @@ public class RunState : IPlayerState {
 
 public class DashState : IPlayerState {
     public string Name => "DashState";
+    
+    [Export] public float ExitVelocity = 150.0f;
+    [Export] public float DashDuration = 0.08f;
+    [Export] public double DashSpeed = 750.0f;
+    
+    private double _dashTimeElapsed;
+    private readonly Vector2 _dashCurrentAngle;
 
-    public DashState(Player player, Player.InputInfo inputs) {
-        player.DashTimeElapsed = 0;
-        player.DashStoredVelocity = player.Velocity;
-        player.DashCurrentAngle = inputs.InputDirection;
-    }
-
-    private static Vector2 GetDashDirection(Player.InputInfo inputs) {
-        var direction = inputs.InputDirection;
-        var directions = new Vector2[]
-        {
-            Vector2.Up, Vector2.Down, Vector2.Left, Vector2.Right, new Vector2(1, 1).Normalized(), // Up-right
-            new Vector2(-1, 1).Normalized(),                                                       // Up-left
-            new Vector2(1, -1).Normalized(),                                                       // Down-right
-            new Vector2(-1, -1).Normalized()                                                       // Down-left
-        };
-
-        var closestDirection = direction;
-        var highestDot = -1.0f;
-        foreach (var dir in directions) {
-            var dot = direction.Dot(dir);
-            if (dot < highestDot) continue;
-
-            highestDot = dot;
-            closestDirection = dir;
-        }
-        return closestDirection;
+    public DashState(Player.InputInfo inputs) {
+        _dashTimeElapsed = 0;
+        _dashCurrentAngle = inputs.InputDirection;
     }
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.SuperJumpCurrentBufferTime = 0;
-        player.DashTimeElapsed += delta;
+        _dashTimeElapsed += delta;
         player.ChangeAnimation("jump");
         player.SetEmittingDashParticles(true);
 
-        player.Velocity = player.DashCurrentAngle * (float)player.DashSpeed;
+        player.Velocity = _dashCurrentAngle * (float)DashSpeed;
 
         if (player.CanStartCharge(inputs))
             return new ChargeState();
 
-        if (player.DashTimeElapsed < player.DashDuration)
+        if (_dashTimeElapsed < DashDuration)
             return null;
 
         player.SetEmittingDashParticles(false);
 
         // ReSharper disable once InvertIf
         if (player.Velocity.Y != 0) {
-            var tempVel = player.Velocity.Y < 0 ? -player.MaxVerticalVelocity : player.MaxVerticalVelocity;
+            var tempVel = player.Velocity.Y < 0 ? -ExitVelocity : ExitVelocity;
             player.Velocity = new Vector2(player.Velocity.X, tempVel);
         }
 
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
+    
+    
+    // private static Vector2 GetDashDirection(Player.InputInfo inputs) {
+    //     var direction = inputs.InputDirection;
+    //     var directions = new Vector2[]
+    //     {
+    //         Vector2.Up, Vector2.Down, Vector2.Left, Vector2.Right, new Vector2(1, 1).Normalized(), // Up-right
+    //         new Vector2(-1, 1).Normalized(),                                                       // Up-left
+    //         new Vector2(1, -1).Normalized(),                                                       // Down-right
+    //         new Vector2(-1, -1).Normalized()                                                       // Down-left
+    //     };
+    //
+    //     var closestDirection = direction;
+    //     var highestDot = -1.0f;
+    //     foreach (var dir in directions) {
+    //         var dot = direction.Dot(dir);
+    //         if (dot < highestDot) continue;
+    //
+    //         highestDot = dot;
+    //         closestDirection = dir;
+    //     }
+    //     return closestDirection;
+    // }
 }

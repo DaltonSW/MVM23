@@ -12,17 +12,12 @@ public partial class Player : CharacterBody2D {
     [Export] public float RunSpeed = 150.0f;
 
     [ExportGroup("Jump Properties")]
-    [Export] public float ApexGravityVelRange = 5F;
     // Both of the below are in seconds
-    [Export] public double CoyoteTimeBuffer = 0.1;
+    
     [Export] public double EarlyJumpInputBuffer = 0.2;
-    [Export] public float MaxVerticalVelocity = 150.0f;
-    [Export] public float SuperJumpVelocity = 750f;
 
-    [Export] public double SuperJumpMinChargeTime = 1.00;
     [Export] public double SuperJumpInitBufferLimit = 0.75;
     public double SuperJumpCurrentBufferTime;
-    public double SuperJumpCurrentChargeTime;
     public bool CanSuperJump { get; set; }
     
     public double CoyoteTimeElapsed;
@@ -38,11 +33,7 @@ public partial class Player : CharacterBody2D {
     public float ApexGravity;
 
     [ExportGroup("Dash Properties")]
-    [Export] public float DashDuration = 0.08f;
-    [Export] public double DashSpeed = 750.0f;
-    public double DashTimeElapsed;
-    public Vector2 DashStoredVelocity;
-    public Vector2 DashCurrentAngle;
+
 
     private bool IsDashing { get; set; }
     private bool PlayerCanDash { get; set; }
@@ -188,14 +179,14 @@ public partial class Player : CharacterBody2D {
         _dashParticles.Emitting = emit;
     }
 
-    public float GetAngleToMouse() => GetAngleTo(GetViewport().GetMousePosition());
+    private float GetAngleToMouse() => GetAngleTo(GetViewport().GetMousePosition());
 
-    public void FreezeReticle() {
+    private void FreezeReticle() {
         _reticleFrozen = true;
         _reticleFreezePos = _reticle.GlobalPosition;
     }
 
-    public void RestoreReticle() {
+    private void RestoreReticle() {
         _reticleFrozen = false;
     }
 
