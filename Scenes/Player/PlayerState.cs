@@ -35,6 +35,9 @@ public class IdleState : IPlayerState {
         player.ChangeAnimation("idle");
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
+        if (player.CanStartCharge(inputs))
+            return new ChargeState();
+
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
 
@@ -49,7 +52,7 @@ public class IdleState : IPlayerState {
             return new FallState();
 
         // ReSharper disable once ConvertIfStatementToReturnStatement
-        if (inputs.InputDirection == Vector2.Zero) return null;
+        if (inputs.InputDirection.X == 0) return null;
 
         return new RunState();
     }
@@ -59,13 +62,19 @@ public class ChargeState : IPlayerState {
     public string Name => "ChargeState";
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        if (!inputs.IsPushingCrouch)
+        player.Velocity = Vector2.Zero;
+        if (!inputs.IsPushingCrouch) {
+            player.ChangeColor(Colors.White);
+            player.SuperJumpCurrentChargeTime = 0;
             return player.CanSuperJump ? new SuperJumpState() : new IdleState();
+        }
 
         player.SuperJumpCurrentChargeTime += delta;
-        if (player.SuperJumpCurrentChargeTime >= Player.SuperJumpMinChargeTime)
-            player.CanSuperJump = true;
+        if (player.SuperJumpCurrentChargeTime < Player.SuperJumpMinChargeTime) return null;
         
+        player.CanSuperJump = true;
+        player.ChangeColor(Colors.Red);
+
         return null;
     }
 }
@@ -74,9 +83,11 @@ public class SuperJumpState : IPlayerState {
     public string Name => "SuperJumpState";
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        if (inputs.IsPushingCrouch)
+        if (inputs.IsPushingCrouch) {
+            player.CanSuperJump = false;
             return new IdleState();
-        player.Velocity = new Vector2(0, Player.SuperJumpVelocity);
+        }
+        player.Velocity = new Vector2(0, -Player.SuperJumpVelocity);
         return null;
     }
 }
@@ -139,7 +150,7 @@ public class FallState : IPlayerState {
 
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
-        
+
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
             if (jumpType != Player.JumpType.None) {
@@ -162,6 +173,9 @@ public class RunState : IPlayerState {
         player.ChangeAnimation("run");
 
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+
+        if (player.CanStartCharge(inputs))
+            return new ChargeState();
 
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(player, inputs);
@@ -215,26 +229,27 @@ public class DashState : IPlayerState {
     }
 
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        player.SuperJumpCurrentBufferTime = 0;
         player.DashTimeElapsed += delta;
         player.ChangeAnimation("jump");
         player.SetEmittingDashParticles(true);
 
         player.Velocity = player.DashCurrentAngle * (float)Player.DashSpeed;
 
-        if (player.IsOnFloor() && inputs.IsPushingCrouch)
+        if (player.CanStartCharge(inputs))
             return new ChargeState();
-        
-        if (player.DashTimeElapsed < Player.DashDuration) 
+
+        if (player.DashTimeElapsed < Player.DashDuration)
             return null;
 
         player.SetEmittingDashParticles(false);
-        
+
         // ReSharper disable once InvertIf
         if (player.Velocity.Y != 0) {
             var tempVel = player.Velocity.Y < 0 ? -Player.MaxVerticalVelocity : Player.MaxVerticalVelocity;
             player.Velocity = new Vector2(player.Velocity.X, tempVel);
         }
-        
+
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
 }
