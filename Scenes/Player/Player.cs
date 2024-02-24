@@ -10,49 +10,31 @@ using MVM23.Scripts.AuxiliaryScripts;
 [GlobalClass]
 public partial class Player : CharacterBody2D {
     [Export] public float RunSpeed = 150.0f;
-
-    [ExportGroup("Jump Properties")]
-    // Both of the below are in seconds
-    
     [Export] public double EarlyJumpInputBuffer = 0.2;
-
     [Export] public double SuperJumpInitBufferLimit = 0.75;
-    public double SuperJumpCurrentBufferTime;
-    public bool CanSuperJump { get; set; }
     
+    [Export] private float _jumpHeight = 70F;  // I believe this is pixels
+    [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
+    public float Gravity;
+    public float JumpSpeed;
+    public float ApexGravity;
+    
+    public double SuperJumpCurrentBufferTime;
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
     //public double EarlyJumpInputCounter;
     //public bool EarlyJumpTimeExpired;
     
-    [ExportSubgroup("Constant Setters")]
-    [Export] private float _jumpHeight = 70F; // I believe this is pixels
-    [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
-    public float Gravity;
-    public float JumpSpeed;
-    public float ApexGravity;
-
-    [ExportGroup("Dash Properties")]
-
-
+    public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     private bool PlayerCanDash { get; set; }
+    public IPlayerState CurrentState { get; private set; }
 
     private AnimatedSprite2D _sprite;
     private CpuParticles2D _dashParticles;
     private Node2D _reticle;
-
-    public IPlayerState CurrentState { get; private set; }
     private bool _reticleFrozen; // TODO: control with _currentState method
     private Vector2 _reticleFreezePos;
-
-    public class InputInfo {
-        public Vector2 InputDirection { get; init; }
-        public bool IsPushingJump { get; init; }
-        public bool IsPushingCrouch { get; init; }
-        public bool IsPushingDash { get; init; }
-        public bool IsPushingGrapple { get; init; }
-    }
 
     private PackedScene _grappleScene;
     
@@ -122,6 +104,14 @@ public partial class Player : CharacterBody2D {
         //  It should be able to return something like PlayerState.Previous to go back to whatever the last one was
     }
 
+    public class InputInfo {
+        public Vector2 InputDirection { get; init; }
+        public bool IsPushingJump { get; init; }
+        public bool IsPushingCrouch { get; init; }
+        public bool IsPushingDash { get; init; }
+        public bool IsPushingGrapple { get; init; }
+    }
+    
     private static InputInfo GetInputs() {
         var inputInfo = new InputInfo
         {
