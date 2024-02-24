@@ -18,9 +18,11 @@ public partial class Player : CharacterBody2D {
     [Export] public const float MaxVerticalVelocity = RunSpeed;
     [Export] public const float SuperJumpVelocity = MaxVerticalVelocity * 5;
 
-    [Export] public const double SuperJumpMinChargeTime = 0.25;
+    [Export] public const double SuperJumpMinChargeTime = 1.00;
+    [Export] public const double SuperJumpInitBufferLimit = 0.75;
+    public double SuperJumpCurrentBufferTime;
     public double SuperJumpCurrentChargeTime;
-    public bool CanSuperJump;
+    public bool CanSuperJump { get; set; }
     
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
@@ -91,10 +93,16 @@ public partial class Player : CharacterBody2D {
             var mousePosition = GetViewport().GetMousePosition();
             _reticle.LookAt(mousePosition);
             _reticle.Position = Vector2.Zero;
-        }
+        } 
+        
+        if (CurrentState.GetType() != typeof(DashState))
+            SetEmittingDashParticles(false);
     }
 
     public override void _PhysicsProcess(double delta) {
+        if (SuperJumpCurrentBufferTime < SuperJumpInitBufferLimit)
+            SuperJumpCurrentBufferTime += delta;
+        
         var inputs = GetInputs();
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
@@ -126,10 +134,10 @@ public partial class Player : CharacterBody2D {
         var inputInfo = new InputInfo
         {
             InputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down"),
-            IsPushingJump = Input.IsActionJustPressed("jump"),
-            IsPushingCrouch = Input.IsActionJustPressed("crouch"),
-            IsPushingDash = Input.IsActionJustPressed("dash"),
-            IsPushingGrapple = Input.IsActionJustPressed("grapple")
+            IsPushingJump = Input.IsActionPressed("jump"),
+            IsPushingCrouch = Input.IsActionPressed("move_down"),
+            IsPushingDash = Input.IsActionPressed("dash"),
+            IsPushingGrapple = Input.IsActionPressed("grapple")
         };
 
         return inputInfo;
@@ -155,9 +163,17 @@ public partial class Player : CharacterBody2D {
         return JumpType.None;
     }
 
+    public bool CanStartCharge(InputInfo inputs) {
+        return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime < SuperJumpInitBufferLimit;
+    }
+
     public void ResetJumpBuffers() {
         CoyoteTimeExpired = false;
         CoyoteTimeElapsed = 0;
+    }
+
+    public void ChangeColor(Color color) {
+        _sprite.Modulate = color;
     }
 
     public void ChangeAnimation(string animation) {

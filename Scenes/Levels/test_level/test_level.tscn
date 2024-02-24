@@ -1775,6 +1775,7 @@ text = "Debug"
 script = ExtResource("3_rvw6x")
 
 [node name="DashDebug" type="Label" parent="."]
+visible = false
 offset_left = 244.0
 offset_top = 14.0
 offset_right = 624.0
