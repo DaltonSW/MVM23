@@ -13,14 +13,14 @@ public interface IPlayerState {
         var velocity = player.Velocity;
 
         if (inputs.InputDirection.X != 0)
-            velocity.X = inputs.InputDirection.X < 0 ? -Player.RunSpeed : Player.RunSpeed;
+            velocity.X = inputs.InputDirection.X < 0 ? -player.RunSpeed : player.RunSpeed;
         else
-            velocity.X = Mathf.MoveToward(velocity.X, 0, Player.RunSpeed);
+            velocity.X = Mathf.MoveToward(velocity.X, 0, player.RunSpeed);
 
         if (player.IsOnFloor())
             return velocity;
 
-        var grav = Math.Abs(velocity.Y) < Player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
+        var grav = Math.Abs(velocity.Y) < player.ApexGravityVelRange ? player.ApexGravity : player.Gravity;
         velocity.Y += grav * (float)delta;
         return velocity;
     }
@@ -70,7 +70,7 @@ public class ChargeState : IPlayerState {
         }
 
         player.SuperJumpCurrentChargeTime += delta;
-        if (player.SuperJumpCurrentChargeTime < Player.SuperJumpMinChargeTime) return null;
+        if (player.SuperJumpCurrentChargeTime < player.SuperJumpMinChargeTime) return null;
         
         player.CanSuperJump = true;
         player.ChangeColor(Colors.Red);
@@ -87,7 +87,7 @@ public class SuperJumpState : IPlayerState {
             player.CanSuperJump = false;
             return new IdleState();
         }
-        player.Velocity = new Vector2(0, -Player.SuperJumpVelocity);
+        player.Velocity = new Vector2(0, -player.SuperJumpVelocity);
         return null;
     }
 }
@@ -139,7 +139,7 @@ public class FallState : IPlayerState {
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
 
         if (!player.CoyoteTimeExpired) {
-            if (player.CoyoteTimeElapsed >= Player.CoyoteTimeBuffer) {
+            if (player.CoyoteTimeElapsed >= player.CoyoteTimeBuffer) {
                 player.CoyoteTimeElapsed = 0;
                 player.CoyoteTimeExpired = true;
             }
@@ -234,19 +234,19 @@ public class DashState : IPlayerState {
         player.ChangeAnimation("jump");
         player.SetEmittingDashParticles(true);
 
-        player.Velocity = player.DashCurrentAngle * (float)Player.DashSpeed;
+        player.Velocity = player.DashCurrentAngle * (float)player.DashSpeed;
 
         if (player.CanStartCharge(inputs))
             return new ChargeState();
 
-        if (player.DashTimeElapsed < Player.DashDuration)
+        if (player.DashTimeElapsed < player.DashDuration)
             return null;
 
         player.SetEmittingDashParticles(false);
 
         // ReSharper disable once InvertIf
         if (player.Velocity.Y != 0) {
-            var tempVel = player.Velocity.Y < 0 ? -Player.MaxVerticalVelocity : Player.MaxVerticalVelocity;
+            var tempVel = player.Velocity.Y < 0 ? -player.MaxVerticalVelocity : player.MaxVerticalVelocity;
             player.Velocity = new Vector2(player.Velocity.X, tempVel);
         }
 

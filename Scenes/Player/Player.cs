@@ -7,19 +7,20 @@ using MVM23.Scripts.AuxiliaryScripts;
 // Bruno Guedes - https://medium.com/@brazmogu/physics-for-game-dev-a-platformer-physics-cheatsheet-f34b09064558
 
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
+[GlobalClass]
 public partial class Player : CharacterBody2D {
-    [Export] public const float RunSpeed = 150.0f;
+    [Export] public float RunSpeed = 150.0f;
 
     [ExportGroup("Jump Properties")]
-    [Export] public const float ApexGravityVelRange = 5F;
+    [Export] public float ApexGravityVelRange = 5F;
     // Both of the below are in seconds
-    [Export] public const double CoyoteTimeBuffer = 0.1;
-    [Export] public const double EarlyJumpInputBuffer = 0.2;
-    [Export] public const float MaxVerticalVelocity = RunSpeed;
-    [Export] public const float SuperJumpVelocity = MaxVerticalVelocity * 5;
+    [Export] public double CoyoteTimeBuffer = 0.1;
+    [Export] public double EarlyJumpInputBuffer = 0.2;
+    [Export] public float MaxVerticalVelocity = 150.0f;
+    [Export] public float SuperJumpVelocity = 750f;
 
-    [Export] public const double SuperJumpMinChargeTime = 1.00;
-    [Export] public const double SuperJumpInitBufferLimit = 0.75;
+    [Export] public double SuperJumpMinChargeTime = 1.00;
+    [Export] public double SuperJumpInitBufferLimit = 0.75;
     public double SuperJumpCurrentBufferTime;
     public double SuperJumpCurrentChargeTime;
     public bool CanSuperJump { get; set; }
@@ -30,15 +31,15 @@ public partial class Player : CharacterBody2D {
     //public bool EarlyJumpTimeExpired;
     
     [ExportSubgroup("Constant Setters")]
-    [Export] private const float JumpHeight = 70F; // I believe this is pixels
-    [Export] private const float TimeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
+    [Export] private float _jumpHeight = 70F; // I believe this is pixels
+    [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
     public float Gravity;
     public float JumpSpeed;
     public float ApexGravity;
 
     [ExportGroup("Dash Properties")]
-    [Export] public const float DashDuration = 0.08f;
-    [Export] public const double DashSpeed = RunSpeed * 6F;
+    [Export] public float DashDuration = 0.08f;
+    [Export] public double DashSpeed = 750.0f;
     public double DashTimeElapsed;
     public Vector2 DashStoredVelocity;
     public Vector2 DashCurrentAngle;
@@ -65,9 +66,9 @@ public partial class Player : CharacterBody2D {
     private PackedScene _grappleScene;
     
     public override void _Ready() {
-        Gravity = (float)(JumpHeight / (2 * Math.Pow(TimeInAir, 2)));
+        Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
         ApexGravity = Gravity / 2;
-        JumpSpeed = (float)Math.Sqrt(2 * JumpHeight * Gravity);
+        JumpSpeed = (float)Math.Sqrt(2 * _jumpHeight * Gravity);
 
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
