@@ -3,14 +3,19 @@ using Godot;
 namespace MVM23.Scripts.AuxiliaryScripts;
 
 public interface IPlayerState {
-    public string Name { get; }
+    public string Name => "InterfaceName";
 
-    public static float ApexGravityVelRange => 5F;
-
-    /// Must be called exactly once per _PhysicsProcess, and nowhere else.
+    /// Must be called EXACTLY once per _PhysicsProcess, and nowhere else.
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
+}
 
-    public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
+public abstract class PlayerState : IPlayerState {
+    public string Name => "PlayerState";
+    public abstract IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
+
+    private const float ApexGravityVelRange = 5F;
+
+    protected static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
         var velocity = player.Velocity;
 
         if (inputs.InputDirection.X != 0) {
@@ -32,15 +37,15 @@ public interface IPlayerState {
     }
 }
 
-// TODO: Consider "IGroundedState" and "IAerialState" ???
+// TODO: Consider "GroundedState" and "AerialState" as intermediate classes?
 
-public class IdleState : IPlayerState {
-    public string Name => "IdleState";
+public class IdleState : PlayerState {
+    public new string Name => "IdleState";
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
-        player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-        
+        player.Velocity = GenericPositionUpdates(player, inputs, delta);
+
         if (player.CanStartCharge(inputs))
             return new ChargeState();
 
@@ -64,15 +69,15 @@ public class IdleState : IPlayerState {
     }
 }
 
-public class ChargeState : IPlayerState {
-    public string Name => "ChargeState";
-    
+public class ChargeState : PlayerState {
+    public new string Name => "ChargeState";
+
     [Export] public double MinChargeTime = 1.00;
 
     private double _currentChargeTime;
 
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.Velocity = Vector2.Zero;
         if (!inputs.IsPushingCrouch) {
             player.ChangeColor(Colors.White);
@@ -82,7 +87,7 @@ public class ChargeState : IPlayerState {
 
         _currentChargeTime += delta;
         if (_currentChargeTime < MinChargeTime) return null;
-        
+
         player.CanSuperJump = true;
         player.ChangeColor(Colors.Red);
 
@@ -90,12 +95,12 @@ public class ChargeState : IPlayerState {
     }
 }
 
-public class SuperJumpState : IPlayerState {
-    public string Name => "SuperJumpState";
-    
+public class SuperJumpState : PlayerState {
+    public new string Name => "SuperJumpState";
+
     [Export] public float SuperJumpVelocity = -750f;
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         if (inputs.IsPushingCrouch) {
             player.CanSuperJump = false;
             return new IdleState();
@@ -105,8 +110,8 @@ public class SuperJumpState : IPlayerState {
     }
 }
 
-public class JumpState : IPlayerState {
-    public string Name => "JumpState";
+public class JumpState : PlayerState {
+    public new string Name => "JumpState";
 
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
@@ -123,17 +128,17 @@ public class JumpState : IPlayerState {
         player.Velocity = new Vector2(player.Velocity.X, player.Velocity.Y - jumpSpeed);
     }
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("jump");
 
-        var velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        var velocity = GenericPositionUpdates(player, inputs, delta);
 
         player.Velocity = velocity;
 
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(inputs);
 
-        
+
         if (player.IsOnCeiling() && ShouldNudgePlayer(player)) {
             NudgePlayer(player);
             return null;
@@ -162,15 +167,15 @@ public class JumpState : IPlayerState {
     }
 }
 
-public class FallState : IPlayerState {
-    public string Name => "FallState";
-    
+public class FallState : PlayerState {
+    public new string Name => "FallState";
+
     [Export] public double CoyoteTimeBuffer = 0.1;
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("fall");
 
-        player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        player.Velocity = GenericPositionUpdates(player, inputs, delta);
 
         if (!player.CoyoteTimeExpired) {
             if (player.CoyoteTimeElapsed >= CoyoteTimeBuffer) {
@@ -200,13 +205,13 @@ public class FallState : IPlayerState {
     }
 }
 
-public class RunState : IPlayerState {
-    public string Name => "RunState";
+public class RunState : PlayerState {
+    public new string Name => "RunState";
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("run");
 
-        player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
+        player.Velocity = GenericPositionUpdates(player, inputs, delta);
 
         if (player.CanStartCharge(inputs))
             return new ChargeState();
@@ -231,13 +236,13 @@ public class RunState : IPlayerState {
     }
 }
 
-public class DashState : IPlayerState {
-    public string Name => "DashState";
-    
+public class DashState : PlayerState {
+    public new string Name => "DashState";
+
     [Export] public float ExitVelocity = 150.0f;
     [Export] public float DashDuration = 0.08f;
     [Export] public double DashSpeed = 750.0f;
-    
+
     private double _dashTimeElapsed;
     private readonly Vector2 _dashCurrentAngle;
 
@@ -246,7 +251,7 @@ public class DashState : IPlayerState {
         _dashCurrentAngle = inputs.InputDirection;
     }
 
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed += delta;
         player.ChangeAnimation("jump");
@@ -270,8 +275,8 @@ public class DashState : IPlayerState {
 
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
-    
-    
+
+
     // private static Vector2 GetDashDirection(Player.InputInfo inputs) {
     //     var direction = inputs.InputDirection;
     //     var directions = new Vector2[]
