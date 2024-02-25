@@ -10,7 +10,7 @@ using MVM23.Scripts.AuxiliaryScripts;
 [GlobalClass]
 public partial class Player : CharacterBody2D {
     [Export] public float RunSpeed = 150.0f;
-    [Export] public double EarlyJumpInputBuffer = 0.2;
+    [Export] public double EarlyJumpMaxBufferTime = 0.2;
     [Export] public double SuperJumpInitBufferLimit = 0.75;
     
     [Export] private float _jumpHeight = 70F;  // I believe this is pixels
@@ -18,7 +18,8 @@ public partial class Player : CharacterBody2D {
     public float Gravity;
     public float JumpSpeed;
     public float ApexGravity;
-    
+
+    private double _timeSinceStartHoldingJump;
     public double SuperJumpCurrentBufferTime;
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
@@ -28,7 +29,7 @@ public partial class Player : CharacterBody2D {
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     private bool PlayerCanDash { get; set; }
-    public IPlayerState CurrentState { get; private set; }
+    private IPlayerState CurrentState { get; set; }
 
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
@@ -84,6 +85,12 @@ public partial class Player : CharacterBody2D {
             SuperJumpCurrentBufferTime += delta;
         
         var inputs = GetInputs();
+
+        if (!inputs.IsPushingJump)
+            _timeSinceStartHoldingJump = 0;
+        else // Jump is being pushed 
+            _timeSinceStartHoldingJump += delta;
+            
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
         if (newState != null) {
@@ -146,7 +153,7 @@ public partial class Player : CharacterBody2D {
     public JumpType CanJump() {
         if (!IsOnFloor() && !CoyoteTimeExpired)
             return JumpType.CoyoteTime;
-        if (IsOnFloor())
+        if (IsOnFloor() && _timeSinceStartHoldingJump < EarlyJumpMaxBufferTime)
             return JumpType.Normal;
         return JumpType.None;
     }
