@@ -5,12 +5,13 @@ on:
   pull_request: {}
 
 jobs:
-  Godot:
+  Build-And-Upload-Prototypes:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - name: Set Environment Variables
-        run: echo "CUR_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')"
+      - name: Get current time
+        uses: gerred/actions/current-time@master
+        id: current-time
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -29,6 +30,6 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Prototype Builds - {{ env.CUR_DATETIME }}
+          name: Prototype Builds - ${{ steps.current-time.outputs.time }}
           path: ${{ steps.export.outputs.archive_directory }}
           retention-days: 30
