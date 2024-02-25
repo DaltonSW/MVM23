@@ -31,12 +31,16 @@ public partial class Player : CharacterBody2D {
     public IPlayerState CurrentState { get; private set; }
 
     private AnimatedSprite2D _sprite;
+    public bool IsFacingLeft { get; private set; }
+    public RayCast2D BonkCheck;
+    public RayCast2D BonkBuffer;
     private CpuParticles2D _dashParticles;
     private Node2D _reticle;
     private bool _reticleFrozen; // TODO: control with _currentState method
     private Vector2 _reticleFreezePos;
 
     private PackedScene _grappleScene;
+
     
     public override void _Ready() {
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
@@ -52,6 +56,8 @@ public partial class Player : CharacterBody2D {
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
+        BonkCheck = GetNode<RayCast2D>("BonkCheck");
+        BonkBuffer = GetNode<RayCast2D>("BonkBuffer");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
         _reticle = GetNode<Node2D>("Reticle");
         _reticle.Visible = false;
@@ -111,7 +117,7 @@ public partial class Player : CharacterBody2D {
         public bool IsPushingDash { get; init; }
         public bool IsPushingGrapple { get; init; }
     }
-    
+
     private static InputInfo GetInputs() {
         var inputInfo = new InputInfo
         {
@@ -159,8 +165,6 @@ public partial class Player : CharacterBody2D {
     }
 
     public void ChangeAnimation(string animation) {
-        _sprite.FlipH = Velocity.X >= 0;
-
         if (_sprite.Animation != animation)
             _sprite.Play(animation);
     }
@@ -178,6 +182,18 @@ public partial class Player : CharacterBody2D {
 
     private void RestoreReticle() {
         _reticleFrozen = false;
+    }
+
+    public void FaceLeft() => SetFaceDirection(true);
+    
+    public void FaceRight() => SetFaceDirection(false);
+
+    private void SetFaceDirection(bool faceLeft) {
+        IsFacingLeft = faceLeft;
+        _sprite.FlipH = !IsFacingLeft;
+        var adjustment = IsFacingLeft ? 1 : -1;
+        BonkBuffer.Position = new Vector2(Math.Abs(BonkBuffer.Position.X) * adjustment, BonkBuffer.Position.Y);
+        BonkCheck.Position = new Vector2(Math.Abs(BonkCheck.Position.X) * adjustment, BonkCheck.Position.Y);
     }
 
     // public void OnGrappleStruck() {

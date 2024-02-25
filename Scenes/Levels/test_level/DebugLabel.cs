@@ -13,6 +13,7 @@ public partial class DebugLabel : Label {
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        Text = $"Current Charge Buffer: {_player.SuperJumpCurrentBufferTime}\nState: {_player.CurrentState}";
+        Text = $"Is Facing Left?: {_player.IsFacingLeft}" +
+               $"\nPlayer Pos: {_player.GlobalPosition}";
     }
 }

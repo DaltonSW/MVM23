@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dxfdesm0su656" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
-size = Vector2(20, 28)
+size = Vector2(16, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ttd6e"]
 atlas = ExtResource("5_24xm3")
@@ -107,7 +107,7 @@ shape = SubResource("RectangleShape2D_cfoin")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_agbor")
-animation = &"idle"
+animation = &"jump"
 
 [node name="DashParticles" type="CPUParticles2D" parent="."]
 emitting = false
@@ -118,3 +118,13 @@ emitting = false
 scale = Vector2(-1, 1)
 texture = ExtResource("10_kjnoh")
 offset = Vector2(-24, 0)
+
+[node name="BonkCheck" type="RayCast2D" parent="."]
+position = Vector2(8, -12)
+target_position = Vector2(0, -1)
+collide_with_areas = true
+
+[node name="BonkBuffer" type="RayCast2D" parent="."]
+position = Vector2(2, -12)
+target_position = Vector2(0, -1)
+collide_with_areas = true

@@ -14,8 +14,13 @@ public interface IPlayerState {
     public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
         var velocity = player.Velocity;
 
-        if (inputs.InputDirection.X != 0)
+        if (inputs.InputDirection.X != 0) {
             velocity.X = inputs.InputDirection.X < 0 ? -player.RunSpeed : player.RunSpeed;
+            if (inputs.InputDirection.X < 0 && velocity.X < 0)
+                player.FaceLeft();
+            else
+                player.FaceRight();
+        }
         else
             velocity.X = Mathf.MoveToward(velocity.X, 0, player.RunSpeed);
 
@@ -104,6 +109,9 @@ public class SuperJumpState : IPlayerState {
 public class JumpState : IPlayerState {
     public string Name => "JumpState";
 
+    private Vector2 _nudgeEnterVel = Vector2.Inf;
+    private const int NudgeAmount = 6;
+
     //TODO (#4): Jump buffering
     //TODO (#6): Jump corner protection
 
@@ -129,6 +137,14 @@ public class JumpState : IPlayerState {
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(inputs);
 
+        
+        if (player.IsOnCeiling() && ShouldNudgePlayer(player)) {
+            NudgePlayer(player);
+            return null;
+        }
+
+        _nudgeEnterVel = player.Velocity;
+
         if (player.Velocity.Y > 0)
             return new FallState();
 
@@ -136,6 +152,17 @@ public class JumpState : IPlayerState {
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
 
         return null;
+    }
+
+    private static bool ShouldNudgePlayer(Player player) {
+        return player.BonkCheck.IsColliding() && !player.BonkBuffer.IsColliding();
+    }
+
+    private void NudgePlayer(Player player) {
+        var adjustment = player.IsFacingLeft ? -NudgeAmount : NudgeAmount;
+        var playerPos = player.GlobalPosition;
+        player.Velocity = _nudgeEnterVel;
+        player.GlobalPosition = new Vector2(playerPos.X + adjustment, playerPos.Y);
     }
 }
 
