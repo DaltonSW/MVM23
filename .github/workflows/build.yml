@@ -13,7 +13,7 @@ jobs:
         uses: srfrnk/current-time@master
         id: current-time
         with:
-          format: MMM DD (hh mmA ZZ)
+          format: MMM DD (hh mmA [GMT])
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
