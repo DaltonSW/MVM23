@@ -112,9 +112,6 @@ public class JumpState : IPlayerState {
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
 
-    //TODO (#4): Jump buffering
-    //TODO (#6): Jump corner protection
-
     public JumpState(Player player, Player.JumpType jumpType) {
         var jumpSpeed = player.JumpSpeed;
 
