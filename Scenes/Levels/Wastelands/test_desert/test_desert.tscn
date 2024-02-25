@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://m548w2gc7iui"]
 
-[ext_resource type="Texture2D" uid="uid://byp46jks2kr14" path="res://Scenes/Levels/Wastelands/desert.png" id="1_talrd"]
-[ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/Player.tscn" id="2_h2ee5"]
+[ext_resource type="Texture2D" uid="uid://bdlqed7pb8xrw" path="res://Scenes/Levels/Wastelands/desert.png" id="1_talrd"]
+[ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_h2ee5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cmyyo"]
 texture = ExtResource("1_talrd")
