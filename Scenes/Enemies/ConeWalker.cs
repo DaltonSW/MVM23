@@ -12,14 +12,26 @@ public partial class ConeWalker : CharacterBody2D
     /// Is null if there is none.
     private Node2D _target;
 
-    /// The direction this character's sprite is
-    /// initially facing, when loaded into its parent scene.
-    private XDirection _baseSpriteDirection;
-    private XDirection _baseLineOfSightDirection;
-    private Sign _baseLineOfSightXScaleSign;
+    /// The current direction this character is facing.
+    /// After initialization, use the property instead of
+    /// accessing this directly.
+    // TODO: move to abstract base class to enforce this.
+    private XDirection _direction;
 
-    /// The direction this character is facing.
-    private XDirection _direction; 
+    public XDirection Direction
+    {
+        get => _direction;
+        set
+        {
+            if (value != _direction)
+            {
+                // Flip
+                this.TransformScale(scale =>
+                    scale.MapX(x => x *= -1));
+            }
+            _direction = value;
+        }
+    }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -27,21 +39,17 @@ public partial class ConeWalker : CharacterBody2D
         _lineOfSight = GetNode<Area2D>("LineOfSight");
         _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
-        _baseSpriteDirection = Scale.X > 0
-            ? XDirection.RIGHT
-            : XDirection.LEFT;
-        _baseLineOfSightDirection = _baseSpriteDirection;
-        _baseLineOfSightXScaleSign = Signs.Of(_lineOfSight.Scale.X);
-
-        _direction = _baseSpriteDirection;
+        // This point should be positioned so that it
+        // is in the direction the character is facing.
+        // This should give a good indication regardless
+        // of how the character is initially scaled.
+        var pointInDirectionFacing = GetNode<Node2D>("PointInDirectionFacing");
+        _direction = this.XDirectionTo(pointInDirectionFacing);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        // Flip the sprite when the character is not facing the
-        // same direction as its sprite was set to face.
-        _sprite.FlipH = _direction != _baseSpriteDirection;
         ChangeAnimation(
             Velocity.IsZeroApprox()
                 ? "idle"
@@ -59,21 +67,11 @@ public partial class ConeWalker : CharacterBody2D
         if (_target is Node2D target)
         {
             // Face target
-            _direction = GlobalPosition.X < target.GlobalPosition.X
-                ? XDirection.RIGHT
-                : XDirection.LEFT;
+            Direction = this.XDirectionTo(target);
         }
 
-        // Point LoS in direction char is facing.
-        _lineOfSight.TransformScale(scale =>
-            scale.MapX(x =>
-                x.WithSign(
-                    _baseLineOfSightDirection != _direction
-                        ? _baseLineOfSightXScaleSign.Opposite()
-                        : _baseLineOfSightXScaleSign)));
-        
         // Move in direction char is facing.
-        Velocity = WalkSpeed * _direction.UnitVector();
+        Velocity = WalkSpeed * Direction.UnitVector();
         MoveAndSlide();
     }
 
@@ -82,5 +80,6 @@ public partial class ConeWalker : CharacterBody2D
         if (_sprite.Animation != animation)
             _sprite.Play(animation);
     }
+
 }
 

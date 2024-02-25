@@ -1786,4 +1786,7 @@ label_settings = SubResource("LabelSettings_ubrif")
 horizontal_alignment = 2
 
 [node name="ConeWalker" parent="." instance=ExtResource("4_7dkg2")]
-position = Vector2(64, 69)
+position = Vector2(541, 52)
+scale = Vector2(-1, 1)
+
+[editable path="ConeWalker"]

@@ -44,6 +44,14 @@ public static class Extensions
             _                => throw new ArgumentOutOfRangeException(nameof(direction)),
         };
 
+    public static XDirection Opposite(this XDirection direction) =>
+        direction switch
+        {
+            XDirection.LEFT  => XDirection.RIGHT,
+            XDirection.RIGHT => XDirection.LEFT,
+            _                => throw new ArgumentOutOfRangeException(nameof(direction)),
+        };
+
     public static Sign Opposite(this Sign sign) =>
         sign switch 
         {
@@ -67,6 +75,14 @@ public static class Extensions
 
     public static Vector2 MapX(this Vector2 v, Func<float, float> f) =>
         v.WithX(f(v.X));
+
+    public static XDirection XDirectionTo(this Vector2 from, Vector2 to) =>
+        from.X < to.X
+            ? XDirection.RIGHT
+            : XDirection.LEFT;
+
+    public static XDirection XDirectionTo(this Node2D from, Node2D to) =>
+        from.GlobalPosition.XDirectionTo(to.GlobalPosition);
 
     public static float WithSign(this float n, Sign sign) => 
         Math.Abs(n) * sign.Unit();
