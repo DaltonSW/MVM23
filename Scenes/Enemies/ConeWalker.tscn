@@ -65,7 +65,7 @@ shape = SubResource("CapsuleShape2D_7svgw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ukps6")
 animation = &"idle"
-frame_progress = 0.678148
+frame_progress = 0.0294797
 
 [node name="LineOfSight" type="Area2D" parent="."]
 
@@ -76,3 +76,11 @@ polygon = PackedVector2Array(-75, 46.8432, 318, -523.422, 386, 340.122)
 
 [node name="PointInDirectionFacing" type="Node2D" parent="."]
 position = Vector2(8, 0)
+
+[node name="DropAheadRayCast" type="RayCast2D" parent="."]
+position = Vector2(3, 22)
+target_position = Vector2(0, 57)
+
+[node name="EdgeAheadRayCast" type="RayCast2D" parent="."]
+position = Vector2(3, 22)
+target_position = Vector2(4, 4)

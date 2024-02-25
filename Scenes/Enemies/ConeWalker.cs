@@ -4,9 +4,15 @@ using System.Linq;
 
 public partial class ConeWalker : CharacterBody2D
 {
-    [Export] public float WalkSpeed = 50.0f;
+    [Export] public float WalkSpeed = 800;
+    [Export] public float ChaseSpeed = 6000;
+
     private Area2D _lineOfSight;
     private AnimatedSprite2D _sprite;
+    private RayCast2D _dropAheadRayCast;
+    private RayCast2D _edgeAheadRayCast;
+
+    private float _gravity;
 
     /// The node this character is locked onto, if any.
     /// Is null if there is none.
@@ -38,6 +44,8 @@ public partial class ConeWalker : CharacterBody2D
     {
         _lineOfSight = GetNode<Area2D>("LineOfSight");
         _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        _dropAheadRayCast = GetNode<RayCast2D>("DropAheadRayCast");
+        _edgeAheadRayCast = GetNode<RayCast2D>("EdgeAheadRayCast");
 
         // This point should be positioned so that it
         // is in the direction the character is facing.
@@ -45,6 +53,8 @@ public partial class ConeWalker : CharacterBody2D
         // of how the character is initially scaled.
         var pointInDirectionFacing = GetNode<Node2D>("PointInDirectionFacing");
         _direction = this.XDirectionTo(pointInDirectionFacing);
+
+        _gravity = (float)ProjectSettings.GetSetting("physics/2d/default_gravity");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -69,14 +79,48 @@ public partial class ConeWalker : CharacterBody2D
             // Face target
             Direction = this.XDirectionTo(target);
         }
+        if (EdgeAhead() && !Chasing())
+        {
+            Direction = Direction.Opposite();
+        }
 
         // Move in direction char is facing.
-        Velocity = WalkSpeed * Direction.UnitVector();
+        Velocity = CalcVelocity(delta);
         MoveAndSlide();
     }
 
+    private Vector2 CalcVelocity(double delta)
+    {
+        var velocity = Velocity;
+
+        // fake friction
+        velocity.X = 0;
+
+        if (IsOnFloor())
+        {
+            // foot
+            velocity += (float)delta * FootSpeed() * Direction.UnitVector();
+        }
+
+        // gravity
+        velocity += (float)delta * _gravity * Vector2.Down;
+
+        return velocity;
+    }
+
+    private bool Chasing() => _target is not null;
+    private float FootSpeed() =>
+        DropAhead()
+            ? 0
+            : Chasing()
+                 ? ChaseSpeed
+                 : WalkSpeed;
+
+    private bool DropAhead() => !_dropAheadRayCast.IsColliding();
+    private bool EdgeAhead() => !_edgeAheadRayCast.IsColliding();
+
     // TODO: reuse with Player's
-    public void ChangeAnimation(string animation) {
+    private void ChangeAnimation(string animation) {
         if (_sprite.Animation != animation)
             _sprite.Play(animation);
     }
