@@ -10,8 +10,10 @@ jobs:
     permissions: write-all
     steps:
       - name: Get current time
-        uses: gerred/actions/current-time@master
+        uses: srfrnk/current-time@master
         id: current-time
+        with:
+          format: DD MM YY (HH MM SS)
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -30,6 +32,6 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Prototype Builds - ${{ steps.current-time.outputs.time }}
+          name: Prototype Builds - ${{ steps.current-time.outputs.formattedTime }}
           path: ${{ steps.export.outputs.archive_directory }}
           retention-days: 30
