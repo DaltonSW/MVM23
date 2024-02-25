@@ -22,3 +22,9 @@ jobs:
           name: MVM23
           preset: ${{ matrix.platform }}
           debugMode: "true"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Client - ${{ matrix.platform }}
+          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+          retention-days: 30
