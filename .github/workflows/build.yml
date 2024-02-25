@@ -8,10 +8,9 @@ jobs:
   Godot:
     runs-on: ubuntu-latest
     permissions: write-all
-    strategy:
-      matrix:
-        platform: [linux, windows]
     steps:
+      - name: Set Environment Variables
+        run: echo "CUR_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')"
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -27,9 +26,9 @@ jobs:
           relative_project_path: ./
           archive_output: true
           cache: true
-      - name: Upload Artifact
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Client - ${{ matrix.platform }}
+          name: Prototype Builds - {{ env.CUR_DATETIME }}
           path: ${{ steps.export.outputs.archive_directory }}
           retention-days: 30
