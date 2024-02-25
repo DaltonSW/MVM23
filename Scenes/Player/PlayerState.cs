@@ -7,8 +7,7 @@ public interface IPlayerState {
 
     public static float ApexGravityVelRange => 5F;
 
-    /// Must be called exactly once per _PhysicsProcess,
-    /// and nowhere else.
+    /// Must be called exactly once per _PhysicsProcess, and nowhere else.
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
 
     public static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
@@ -41,7 +40,7 @@ public class IdleState : IPlayerState {
     public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
         player.Velocity = IPlayerState.GenericPositionUpdates(player, inputs, delta);
-
+        
         if (player.CanStartCharge(inputs))
             return new ChargeState();
 

@@ -23,8 +23,6 @@ public partial class Player : CharacterBody2D {
     public double SuperJumpCurrentBufferTime;
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
-    //public double EarlyJumpInputCounter;
-    //public bool EarlyJumpTimeExpired;
     
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
@@ -97,12 +95,13 @@ public partial class Player : CharacterBody2D {
             ChangeState(newState);
         }
 
-        // if (inputs.IsPushingGrapple) {
-        //     var grappleHook = _grappleScene.Instantiate<GrappleHook>();
-        //     grappleHook.Position = GlobalPosition;
-        //     grappleHook.Rotation = GetAngleToMouse();
-        //     GetParent().AddChild(grappleHook);
-        // }
+        if (inputs.IsPushingGrapple) {
+            GD.Print("Grapple!");
+            // var grappleHook = _grappleScene.Instantiate<GrappleHook>();
+            // grappleHook.Position = GlobalPosition;
+            // grappleHook.Rotation = GetAngleToMouse();
+            // GetParent().AddChild(grappleHook);
+        }
         
         MoveAndSlide();
     }
@@ -111,7 +110,7 @@ public partial class Player : CharacterBody2D {
         GD.Print($"Changing from {CurrentState.Name} to {newState.Name}");
         CurrentState = newState;
 
-        // TODO: Implement a "push down automaton"(?) pattern
+        // TODO: Implement a "push down automaton"(?) pattern (and consider if it's even needed)
         //  Basically just a stack that stores the previous states
         //  If you can "shoot" from idle or running or jumping, it shouldn't need to keep track of specific prev state
         //  It should be able to return something like PlayerState.Previous to go back to whatever the last one was
@@ -145,7 +144,8 @@ public partial class Player : CharacterBody2D {
         SuperJump
     }
 
-
+    // This function exists because I assume the logic is going to expand in the future
+    // If it really is only this property, we can swap it out elsewhere maybe
     public bool CanDash() {
         return PlayerCanDash;
     }
