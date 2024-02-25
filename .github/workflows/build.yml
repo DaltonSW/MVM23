@@ -7,21 +7,26 @@ on:
 jobs:
   Godot:
     runs-on: ubuntu-latest
+    permissions: write-all
     strategy:
       matrix:
         platform: [linux, windows]
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           lfs: true
-      - name: Build
+      - name: Export Game
         id: build
-        uses: manleydev/build-godot-action@v1.5.0
+        # Use latest version (see releases for all versions)
+        uses: firebelley/godot-export@v5.2.1
         with:
-          name: MVM23
-          preset: ${{ matrix.platform }}
-          debugMode: "true"
+          # Defining all the required inputs
+          godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_mono_linux.x86_64.zip
+          godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_export_templates.tpz
+          relative_project_path: ./
+          archive_output: true
+          cache: true
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
