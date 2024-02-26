@@ -11,33 +11,13 @@ public partial class ConeWalker : CharacterBody2D
     private AnimatedSprite2D _sprite;
     private RayCast2D _dropAheadRayCast;
     private RayCast2D _edgeAheadRayCast;
+    private XDirectionManager _xDirMan;
 
     private float _gravity;
 
     /// The node this character is locked onto, if any.
     /// Is null if there is none.
     private Node2D _target;
-
-    /// The current direction this character is facing.
-    /// After initialization, use the property instead of
-    /// accessing this directly.
-    // TODO: move to abstract base class to enforce this.
-    private XDirection _direction;
-
-    public XDirection Direction
-    {
-        get => _direction;
-        set
-        {
-            if (value != _direction)
-            {
-                // Flip
-                this.TransformScale(scale =>
-                    scale.MapX(x => x *= -1));
-            }
-            _direction = value;
-        }
-    }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -46,13 +26,7 @@ public partial class ConeWalker : CharacterBody2D
         _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         _dropAheadRayCast = GetNode<RayCast2D>("DropAheadRayCast");
         _edgeAheadRayCast = GetNode<RayCast2D>("EdgeAheadRayCast");
-
-        // This point should be positioned so that it
-        // is in the direction the character is facing.
-        // This should give a good indication regardless
-        // of how the character is initially scaled.
-        var pointInDirectionFacing = GetNode<Node2D>("PointInDirectionFacing");
-        _direction = this.XDirectionTo(pointInDirectionFacing);
+        _xDirMan = GetNode<XDirectionManager>("XDirectionManager");
 
         _gravity = (float)ProjectSettings.GetSetting("physics/2d/default_gravity");
     }
@@ -77,11 +51,11 @@ public partial class ConeWalker : CharacterBody2D
         if (_target is Node2D target)
         {
             // Face target
-            Direction = this.XDirectionTo(target);
+            _xDirMan.Direction = this.XDirectionTo(target);
         }
         if (EdgeAhead() && !Chasing())
         {
-            Direction = Direction.Opposite();
+            _xDirMan.Direction = _xDirMan.Direction.Opposite();
         }
 
         // Move in direction char is facing.
@@ -99,7 +73,7 @@ public partial class ConeWalker : CharacterBody2D
         if (IsOnFloor())
         {
             // foot
-            velocity += (float)delta * FootSpeed() * Direction.UnitVector();
+            velocity += (float)delta * FootSpeed() * _xDirMan.Direction.UnitVector();
         }
 
         // gravity

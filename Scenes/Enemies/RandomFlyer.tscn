@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://bxmn2bkeaqomj"]
+
+[ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyer.cs" id="1_pb1ik"]
+[ext_resource type="Texture2D" uid="uid://c51o8uydec7qc" path="res://Scenes/Enemies/cone_fly.png" id="2_4dedk"]
+[ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyerBody.cs" id="2_mw4us"]
+[ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_c5c8c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjrom"]
+atlas = ExtResource("2_4dedk")
+region = Rect2(0, 0, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ts5qk"]
+atlas = ExtResource("2_4dedk")
+region = Rect2(0, 16, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhuna"]
+atlas = ExtResource("2_4dedk")
+region = Rect2(0, 32, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8kqsq"]
+atlas = ExtResource("2_4dedk")
+region = Rect2(0, 48, 48, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v4sfb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjrom")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ts5qk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhuna")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8kqsq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="RandomFlyer" type="Node2D"]
+script = ExtResource("1_pb1ik")
+
+[node name="Body" type="CharacterBody2D" parent="."]
+script = ExtResource("2_mw4us")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Body"]
+sprite_frames = SubResource("SpriteFrames_v4sfb")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
+
+[node name="XDirectionManager" parent="Body" instance=ExtResource("3_c5c8c")]

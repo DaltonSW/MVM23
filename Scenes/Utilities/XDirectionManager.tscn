@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnpp01rpw4mmx"]
+
+[ext_resource type="Script" path="res://Scenes/Utilities/XDirectionManager.cs" id="1_bo3qj"]
+
+[node name="XDirectionManager" type="Node2D"]
+script = ExtResource("1_bo3qj")
+
+[node name="PointInDirectionFacing" type="Marker2D" parent="."]
+position = Vector2(11, 0)

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://b5nkd7g0qhcli"]
+[gd_scene load_steps=9 format=3 uid="uid://b5nkd7g0qhcli"]
 
 [ext_resource type="Texture2D" uid="uid://dvtps0ift1h7p" path="res://Scenes/Levels/test_level/SMB_Tiles.png" id="1_ajnvo"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_l5o3i"]
 [ext_resource type="Script" path="res://Scenes/Levels/test_level/DebugLabel.cs" id="3_rvw6x"]
 [ext_resource type="PackedScene" uid="uid://l1pht3bvo7gc" path="res://Scenes/Enemies/ConeWalker.tscn" id="4_7dkg2"]
+[ext_resource type="PackedScene" uid="uid://bxmn2bkeaqomj" path="res://Scenes/Enemies/RandomFlyer.tscn" id="5_lar56"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mtdig"]
 texture = ExtResource("1_ajnvo")
@@ -1788,5 +1789,8 @@ horizontal_alignment = 2
 [node name="ConeWalker" parent="." instance=ExtResource("4_7dkg2")]
 position = Vector2(541, 52)
 scale = Vector2(-1, 1)
+
+[node name="RandomFlyer" parent="." instance=ExtResource("5_lar56")]
+position = Vector2(284, 105)
 
 [editable path="ConeWalker"]
