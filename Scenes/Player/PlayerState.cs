@@ -40,7 +40,7 @@ public abstract class PlayerState : IPlayerState {
     }
 }
 
-// TODO: Consider "GroundedState" and "AerialState" as intermediate classes?
+// Consider "GroundedState" and "AerialState" as intermediate classes?
 
 public class IdleState : PlayerState {
     public new string Name => "IdleState";
@@ -159,9 +159,16 @@ public class JumpState : PlayerState {
             return new DashState(inputs, player);
 
 
-        if (player.IsOnCeiling() && ShouldNudgePlayer(player)) {
-            NudgePlayer(player);
-            return null;
+        if (player.IsOnCeiling()) {
+            if (ShouldNudgePlayerNeg(player)) {
+                NudgePlayer(player, -NudgeAmount);
+                return null;
+            }
+
+            if (ShouldNudgePlayerPos(player)) {
+                NudgePlayer(player, NudgeAmount);
+                return null;
+            }
         }
 
         _nudgeEnterVel = player.Velocity;
@@ -175,15 +182,18 @@ public class JumpState : PlayerState {
         return null;
     }
 
-    private static bool ShouldNudgePlayer(Player player) {
-        return player.BonkCheck.IsColliding() && !player.BonkBuffer.IsColliding();
+    private static bool ShouldNudgePlayerNeg(Player player) {
+        return player.PosBonkCheck.IsColliding() && !player.PosBonkBuffer.IsColliding();
     }
 
-    private void NudgePlayer(Player player) {
-        var adjustment = player.IsFacingLeft ? -NudgeAmount : NudgeAmount;
+    private static bool ShouldNudgePlayerPos(Player player) {
+        return player.NegBonkCheck.IsColliding() && !player.NegBonkBuffer.IsColliding();
+    }
+
+    private void NudgePlayer(Player player, int nudgeAmount) {
         var playerPos = player.GlobalPosition;
         player.Velocity = _nudgeEnterVel;
-        player.GlobalPosition = new Vector2(playerPos.X + adjustment, playerPos.Y);
+        player.GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 }
 
