@@ -31,11 +31,13 @@ public partial class Player : CharacterBody2D {
 
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
-    public RayCast2D BonkCheck;
-    public RayCast2D BonkBuffer;
+    public RayCast2D PosBonkCheck;
+    public RayCast2D PosBonkBuffer;
+    public RayCast2D NegBonkCheck;
+    public RayCast2D NegBonkBuffer;
     private CpuParticles2D _dashParticles;
     private Node2D _reticle;
-    private bool _reticleFrozen; // TODO: control with _currentState method
+    private bool _reticleFrozen;
     private Vector2 _reticleFreezePos;
 
     private PackedScene _grappleScene;
@@ -55,8 +57,10 @@ public partial class Player : CharacterBody2D {
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
-        BonkCheck = GetNode<RayCast2D>("BonkCheck");
-        BonkBuffer = GetNode<RayCast2D>("BonkBuffer");
+        PosBonkCheck = GetNode<RayCast2D>("Sprite/PosBonkCheck");
+        PosBonkBuffer = GetNode<RayCast2D>("Sprite/PosBonkBuffer");
+        NegBonkCheck = GetNode<RayCast2D>("Sprite/NegBonkCheck");
+        NegBonkBuffer = GetNode<RayCast2D>("Sprite/NegBonkBuffer");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
         _reticle = GetNode<Node2D>("Reticle");
         _reticle.Visible = false;
@@ -197,9 +201,6 @@ public partial class Player : CharacterBody2D {
     private void SetFaceDirection(bool faceLeft) {
         IsFacingLeft = faceLeft;
         _sprite.FlipH = !IsFacingLeft;
-        var adjustment = IsFacingLeft ? 1 : -1;
-        BonkBuffer.Position = new Vector2(Math.Abs(BonkBuffer.Position.X) * adjustment, BonkBuffer.Position.Y);
-        BonkCheck.Position = new Vector2(Math.Abs(BonkCheck.Position.X) * adjustment, BonkCheck.Position.Y);
     }
 
     // public void OnGrappleStruck() {
