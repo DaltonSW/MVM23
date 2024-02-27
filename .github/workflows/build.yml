@@ -1,7 +1,6 @@
 name: Build MVM23 Project
 
 on:
-  push: {}
   pull_request: {}
 
 jobs:
