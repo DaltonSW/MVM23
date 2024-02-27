@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using MVM23.Scripts.AuxiliaryScripts;
+using MVM23;
 
 // Credits:
 // Bruno Guedes - https://medium.com/@brazmogu/physics-for-game-dev-a-platformer-physics-cheatsheet-f34b09064558
@@ -10,9 +10,9 @@ using MVM23.Scripts.AuxiliaryScripts;
 [GlobalClass]
 public partial class Player : CharacterBody2D {
     [Export] public float RunSpeed = 150.0f;
-    [Export] public double EarlyJumpMaxBufferTime = 0.2;
-    [Export] public double SuperJumpInitBufferLimit = 0.75;
-    
+    [Export] public double EarlyJumpMaxBufferTime = 0.1;
+    [Export] public double SuperJumpInitBufferLimit = 0.2; // Waits to start charging to give time to boost jump
+
     [Export] private float _jumpHeight = 70F;  // I believe this is pixels
     [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
     public float Gravity;
@@ -23,7 +23,7 @@ public partial class Player : CharacterBody2D {
     public double SuperJumpCurrentBufferTime;
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
-    
+
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     private bool PlayerCanDash { get; set; }
@@ -40,7 +40,7 @@ public partial class Player : CharacterBody2D {
 
     private PackedScene _grappleScene;
 
-    
+
     public override void _Ready() {
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
         ApexGravity = Gravity / 2;
@@ -72,23 +72,21 @@ public partial class Player : CharacterBody2D {
             var mousePosition = GetViewport().GetMousePosition();
             _reticle.LookAt(mousePosition);
             _reticle.Position = Vector2.Zero;
-        } 
-        
+        }
+
         if (CurrentState.GetType() != typeof(DashState))
             SetEmittingDashParticles(false);
     }
 
     public override void _PhysicsProcess(double delta) {
-        if (SuperJumpCurrentBufferTime < SuperJumpInitBufferLimit)
-            SuperJumpCurrentBufferTime += delta;
-        
         var inputs = GetInputs();
 
+        // if (!inputs.IsPushingJump || (IsOnFloor() && inputs.InputDirection.X != 0)) ???
         if (!inputs.IsPushingJump)
             _timeSinceStartHoldingJump = 0;
         else // Jump is being pushed 
             _timeSinceStartHoldingJump += delta;
-            
+
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
         if (newState != null) {
@@ -102,7 +100,7 @@ public partial class Player : CharacterBody2D {
             // grappleHook.Rotation = GetAngleToMouse();
             // GetParent().AddChild(grappleHook);
         }
-        
+
         MoveAndSlide();
     }
 
@@ -141,7 +139,7 @@ public partial class Player : CharacterBody2D {
         None,
         Normal,
         CoyoteTime,
-        SuperJump
+        BoostJump
     }
 
     // This function exists because I assume the logic is going to expand in the future
@@ -149,22 +147,23 @@ public partial class Player : CharacterBody2D {
     public bool CanDash() {
         return PlayerCanDash;
     }
-    
+
     public JumpType CanJump() {
         if (!IsOnFloor() && !CoyoteTimeExpired)
             return JumpType.CoyoteTime;
         if (IsOnFloor() && _timeSinceStartHoldingJump < EarlyJumpMaxBufferTime)
-            return JumpType.Normal;
+            return CurrentState.GetType() == typeof(DashState) ? JumpType.BoostJump : JumpType.Normal;
         return JumpType.None;
     }
 
     public bool CanStartCharge(InputInfo inputs) {
-        return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime < SuperJumpInitBufferLimit;
+        return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime >= SuperJumpInitBufferLimit;
     }
 
     public void ResetJumpBuffers() {
         CoyoteTimeExpired = false;
         CoyoteTimeElapsed = 0;
+        SuperJumpCurrentBufferTime = 0;
     }
 
     public void ChangeColor(Color color) {
@@ -192,7 +191,7 @@ public partial class Player : CharacterBody2D {
     }
 
     public void FaceLeft() => SetFaceDirection(true);
-    
+
     public void FaceRight() => SetFaceDirection(false);
 
     private void SetFaceDirection(bool faceLeft) {
