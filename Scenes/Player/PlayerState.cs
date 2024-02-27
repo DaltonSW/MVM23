@@ -1,6 +1,6 @@
 using System;
 using Godot;
-namespace MVM23.Scripts.AuxiliaryScripts;
+namespace MVM23;
 
 public interface IPlayerState {
     public string Name => "InterfaceName";
@@ -19,7 +19,10 @@ public abstract class PlayerState : IPlayerState {
         var velocity = player.Velocity;
 
         if (inputs.InputDirection.X != 0) {
-            velocity.X = inputs.InputDirection.X < 0 ? -player.RunSpeed : player.RunSpeed;
+            if (player.Velocity.X != 0 && !player.IsOnFloor())
+                velocity.X = player.Velocity.X;
+            else
+                velocity.X = inputs.InputDirection.X < 0 ? -player.RunSpeed : player.RunSpeed;
             if (inputs.InputDirection.X < 0 && velocity.X < 0)
                 player.FaceLeft();
             else
@@ -50,7 +53,7 @@ public class IdleState : PlayerState {
             return new ChargeState();
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(inputs);
+            return new DashState(inputs, player);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -101,6 +104,7 @@ public class SuperJumpState : PlayerState {
     [Export] public float SuperJumpVelocity = -750f;
 
     public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        player.SuperJumpCurrentBufferTime = 0;
         if (inputs.IsPushingCrouch) {
             player.CanSuperJump = false;
             return new IdleState();
@@ -116,8 +120,24 @@ public class JumpState : PlayerState {
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
 
+    private const float BoostJumpVertMult = 0.75F;
+    private const float BoostJumpHorzMult = 2.5F;
+
     public JumpState(Player player, Player.JumpType jumpType) {
         var jumpSpeed = player.JumpSpeed;
+        var horizSpeed = player.RunSpeed;
+        if (player.Velocity.X < 0)
+            horizSpeed *= -1;
+
+        // ReSharper disable once ConvertIfStatementToSwitchStatement
+        if (jumpType == Player.JumpType.BoostJump) {
+            jumpSpeed *= BoostJumpVertMult;
+            horizSpeed *= BoostJumpHorzMult;
+            player.ResetJumpBuffers();
+            player.CoyoteTimeExpired = true; // Set it to true so you can't infinitely jump up
+            player.Velocity = new Vector2(horizSpeed, -jumpSpeed);
+            return;
+        }
 
         // If this was a CT jump, add additional jump speed proportional to how long the player has spent in CT
         if (jumpType == Player.JumpType.CoyoteTime)
@@ -125,7 +145,7 @@ public class JumpState : PlayerState {
 
         player.ResetJumpBuffers();
         player.CoyoteTimeExpired = true; // Set it to true so you can't infinitely jump up
-        player.Velocity = new Vector2(player.Velocity.X, player.Velocity.Y - jumpSpeed);
+        player.Velocity = new Vector2(horizSpeed, -jumpSpeed);
     }
 
     public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
@@ -136,7 +156,7 @@ public class JumpState : PlayerState {
         player.Velocity = velocity;
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(inputs);
+            return new DashState(inputs, player);
 
 
         if (player.IsOnCeiling() && ShouldNudgePlayer(player)) {
@@ -188,7 +208,7 @@ public class FallState : PlayerState {
         }
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(inputs);
+            return new DashState(inputs, player);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -217,7 +237,7 @@ public class RunState : PlayerState {
             return new ChargeState();
 
         if (inputs.IsPushingDash && player.CanDash())
-            return new DashState(inputs);
+            return new DashState(inputs, player);
 
         if (inputs.IsPushingJump) {
             var jumpType = player.CanJump();
@@ -239,39 +259,57 @@ public class RunState : PlayerState {
 public class DashState : PlayerState {
     public new string Name => "DashState";
 
-    [Export] public float ExitVelocity = 150.0f;
-    [Export] public float DashDuration = 0.08f;
+    [Export] public static float ExitVelocity { get; } = 150.0f;
+    [Export] public float DashDuration = 0.25f;
     [Export] public double DashSpeed = 750.0f;
 
     private double _dashTimeElapsed;
     private readonly Vector2 _dashCurrentAngle;
 
-    public DashState(Player.InputInfo inputs) {
+    public DashState(Player.InputInfo inputs, Player player) {
+        player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
     }
 
     public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        player.SuperJumpCurrentBufferTime = 0;
+        if (player.IsOnFloor())
+            player.SuperJumpCurrentBufferTime += delta;
         _dashTimeElapsed += delta;
         player.ChangeAnimation("jump");
         player.SetEmittingDashParticles(true);
 
         player.Velocity = _dashCurrentAngle * (float)DashSpeed;
 
-        if (player.CanStartCharge(inputs))
+        if (player.CanStartCharge(inputs)) {
+            player.SuperJumpCurrentBufferTime = 0;
             return new ChargeState();
+        }
+
+        if (inputs.IsPushingJump) {
+            if (player.CanJump() == Player.JumpType.BoostJump) {
+                player.SuperJumpCurrentBufferTime = 0;
+                return new JumpState(player, Player.JumpType.BoostJump);
+            }
+        }
 
         if (_dashTimeElapsed < DashDuration)
             return null;
 
+        player.SuperJumpCurrentBufferTime = 0;
+
         player.SetEmittingDashParticles(false);
 
         // ReSharper disable once InvertIf
-        if (player.Velocity.Y != 0) {
-            var tempVel = player.Velocity.Y < 0 ? -ExitVelocity : ExitVelocity;
-            player.Velocity = new Vector2(player.Velocity.X, tempVel);
-        }
+        var tempY = 0F;
+        var tempX = 0F;
+        if (player.Velocity.Y != 0)
+            tempY = player.Velocity.Y < 0 ? -ExitVelocity : ExitVelocity;
+
+        if (player.Velocity.X != 0)
+            tempX = player.Velocity.X < 0 ? -player.RunSpeed : player.RunSpeed;
+        player.Velocity = new Vector2(tempX, tempY);
+
 
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
