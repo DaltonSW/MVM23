@@ -32,10 +32,10 @@ public partial class Player : CharacterBody2D {
 
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
-    public RayCast2D PosBonkCheck;
-    public RayCast2D PosBonkBuffer;
-    public RayCast2D NegBonkCheck;
-    public RayCast2D NegBonkBuffer;
+    private RayCast2D _posBonkCheck;
+    private RayCast2D _posBonkBuffer;
+    private RayCast2D _negBonkCheck;
+    private RayCast2D _negBonkBuffer;
     private CpuParticles2D _dashParticles;
     private Node2D _reticle;
     private bool _reticleFrozen;
@@ -58,10 +58,10 @@ public partial class Player : CharacterBody2D {
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
-        PosBonkCheck = GetNode<RayCast2D>("Sprite/PosBonkCheck");
-        PosBonkBuffer = GetNode<RayCast2D>("Sprite/PosBonkBuffer");
-        NegBonkCheck = GetNode<RayCast2D>("Sprite/NegBonkCheck");
-        NegBonkBuffer = GetNode<RayCast2D>("Sprite/NegBonkBuffer");
+        _posBonkCheck = GetNode<RayCast2D>("Sprite/PosBonkCheck");
+        _posBonkBuffer = GetNode<RayCast2D>("Sprite/PosBonkBuffer");
+        _negBonkCheck = GetNode<RayCast2D>("Sprite/NegBonkCheck");
+        _negBonkBuffer = GetNode<RayCast2D>("Sprite/NegBonkBuffer");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
         _reticle = GetNode<Node2D>("Reticle");
         _reticle.Visible = false;
@@ -210,6 +210,22 @@ public partial class Player : CharacterBody2D {
     private void SetFaceDirection(bool faceLeft) {
         IsFacingLeft = faceLeft;
         _sprite.FlipH = !IsFacingLeft;
+    }
+
+    public bool ShouldNudgePositive() {
+        return _negBonkCheck.IsColliding() && !_negBonkBuffer.IsColliding();
+    }
+
+
+    public bool ShouldNudgeNegative() {
+        return _posBonkCheck.IsColliding() && !_posBonkBuffer.IsColliding();
+    }
+
+
+    public void NudgePlayer(int nudgeAmount, Vector2 nudgeEnterVelocity) {
+        var playerPos = GlobalPosition;
+        Velocity = nudgeEnterVelocity;
+        GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
     // public void OnGrappleStruck() {
