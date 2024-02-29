@@ -20,13 +20,14 @@ public partial class Player : CharacterBody2D {
     public float ApexGravity;
 
     private double _timeSinceStartHoldingJump;
+    private double _timeSinceLeftGround;
     public double SuperJumpCurrentBufferTime;
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
 
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
-    private bool PlayerCanDash { get; set; }
+    public bool PlayerCanDash { get; set; }
     private IPlayerState CurrentState { get; set; }
 
     private AnimatedSprite2D _sprite;
@@ -91,6 +92,13 @@ public partial class Player : CharacterBody2D {
         else // Jump is being pushed 
             _timeSinceStartHoldingJump += delta;
 
+        if (IsOnFloor()) {
+            _timeSinceLeftGround = 0;
+            PlayerCanDash = true;
+        }
+        else
+            _timeSinceLeftGround += delta;
+
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
         if (newState != null) {
@@ -153,8 +161,9 @@ public partial class Player : CharacterBody2D {
     }
 
     public JumpType CanJump() {
-        if (!IsOnFloor() && !CoyoteTimeExpired)
+        if (!IsOnFloor() && !CoyoteTimeExpired && _timeSinceStartHoldingJump < _timeSinceLeftGround)
             return JumpType.CoyoteTime;
+
         if (IsOnFloor() && _timeSinceStartHoldingJump < EarlyJumpMaxBufferTime)
             return CurrentState.GetType() == typeof(DashState) ? JumpType.BoostJump : JumpType.Normal;
         return JumpType.None;
