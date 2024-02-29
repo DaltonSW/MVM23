@@ -160,13 +160,13 @@ public class JumpState : PlayerState {
 
 
         if (player.IsOnCeiling()) {
-            if (ShouldNudgePlayerNeg(player)) {
-                NudgePlayer(player, -NudgeAmount);
+            if (player.ShouldNudgeNegative()) {
+                player.NudgePlayer(-NudgeAmount, _nudgeEnterVel);
                 return null;
             }
 
-            if (ShouldNudgePlayerPos(player)) {
-                NudgePlayer(player, NudgeAmount);
+            if (player.ShouldNudgePositive()) {
+                player.NudgePlayer(NudgeAmount, _nudgeEnterVel);
                 return null;
             }
         }
@@ -180,20 +180,6 @@ public class JumpState : PlayerState {
             return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
 
         return null;
-    }
-
-    private static bool ShouldNudgePlayerNeg(Player player) {
-        return player.PosBonkCheck.IsColliding() && !player.PosBonkBuffer.IsColliding();
-    }
-
-    private static bool ShouldNudgePlayerPos(Player player) {
-        return player.NegBonkCheck.IsColliding() && !player.NegBonkBuffer.IsColliding();
-    }
-
-    private void NudgePlayer(Player player, int nudgeAmount) {
-        var playerPos = player.GlobalPosition;
-        player.Velocity = _nudgeEnterVel;
-        player.GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 }
 
@@ -273,6 +259,8 @@ public class DashState : PlayerState {
     [Export] public float DashDuration = 0.12f;
     [Export] public double DashSpeed = 750.0f;
 
+    private const int NudgeAmount = 6;
+
     private double _dashTimeElapsed;
     private readonly Vector2 _dashCurrentAngle;
 
@@ -292,6 +280,18 @@ public class DashState : PlayerState {
         player.SetEmittingDashParticles(true);
 
         player.Velocity = _dashCurrentAngle * (float)DashSpeed;
+
+        if (player.IsOnCeiling()) {
+            if (player.ShouldNudgeNegative()) {
+                player.NudgePlayer(-NudgeAmount, player.Velocity);
+                return null;
+            }
+
+            if (player.ShouldNudgePositive()) {
+                player.NudgePlayer(NudgeAmount, player.Velocity);
+                return null;
+            }
+        }
 
         if (player.CanStartCharge(inputs)) {
             player.SuperJumpCurrentBufferTime = 0;

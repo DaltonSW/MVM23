@@ -212,6 +212,22 @@ public partial class Player : CharacterBody2D {
         _sprite.FlipH = !IsFacingLeft;
     }
 
+    public bool ShouldNudgePositive() {
+        return NegBonkCheck.IsColliding() && !NegBonkBuffer.IsColliding();
+    }
+
+
+    public bool ShouldNudgeNegative() {
+        return PosBonkCheck.IsColliding() && !PosBonkBuffer.IsColliding();
+    }
+
+
+    public void NudgePlayer(int nudgeAmount, Vector2 nudgeEnterVelocity) {
+        var playerPos = GlobalPosition;
+        Velocity = nudgeEnterVelocity;
+        GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
+    }
+
     // public void OnGrappleStruck() {
     //     return;
     // }
