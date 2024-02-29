@@ -270,7 +270,7 @@ public class DashState : PlayerState {
     public new string Name => "DashState";
 
     [Export] public static float ExitVelocity { get; } = 150.0f;
-    [Export] public float DashDuration = 0.25f;
+    [Export] public float DashDuration = 0.12f;
     [Export] public double DashSpeed = 750.0f;
 
     private double _dashTimeElapsed;
@@ -280,11 +280,13 @@ public class DashState : PlayerState {
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
+        player.PlayerCanDash = false;
     }
 
     public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         if (player.IsOnFloor())
             player.SuperJumpCurrentBufferTime += delta;
+
         _dashTimeElapsed += delta;
         player.ChangeAnimation("jump");
         player.SetEmittingDashParticles(true);
