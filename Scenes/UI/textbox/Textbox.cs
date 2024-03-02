@@ -61,11 +61,13 @@ public partial class Textbox : CanvasLayer {
 
     private double _endLabelTimeVisible;
 
-    [Export] public string DialogueName = "sample";
+    [Export] public string DialogueID = "sample";
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
+        ProcessMode = ProcessModeEnum.Always;
+
         LoadConversation();
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
@@ -88,6 +90,8 @@ public partial class Textbox : CanvasLayer {
         switch (_currentState) {
             case TextboxState.Empty:
                 Visible = false;
+                GetTree().Paused = false;
+                QueueFree();
                 return;
             case TextboxState.Printing:
                 // TODO: Fix "hit action to insta-advance"
@@ -111,7 +115,7 @@ public partial class Textbox : CanvasLayer {
                 ChangeState(TextboxState.Printing);
                 return;
             case TextboxState.Finished:
-                if (Input.IsActionJustPressed("ui_accept")) {
+                if (Input.IsActionJustPressed("interact")) {
                     ChangeState(TextboxState.Ready);
                     _endLabel.Visible = false;
                     return;
@@ -130,7 +134,8 @@ public partial class Textbox : CanvasLayer {
         var deserializer = new DeserializerBuilder().WithNamingConvention(UnderscoredNamingConvention.Instance).Build();
 
         var conversation =
-            deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueName}.yaml"));
+            deserializer.Deserialize<Conversation>(
+                FileAccess.GetFileAsString($"res://Assets/Dialogue/{DialogueID}.yaml"));
         _conversation = conversation;
     }
 

@@ -86,10 +86,9 @@ public partial class Player : CharacterBody2D {
     public override void _PhysicsProcess(double delta) {
         var inputs = GetInputs();
 
-        // if (!inputs.IsPushingJump || (IsOnFloor() && inputs.InputDirection.X != 0)) ???
         if (!inputs.IsPushingJump)
             _timeSinceStartHoldingJump = 0;
-        else // Jump is being pushed 
+        else
             _timeSinceStartHoldingJump += delta;
 
         if (IsOnFloor()) {
@@ -106,11 +105,10 @@ public partial class Player : CharacterBody2D {
         }
 
         if (inputs.IsPushingGrapple) {
-            GD.Print("Grapple!");
-            // var grappleHook = _grappleScene.Instantiate<GrappleHook>();
-            // grappleHook.Position = GlobalPosition;
-            // grappleHook.Rotation = GetAngleToMouse();
-            // GetParent().AddChild(grappleHook);
+            var grappleHook = _grappleScene.Instantiate<GrappleHook>();
+            grappleHook.Position = GlobalPosition;
+            grappleHook.Rotation = GetAngleToMouse();
+            GetParent().AddChild(grappleHook);
         }
 
         MoveAndSlide();
