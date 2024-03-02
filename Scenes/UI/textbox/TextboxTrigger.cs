@@ -24,5 +24,6 @@ public partial class TextboxTrigger : Area2D {
         var textbox = _textboxScene.Instantiate<Textbox>();
         textbox.DialogueID = TextboxID;
         GetParent().AddChild(textbox);
+        GetTree().Paused = true;
     }
 }
