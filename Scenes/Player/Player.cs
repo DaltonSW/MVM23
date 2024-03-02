@@ -30,6 +30,9 @@ public partial class Player : CharacterBody2D {
     public bool PlayerCanDash { get; set; }
     private IPlayerState CurrentState { get; set; }
 
+    public bool CanThrowGrapple { get; set; }
+    private GrappleHook GrappleInstance { get; set; }
+
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
     private RayCast2D _posBonkCheck;
@@ -55,6 +58,7 @@ public partial class Player : CharacterBody2D {
         CurrentState = new IdleState();
         _reticleFrozen = false;
         PlayerCanDash = true;
+        CanThrowGrapple = true;
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
@@ -81,6 +85,9 @@ public partial class Player : CharacterBody2D {
 
         if (CurrentState.GetType() != typeof(DashState))
             SetEmittingDashParticles(false);
+
+        if (GrappleInstance != null)
+            QueueRedraw();
     }
 
     public override void _PhysicsProcess(double delta) {
@@ -90,6 +97,11 @@ public partial class Player : CharacterBody2D {
             _timeSinceStartHoldingJump = 0;
         else
             _timeSinceStartHoldingJump += delta;
+
+        if (!inputs.IsPushingGrapple && GrappleInstance != null) {
+            GrappleInstance.QueueFree();
+            OnGrappleFree();
+        }
 
         if (IsOnFloor()) {
             _timeSinceLeftGround = 0;
@@ -104,14 +116,27 @@ public partial class Player : CharacterBody2D {
             ChangeState(newState);
         }
 
-        if (inputs.IsPushingGrapple) {
+        if (inputs.IsPushingGrapple && CanThrowGrapple) {
             var grappleHook = _grappleScene.Instantiate<GrappleHook>();
             grappleHook.Position = GlobalPosition;
             grappleHook.Rotation = GetAngleToMouse();
             GetParent().AddChild(grappleHook);
+            GrappleInstance = grappleHook;
+            grappleHook.Connect(nameof(GrappleHook.GrappleHookStruck), new Callable(this, nameof(OnGrappleStruck)));
+            grappleHook.Connect(nameof(GrappleHook.Freeing), new Callable(this, nameof(OnGrappleFree)));
+            CanThrowGrapple = false;
         }
 
         MoveAndSlide();
+    }
+
+    public override void _Draw() {
+        if (GrappleInstance == null) return;
+
+        var from = Vector2.Zero;
+        var to = GrappleInstance.GlobalPosition - GlobalPosition;
+        var color = Colors.Aqua;
+        DrawLine(from, to, color);
     }
 
     private void ChangeState(IPlayerState newState) {
@@ -226,7 +251,13 @@ public partial class Player : CharacterBody2D {
         GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
-    // public void OnGrappleStruck() {
-    //     return;
-    // }
+    private void OnGrappleFree() {
+        GrappleInstance = null;
+        QueueRedraw();
+        CanThrowGrapple = true;
+    }
+
+    public void OnGrappleStruck() {
+        ChangeState(new GrappleState(GrappleInstance, GlobalPosition.DistanceTo(GrappleInstance.GlobalPosition)));
+    }
 }
