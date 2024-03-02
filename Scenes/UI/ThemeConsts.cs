@@ -10,6 +10,8 @@ public class ThemeConsts {
     private static FontFile GontserratBold { get; set; }
     private static FontFile GontserratItalic { get; set; }
     private static FontFile GontserratBoldItalic { get; set; }
+    private static FontFile VCROSD { get; set; }
+    private static FontFile EASVHS { get; set; }
 
     public static int RegularTextSize { get; private set; }
     public static FontFile RegularText { get; private set; }
@@ -21,7 +23,7 @@ public class ThemeConsts {
     public static TextField.DrawModes DefaultDrawMode { get; private set; }
 
     public static void Initialize() {
-        RegularTextSize = 14;
+        RegularTextSize = 20;
         DefaultDrawMode = TextField.DrawModes.CharByChar;
 
         AgaveRegular = new FontFile();
@@ -45,9 +47,15 @@ public class ThemeConsts {
         GontserratItalic = new FontFile();
         GontserratItalic.LoadDynamicFont("res://Assets/Fonts/Gontserrat Italic.ttf");
 
-        RegularText = GontserratRegular;
-        RegularText.FontStyle = TextServer.FontStyle.FixedWidth;
-        BoldText = GontserratBold;
+        VCROSD = new FontFile();
+        VCROSD.LoadDynamicFont("res://Assets/Fonts/VCR OSD.ttf");
+
+        EASVHS = new FontFile();
+        EASVHS.LoadDynamicFont("res://Assets/Fonts/EASVHS.ttf");
+
+        RegularText = EASVHS;
+        // RegularText.FontStyle = TextServer.FontStyle.FixedWidth;
+        BoldText = EASVHS;
         BoldText.FontStyle = TextServer.FontStyle.FixedWidth;
         BoldItalicText = GontserratBoldItalic;
         BoldItalicText.FontStyle = TextServer.FontStyle.FixedWidth;

@@ -65,6 +65,7 @@ theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 16
 
 [node name="TextField" type="Panel" parent="ParentBox/Background/InnerBox"]
+texture_filter = 1
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ec8u2")
 script = ExtResource("1_jxaen")
@@ -79,6 +80,7 @@ text = "V"
 label_settings = SubResource("LabelSettings_lnvqc")
 
 [node name="SpeakerName" type="Label" parent="ParentBox/Background"]
+texture_filter = 1
 layout_mode = 2
 offset_left = 33.0
 offset_top = 12.0
