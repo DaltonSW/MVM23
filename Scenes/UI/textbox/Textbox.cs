@@ -61,7 +61,7 @@ public partial class Textbox : CanvasLayer {
 
     private double _endLabelTimeVisible;
 
-    [Export] public string DialogueName = "sample";
+    [Export] public string DialogueID = "sample";
 
 
     // Called when the node enters the scene tree for the first time.
@@ -130,7 +130,7 @@ public partial class Textbox : CanvasLayer {
         var deserializer = new DeserializerBuilder().WithNamingConvention(UnderscoredNamingConvention.Instance).Build();
 
         var conversation =
-            deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueName}.yaml"));
+            deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueID}.yaml"));
         _conversation = conversation;
     }
 
