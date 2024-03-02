@@ -349,3 +349,36 @@ public class DashState : PlayerState {
     //     return closestDirection;
     // }
 }
+
+public class GrappleState : PlayerState {
+    private GrappleHook GrappleHook { get; set; }
+    private float _playerDistanceToHook;
+
+    [Export] private float GrappleForce = 600f;
+    [Export] private double GrappleGravDiv = 1.3;
+    private const float MaxSpeed = 150f;
+
+    public GrappleState(GrappleHook grappleHook, float playerDistanceToHook) {
+        GrappleHook = grappleHook;
+        _playerDistanceToHook = playerDistanceToHook;
+    }
+
+    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        var currentAngle = (GrappleHook.GlobalPosition - player.GlobalPosition).Normalized();
+
+        var velocity = player.Velocity;
+
+        velocity += currentAngle * GrappleForce * (float)delta;
+
+        velocity.Y += (float)(player.ApexGravity * delta / GrappleGravDiv);
+
+        player.Velocity = velocity;
+
+        if (inputs.IsPushingGrapple) return null;
+
+        if (player.IsOnFloor()) {
+            return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
+        }
+        return new FallState();
+    }
+}
