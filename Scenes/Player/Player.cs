@@ -28,6 +28,7 @@ public partial class Player : CharacterBody2D {
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     public bool PlayerCanDash { get; set; }
+    public bool CanThrowGrapple { get; set; }
     private IPlayerState CurrentState { get; set; }
 
     private AnimatedSprite2D _sprite;
@@ -55,6 +56,7 @@ public partial class Player : CharacterBody2D {
         CurrentState = new IdleState();
         _reticleFrozen = false;
         PlayerCanDash = true;
+        CanThrowGrapple = true;
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
@@ -104,11 +106,14 @@ public partial class Player : CharacterBody2D {
             ChangeState(newState);
         }
 
-        if (inputs.IsPushingGrapple) {
+        if (inputs.IsPushingGrapple && CanThrowGrapple) {
             var grappleHook = _grappleScene.Instantiate<GrappleHook>();
             grappleHook.Position = GlobalPosition;
             grappleHook.Rotation = GetAngleToMouse();
             GetParent().AddChild(grappleHook);
+            grappleHook.Connect(nameof(GrappleHook.GrappleHookStruck), new Callable(this, nameof(OnGrappleStruck)));
+            grappleHook.Connect(nameof(GrappleHook.Freeing), new Callable(this, nameof(OnGrappleFree)));
+            CanThrowGrapple = false;
         }
 
         MoveAndSlide();
@@ -226,7 +231,11 @@ public partial class Player : CharacterBody2D {
         GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
-    // public void OnGrappleStruck() {
-    //     return;
-    // }
+    private void OnGrappleFree() {
+        CanThrowGrapple = true;
+    }
+
+    public void OnGrappleStruck() {
+        return;
+    }
 }
