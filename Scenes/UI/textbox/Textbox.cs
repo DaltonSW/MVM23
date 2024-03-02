@@ -111,7 +111,7 @@ public partial class Textbox : CanvasLayer {
                 ChangeState(TextboxState.Printing);
                 return;
             case TextboxState.Finished:
-                if (Input.IsActionJustPressed("ui_accept")) {
+                if (Input.IsActionJustPressed("interact")) {
                     ChangeState(TextboxState.Ready);
                     _endLabel.Visible = false;
                     return;
@@ -130,7 +130,8 @@ public partial class Textbox : CanvasLayer {
         var deserializer = new DeserializerBuilder().WithNamingConvention(UnderscoredNamingConvention.Instance).Build();
 
         var conversation =
-            deserializer.Deserialize<Conversation>(FileAccess.GetFileAsString($"res://Dialogue/{DialogueID}.yaml"));
+            deserializer.Deserialize<Conversation>(
+                FileAccess.GetFileAsString($"res://Assets/Dialogue/{DialogueID}.yaml"));
         _conversation = conversation;
     }
 
