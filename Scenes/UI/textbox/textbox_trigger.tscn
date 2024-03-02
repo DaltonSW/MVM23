@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes/UI/textbox/TextboxTrigger.cs" id="1_y2iv3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uc2bu"]
-radius = 15.0333
+radius = 11.4018
 
 [node name="TextboxTrigger" type="Area2D"]
 script = ExtResource("1_y2iv3")
