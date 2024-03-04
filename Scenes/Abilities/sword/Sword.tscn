@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4t6k8p7kupa1"]
+
+[ext_resource type="Script" path="res://Scenes/Abilities/sword/Sword.cs" id="1_nb200"]
+[ext_resource type="Texture2D" uid="uid://dnbup8fs46qq" path="res://Scenes/Abilities/sword/slash.png" id="2_jg6mc"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iyjyr"]
+radius = 12.0
+height = 32.0
+
+[node name="Sword" type="Node2D"]
+script = ExtResource("1_nb200")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, 1)
+texture = ExtResource("2_jg6mc")
+
+[node name="Hitbox" type="Area2D" parent="." groups=["hitbox"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(11, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_iyjyr")

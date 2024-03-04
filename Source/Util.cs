@@ -6,6 +6,24 @@ public static class Util
 {
 }
 
+public enum Direction8
+{
+    RIGHT,
+    DOWN_RIGHT,
+    DOWN,
+    DOWN_LEFT,
+    LEFT,
+    UP_LEFT,
+    UP,
+    UP_RIGHT,
+}
+
+public enum YDirection
+{
+    UP,
+    DOWN,
+}
+
 public enum XDirection
 {
     LEFT,
@@ -40,6 +58,12 @@ public static class DoubleExtensions
 
 public static class Extensions
 {
+    public static Angle AngleObject(this Vector2 v) =>
+        Angle.FromRadians(v.Angle());
+
+    public static Direction8 NearestDirection8(this Vector2 v) =>
+        v.AngleObject().NearestDirection8();
+
     public static Vector2 UnitVector(this XDirection direction) =>
         direction switch
         {
@@ -120,6 +144,26 @@ public static class Extensions
         from + 0.5f * (to - from);
 }
 
+public static class Direction8Extensions
+{
+    public static Angle Angle(this Direction8 d) =>
+        global::Angle.FromRadians(d.Radians());
+
+    public static float Radians(this Direction8 d) =>
+        d switch
+        {
+            Direction8.UP_LEFT    => -3 * Constants.PI_OVER_4,
+            Direction8.UP         => -Constants.PI_OVER_2,
+            Direction8.UP_RIGHT   => -Constants.PI_OVER_4,
+            Direction8.RIGHT      => 0,
+            Direction8.DOWN_RIGHT => Constants.PI_OVER_4,
+            Direction8.DOWN       => Constants.PI_OVER_2,
+            Direction8.DOWN_LEFT  => 3 * Constants.PI_OVER_4,
+            Direction8.LEFT       => (float)Math.PI,
+            _ => throw new ArgumentOutOfRangeException(nameof(d)),
+        };
+}
+
 public class Range
 {
     public double LowerInclusive { get; private set; }
@@ -194,6 +238,8 @@ public static class Vector2s
 public static class Constants
 {
     public const float PI_OVER_2 = (float)(Math.PI / 2);
+    public const float PI_OVER_4 = (float)(Math.PI / 4);
+    public const float PI_OVER_8 = (float)(Math.PI / 8);
     public static Range NEG_TO_POS_PI_OVER_2 = Range.PlusOrMinus(PI_OVER_2);
     public static Range NEG_TO_POS_PI = Range.PlusOrMinus(Math.PI);
 }
@@ -203,3 +249,44 @@ public enum RotDirection
     CLOCKWISE,
     COUNTERCLOCKWISE
 }
+
+public class Angle
+{
+    public float Radians { get; private init; }
+
+    private Angle(float radians)
+    {
+        Radians = radians;
+    }
+
+    public Direction8 NearestDirection8() =>
+        Radians switch
+        {
+             < -7 * Constants.PI_OVER_8
+                => Direction8.LEFT,
+            >= -7 * Constants.PI_OVER_8 and < -5 * Constants.PI_OVER_8
+                => Direction8.UP_LEFT,
+            >= -5 * Constants.PI_OVER_8 and < -3 * Constants.PI_OVER_8
+                => Direction8.UP,
+            >= -3 * Constants.PI_OVER_8 and < -1 * Constants.PI_OVER_8
+                => Direction8.UP_RIGHT,
+            >= -1 * Constants.PI_OVER_8 and < +1 * Constants.PI_OVER_8
+                => Direction8.RIGHT,
+            >= +1 * Constants.PI_OVER_8 and < +3 * Constants.PI_OVER_8
+                => Direction8.DOWN_RIGHT,
+            >= +3 * Constants.PI_OVER_8 and < +5 * Constants.PI_OVER_8
+                => Direction8.DOWN,
+            >= +5 * Constants.PI_OVER_8 and < +7 * Constants.PI_OVER_8
+                => Direction8.DOWN_LEFT,
+            >= +7 * Constants.PI_OVER_8
+                => Direction8.LEFT,
+            _ => throw new ArgumentOutOfRangeException(nameof(Radians)),
+        };
+
+    public static Angle FromRadians(float radians) =>
+        new Angle(Normalize(radians));
+
+    private static float Normalize(float radians) =>
+        radians % (float)Math.PI;
+}
+
