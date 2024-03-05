@@ -28,10 +28,10 @@ public partial class Player : CharacterBody2D {
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     public bool PlayerCanDash { get; set; }
-    private IPlayerState CurrentState { get; set; }
+    private PlayerState CurrentState { get; set; }
 
     public bool CanThrowGrapple { get; set; }
-    private GrappleHook GrappleInstance { get; set; }
+    public GrappleHook GrappleInstance { get; set; }
 
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
@@ -112,6 +112,7 @@ public partial class Player : CharacterBody2D {
 
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
+
         if (newState != null) {
             ChangeState(newState);
         }
@@ -139,7 +140,7 @@ public partial class Player : CharacterBody2D {
         DrawLine(from, to, color);
     }
 
-    private void ChangeState(IPlayerState newState) {
+    private void ChangeState(PlayerState newState) {
         GD.Print($"Changing from {CurrentState.Name} to {newState.Name}");
         CurrentState = newState;
 
@@ -258,6 +259,6 @@ public partial class Player : CharacterBody2D {
     }
 
     public void OnGrappleStruck() {
-        ChangeState(new GrappleState(GrappleInstance, GlobalPosition.DistanceTo(GrappleInstance.GlobalPosition)));
+        ChangeState(new GrappleState(this));
     }
 }

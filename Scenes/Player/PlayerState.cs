@@ -1,17 +1,16 @@
 using System;
 using Godot;
+using YamlDotNet.Serialization;
 namespace MVM23;
 
 public interface IPlayerState {
-    public string Name => "InterfaceName";
-
     /// Must be called EXACTLY once per _PhysicsProcess, and nowhere else.
-    public IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
+    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
 }
 
 public abstract class PlayerState : IPlayerState {
-    public string Name => "PlayerState";
-    public abstract IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
+    public abstract string Name { get; set; }
+    public abstract PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
 
     private const float ApexGravityVelRange = 5F;
 
@@ -29,7 +28,7 @@ public abstract class PlayerState : IPlayerState {
                 player.FaceRight();
         }
         else
-            velocity.X = Mathf.MoveToward(velocity.X, 0, player.RunSpeed);
+            velocity.X = Mathf.MoveToward(velocity.X, 0, player.RunSpeed * (float)delta);
 
         if (player.IsOnFloor())
             return velocity;
@@ -43,9 +42,9 @@ public abstract class PlayerState : IPlayerState {
 // Consider "GroundedState" and "AerialState" as intermediate classes?
 
 public class IdleState : PlayerState {
-    public new string Name => "IdleState";
+    public override string Name { get; set; } = "Idle";
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
         player.Velocity = GenericPositionUpdates(player, inputs, delta);
 
@@ -73,14 +72,14 @@ public class IdleState : PlayerState {
 }
 
 public class ChargeState : PlayerState {
-    public new string Name => "ChargeState";
+    public override string Name { get; set; } = "Charge";
 
     [Export] public double MinChargeTime = 1.00;
 
     private double _currentChargeTime;
 
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.Velocity = Vector2.Zero;
         if (!inputs.IsPushingCrouch) {
             player.ChangeColor(Colors.White);
@@ -99,11 +98,11 @@ public class ChargeState : PlayerState {
 }
 
 public class SuperJumpState : PlayerState {
-    public new string Name => "SuperJumpState";
+    public override string Name { get; set; } = "Super Jump";
 
     [Export] public float SuperJumpVelocity = -750f;
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.SuperJumpCurrentBufferTime = 0;
         if (inputs.IsPushingCrouch) {
             player.CanSuperJump = false;
@@ -115,7 +114,7 @@ public class SuperJumpState : PlayerState {
 }
 
 public class JumpState : PlayerState {
-    public new string Name => "JumpState";
+    public override string Name { get; set; } = "Jump";
 
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
@@ -148,7 +147,7 @@ public class JumpState : PlayerState {
         player.Velocity = new Vector2(horizSpeed, -jumpSpeed);
     }
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("jump");
 
         var velocity = GenericPositionUpdates(player, inputs, delta);
@@ -184,11 +183,11 @@ public class JumpState : PlayerState {
 }
 
 public class FallState : PlayerState {
-    public new string Name => "FallState";
+    public override string Name { get; set; } = "Fall";
 
     [Export] public double CoyoteTimeBuffer = 0.1;
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("fall");
 
         player.Velocity = GenericPositionUpdates(player, inputs, delta);
@@ -222,9 +221,9 @@ public class FallState : PlayerState {
 }
 
 public class RunState : PlayerState {
-    public new string Name => "RunState";
+    public override string Name { get; set; } = "Run";
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("run");
 
         player.Velocity = GenericPositionUpdates(player, inputs, delta);
@@ -253,7 +252,7 @@ public class RunState : PlayerState {
 }
 
 public class DashState : PlayerState {
-    public new string Name => "DashState";
+    public override string Name { get; set; } = "Dash";
 
     [Export] public static float ExitVelocity { get; } = 150.0f;
     [Export] public float DashDuration = 0.12f;
@@ -271,7 +270,7 @@ public class DashState : PlayerState {
         player.PlayerCanDash = false;
     }
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         if (player.IsOnFloor())
             player.SuperJumpCurrentBufferTime += delta;
 
@@ -350,29 +349,29 @@ public class DashState : PlayerState {
     // }
 }
 
-public class GrappleState : PlayerState {
+public class OldGrappleState : PlayerState {
+    public override string Name { get; set; } = "AccelGrapple";
     private GrappleHook GrappleHook { get; set; }
     private float _playerDistanceToHook;
 
     [Export] private float GrappleForce = 600f;
     [Export] private double GrappleGravDiv = 1.3;
+    private readonly DateTime _startTime;
     private const float MaxSpeed = 150f;
 
-    public GrappleState(GrappleHook grappleHook, float playerDistanceToHook) {
+    public OldGrappleState(GrappleHook grappleHook, float playerDistanceToHook) {
+        _startTime = DateTime.Now;
         GrappleHook = grappleHook;
         _playerDistanceToHook = playerDistanceToHook;
     }
 
-    public override IPlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        var currentAngle = (GrappleHook.GlobalPosition - player.GlobalPosition).Normalized();
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        var t = (float)(DateTime.Now - _startTime).TotalSeconds;
+        var swingAngle = Mathf.Sin(t * Mathf.Sqrt(player.Gravity / _playerDistanceToHook));
 
-        var velocity = player.Velocity;
-
-        velocity += currentAngle * GrappleForce * (float)delta;
-
-        velocity.Y += (float)(player.ApexGravity * delta / GrappleGravDiv);
-
-        player.Velocity = velocity;
+        // Get new player position based on the pendulum motion
+        var direction = (player.GlobalPosition - GrappleHook.GlobalPosition).Normalized();
+        player.GlobalPosition += player.GlobalPosition + direction * swingAngle * _playerDistanceToHook;
 
         if (inputs.IsPushingGrapple) return null;
 
@@ -380,5 +379,65 @@ public class GrappleState : PlayerState {
             return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
         }
         return new FallState();
+    }
+}
+
+public class GrappleState : PlayerState {
+    public override string Name { get; set; } = "Grapple";
+
+    private GrappleHook _grapple;
+
+    private float _curAngle;
+    private float _angleVel;
+    private float _angleAcc;
+
+    private float _theta;
+    private float _omega;
+    private float _alpha;
+
+    private readonly float _length;
+    private readonly float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+
+    private readonly Vector2 _entryVelocity;
+
+    public GrappleState(Player player) {
+        _entryVelocity = player.Velocity;
+        player.Velocity = Vector2.Zero;
+
+        _grapple = player.GrappleInstance;
+        var playerPos = player.GlobalPosition;
+
+        _curAngle = (float)Math.PI / 2 - _grapple.GlobalPosition.AngleToPoint(playerPos);
+        _length = playerPos.DistanceTo(_grapple.GlobalPosition);
+    }
+
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        if (_grapple == null || !inputs.IsPushingGrapple) {
+            // Calculate tangential exit velocity
+            var exitVelocityDirection =
+                new Vector2((float)Math.Cos(_curAngle), (float)Math.Sin(_curAngle)).Normalized();
+            var tangentialExitVelocity = exitVelocityDirection * _angleVel * _length;
+
+            player.Velocity = tangentialExitVelocity;
+
+            if (player.IsOnFloor()) {
+                return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
+            }
+            return new FallState();
+        }
+
+        _angleAcc = -_gravity / _length * (float)Math.Sin(_curAngle);
+
+        _curAngle += _angleVel * (float)delta;
+        _angleVel += _angleAcc * (float)delta;
+
+        var newPos = new Vector2
+        {
+            X = _grapple.GlobalPosition.X + _length * (float)Math.Sin(_curAngle),
+            Y = _grapple.GlobalPosition.Y + _length * (float)Math.Cos(_curAngle)
+        };
+
+        player.GlobalPosition = newPos;
+        return null;
     }
 }
