@@ -33,7 +33,7 @@ public partial class Player : CharacterBody2D {
     public bool CanThrowGrapple { get; set; }
     public GrappleHook GrappleInstance { get; set; }
 
-    public const float GroundFriction = RunSpeed * 6f;
+    public const float GroundFriction = RunSpeed * 20f;
     public const float AirFriction = GroundFriction * 0.8f;
 
     private AnimatedSprite2D _sprite;
@@ -101,8 +101,8 @@ public partial class Player : CharacterBody2D {
         else
             _timeSinceStartHoldingJump += delta;
 
-        if (!inputs.IsPushingGrapple && GrappleInstance != null) {
-            GrappleInstance.QueueFree();
+        if (!inputs.IsPushingGrapple) {
+            GrappleInstance?.QueueFree();
             OnGrappleFree();
         }
 
@@ -255,7 +255,7 @@ public partial class Player : CharacterBody2D {
         GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
-    private void OnGrappleFree() {
+    public void OnGrappleFree() {
         GrappleInstance = null;
         QueueRedraw();
         CanThrowGrapple = true;

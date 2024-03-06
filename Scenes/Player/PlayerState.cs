@@ -426,23 +426,23 @@ public class GrappleState : PlayerState {
             return new FallState();
         }
 
-        if (player.IsOnFloor()) {
+        if (player.IsOnFloor() || player.IsOnWall() || player.IsOnCeiling()) {
+            player.GrappleInstance.QueueFree();
+            player.GrappleInstance = null;
+            player.QueueRedraw();
             return new IdleState();
         }
 
-        if (player.IsOnCeiling()) {
-            _angleVel = 0;
-            var playerPos = player.GlobalPosition;
-            player.GlobalPosition = new Vector2(playerPos.X, playerPos.Y - 8);
-            return null;
-        }
+        // if (player.IsOnCeiling()) {
+        //     _angleVel *= -0.85f;
+        //     var collisions = player.MoveAndCollide(new Vector2(0, _gravity));
+        //     while (collisions != null && collisions.GetNormal() == Vector2.Down)
+        //         collisions = player.MoveAndCollide(new Vector2(0, _gravity));
+        //     
+        //     return null;
+        // }
 
-        if (player.IsOnWall()) {
-            _angleVel *= -0.75f;
-            var playerPos = player.GlobalPosition;
-            player.GlobalPosition = new Vector2(playerPos.X - 8, playerPos.Y);
-            return null;
-        }
+        player.Velocity = Vector2.Zero;
 
         _angleAcc = -_gravity / _length * (float)Math.Sin(_curAngle);
 
