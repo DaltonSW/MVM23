@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxmn2bkeaqomj"]
+[gd_scene load_steps=11 format=3 uid="uid://bxmn2bkeaqomj"]
 
 [ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyer.cs" id="1_pb1ik"]
 [ext_resource type="Texture2D" uid="uid://c51o8uydec7qc" path="res://Scenes/Enemies/cone_fly.png" id="2_4dedk"]
 [ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyerBody.cs" id="2_mw4us"]
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_c5c8c"]
+[ext_resource type="PackedScene" uid="uid://bp0sboaimndn7" path="res://Scenes/Utilities/Hurtbox.tscn" id="5_dw17x"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wjrom"]
 atlas = ExtResource("2_4dedk")
@@ -54,3 +55,12 @@ sprite_frames = SubResource("SpriteFrames_v4sfb")
 polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
 
 [node name="XDirectionManager" parent="Body" instance=ExtResource("3_c5c8c")]
+
+[node name="Hurtbox" parent="Body" instance=ExtResource("5_dw17x")]
+
+[node name="CollisionPolygon2D" parent="Body/Hurtbox" index="0"]
+polygon = PackedVector2Array(-24, -4.55959, -24, 6.38342, 23, 6.38342, 4, -4.55959)
+
+[connection signal="Hurt" from="Body/Hurtbox" to="." method="_Hurt"]
+
+[editable path="Body/Hurtbox"]

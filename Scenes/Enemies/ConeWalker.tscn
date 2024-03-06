@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://l1pht3bvo7gc"]
+[gd_scene load_steps=12 format=3 uid="uid://l1pht3bvo7gc"]
 
 [ext_resource type="Texture2D" uid="uid://kbkm66q0trwb" path="res://Scenes/Enemies/cone_walk.png" id="1_4c6ve"]
 [ext_resource type="Script" path="res://Scenes/Enemies/ConeWalker.cs" id="1_ldup0"]
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_a3cei"]
+[ext_resource type="PackedScene" uid="uid://bp0sboaimndn7" path="res://Scenes/Utilities/Hurtbox.tscn" id="4_o7vtm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7svgw"]
 radius = 5.0
@@ -84,3 +85,12 @@ position = Vector2(3, 22)
 target_position = Vector2(4, 4)
 
 [node name="XDirectionManager" parent="." instance=ExtResource("3_a3cei")]
+
+[node name="Hurtbox" parent="." instance=ExtResource("4_o7vtm")]
+
+[node name="CollisionPolygon2D" parent="Hurtbox" index="0"]
+polygon = PackedVector2Array(-8, -8.20726, -8, 20.9741, 4, 20.9741, 4, -8.20726)
+
+[connection signal="Hurt" from="Hurtbox" to="." method="_Hurt"]
+
+[editable path="Hurtbox"]

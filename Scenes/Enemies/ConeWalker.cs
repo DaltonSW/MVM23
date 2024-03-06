@@ -99,5 +99,10 @@ public partial class ConeWalker : CharacterBody2D
             _sprite.Play(animation);
     }
 
-}
+    public void _Hurt()
+    {
+        if (!IsQueuedForDeletion())
+            QueueFree();
+    }
 
+}

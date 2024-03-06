@@ -101,6 +101,12 @@ public partial class RandomFlyer : Node2D
             QueueRedraw();
     }
 
+    public void _Hurt()
+    {
+        if (!IsQueuedForDeletion())
+            QueueFree();
+    }
+
     private static List<CurvePoint> GenerateEssCurveInRandomDir(Vector2 start) =>
         GenerateEssCurveOfRandomLength(start, Constants.NEG_TO_POS_PI.RandF());
 
@@ -126,4 +132,3 @@ public partial class RandomFlyer : Node2D
     }
 
 }
-
