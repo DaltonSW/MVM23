@@ -21,14 +21,16 @@ public abstract class PlayerState : IPlayerState {
             if (player.Velocity.X != 0 && !player.IsOnFloor())
                 velocity.X = player.Velocity.X;
             else
-                velocity.X = inputs.InputDirection.X < 0 ? -player.RunSpeed : player.RunSpeed;
+                velocity.X = inputs.InputDirection.X < 0 ? -Player.RunSpeed : Player.RunSpeed;
             if (inputs.InputDirection.X < 0 && velocity.X < 0)
                 player.FaceLeft();
             else
                 player.FaceRight();
         }
-        else
-            velocity.X = Mathf.MoveToward(velocity.X, 0, player.RunSpeed * (float)delta);
+        else {
+            var drag = player.IsOnFloor() ? Player.GroundFriction : Player.AirFriction;
+            velocity.X = Mathf.MoveToward(velocity.X, 0, drag * (float)delta);
+        }
 
         if (player.IsOnFloor())
             return velocity;
@@ -124,9 +126,7 @@ public class JumpState : PlayerState {
 
     public JumpState(Player player, Player.JumpType jumpType) {
         var jumpSpeed = player.JumpSpeed;
-        var horizSpeed = player.RunSpeed;
-        if (player.Velocity.X < 0)
-            horizSpeed *= -1;
+        var horizSpeed = player.Velocity.X;
 
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (jumpType == Player.JumpType.BoostJump) {
@@ -318,7 +318,7 @@ public class DashState : PlayerState {
             tempY = player.Velocity.Y < 0 ? -ExitVelocity : ExitVelocity;
 
         if (player.Velocity.X != 0)
-            tempX = player.Velocity.X < 0 ? -player.RunSpeed : player.RunSpeed;
+            tempX = player.Velocity.X < 0 ? -Player.RunSpeed : Player.RunSpeed;
         player.Velocity = new Vector2(tempX, tempY);
 
 
@@ -385,15 +385,11 @@ public class OldGrappleState : PlayerState {
 public class GrappleState : PlayerState {
     public override string Name { get; set; } = "Grapple";
 
-    private GrappleHook _grapple;
+    private readonly GrappleHook _grapple;
 
     private float _curAngle;
     private float _angleVel;
     private float _angleAcc;
-
-    private float _theta;
-    private float _omega;
-    private float _alpha;
 
     private readonly float _length;
     private readonly float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -418,7 +414,11 @@ public class GrappleState : PlayerState {
                 new Vector2((float)Math.Cos(_curAngle), (float)Math.Sin(_curAngle)).Normalized();
             var tangentialExitVelocity = exitVelocityDirection * _angleVel * _length;
 
+            if (_angleVel < 0 || (_angleVel > 0 && _angleAcc < 0))
+                tangentialExitVelocity.Y *= -1;
+
             player.Velocity = tangentialExitVelocity;
+
 
             if (player.IsOnFloor()) {
                 return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();

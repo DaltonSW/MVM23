@@ -9,7 +9,7 @@ using MVM23;
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 [GlobalClass]
 public partial class Player : CharacterBody2D {
-    [Export] public float RunSpeed = 150.0f;
+    public const float RunSpeed = 150.0f;
     [Export] public double EarlyJumpMaxBufferTime = 0.1;
     [Export] public double SuperJumpInitBufferLimit = 0.2; // Waits to start charging to give time to boost jump
 
@@ -32,6 +32,9 @@ public partial class Player : CharacterBody2D {
 
     public bool CanThrowGrapple { get; set; }
     public GrappleHook GrappleInstance { get; set; }
+
+    public const float GroundFriction = RunSpeed * 6f;
+    public const float AirFriction = GroundFriction * 0.8f;
 
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
