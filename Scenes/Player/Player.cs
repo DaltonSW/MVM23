@@ -33,7 +33,7 @@ public partial class Player : CharacterBody2D {
     public bool PlayerCanDash { get; set; }
     private PlayerState CurrentState { get; set; }
 
-    public bool CanThrowGrapple { get; set; }
+    private bool CanThrowGrapple { get; set; }
     public GrappleHook GrappleInstance { get; set; }
 
     public const float GroundFriction = RunSpeed * 20f;
@@ -120,19 +120,17 @@ public partial class Player : CharacterBody2D {
         else
             _timeSinceLeftGround += delta;
 
-        if (Sword is null && inputs.IsPushingMelee)
-        {
+        if (Sword is null && inputs.IsPushingMelee) {
             GD.Print("creating sword");
             Sword = _swordScene.Instantiate<Sword>();
             AddChild(Sword);
             Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
-        if (Sword is Sword sword && sword.Lifetime >= MeleeDuration)
-        {
+        if (Sword is Sword sword && sword.Lifetime >= MeleeDuratio   {
             GD.Print("clearing sword");
             sword.QueueFree();
             Sword = null;
-        } 
+       } 
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
 
@@ -167,7 +165,7 @@ public partial class Player : CharacterBody2D {
         GD.Print($"Changing from {CurrentState.Name} to {newState.Name}");
         CurrentState = newState;
 
-        // TODO: Implement a "push down automaton"(?) pattern (and consider if it's even needed)
+        //  Consider if a "push down automaton"(?) pattern is useful
         //  Basically just a stack that stores the previous states
         //  If you can "shoot" from idle or running or jumping, it shouldn't need to keep track of specific prev state
         //  It should be able to return something like PlayerState.Previous to go back to whatever the last one was

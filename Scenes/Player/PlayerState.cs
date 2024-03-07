@@ -1,15 +1,9 @@
 using System;
 using Godot;
-using YamlDotNet.Serialization;
 namespace MVM23;
 
-public interface IPlayerState {
-    /// Must be called EXACTLY once per _PhysicsProcess, and nowhere else.
-    public PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
-}
-
-public abstract class PlayerState : IPlayerState {
-    public abstract string Name { get; set; }
+public abstract class PlayerState {
+    public abstract string Name { get; }
     public abstract PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta);
 
     private const float ApexGravityVelRange = 5F;
@@ -44,7 +38,7 @@ public abstract class PlayerState : IPlayerState {
 // Consider "GroundedState" and "AerialState" as intermediate classes?
 
 public class IdleState : PlayerState {
-    public override string Name { get; set; } = "Idle";
+    public override string Name => "Idle";
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("idle");
@@ -74,7 +68,7 @@ public class IdleState : PlayerState {
 }
 
 public class ChargeState : PlayerState {
-    public override string Name { get; set; } = "Charge";
+    public override string Name => "Charge";
 
     [Export] public double MinChargeTime = 1.00;
 
@@ -100,7 +94,7 @@ public class ChargeState : PlayerState {
 }
 
 public class SuperJumpState : PlayerState {
-    public override string Name { get; set; } = "Super Jump";
+    public override string Name => "Super Jump";
 
     [Export] public float SuperJumpVelocity = -750f;
 
@@ -116,7 +110,7 @@ public class SuperJumpState : PlayerState {
 }
 
 public class JumpState : PlayerState {
-    public override string Name { get; set; } = "Jump";
+    public override string Name => "Jump";
 
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
@@ -183,7 +177,7 @@ public class JumpState : PlayerState {
 }
 
 public class FallState : PlayerState {
-    public override string Name { get; set; } = "Fall";
+    public override string Name => "Fall";
 
     [Export] public double CoyoteTimeBuffer = 0.1;
 
@@ -221,7 +215,7 @@ public class FallState : PlayerState {
 }
 
 public class RunState : PlayerState {
-    public override string Name { get; set; } = "Run";
+    public override string Name => "Run";
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.ChangeAnimation("run");
@@ -252,7 +246,7 @@ public class RunState : PlayerState {
 }
 
 public class DashState : PlayerState {
-    public override string Name { get; set; } = "Dash";
+    public override string Name => "Dash";
 
     [Export] public static float ExitVelocity { get; } = 150.0f;
     [Export] public float DashDuration = 0.12f;
@@ -324,66 +318,10 @@ public class DashState : PlayerState {
 
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
-
-
-    // private static Vector2 GetDashDirection(Player.InputInfo inputs) {
-    //     var direction = inputs.InputDirection;
-    //     var directions = new Vector2[]
-    //     {
-    //         Vector2.Up, Vector2.Down, Vector2.Left, Vector2.Right, new Vector2(1, 1).Normalized(), // Up-right
-    //         new Vector2(-1, 1).Normalized(),                                                       // Up-left
-    //         new Vector2(1, -1).Normalized(),                                                       // Down-right
-    //         new Vector2(-1, -1).Normalized()                                                       // Down-left
-    //     };
-    //
-    //     var closestDirection = direction;
-    //     var highestDot = -1.0f;
-    //     foreach (var dir in directions) {
-    //         var dot = direction.Dot(dir);
-    //         if (dot < highestDot) continue;
-    //
-    //         highestDot = dot;
-    //         closestDirection = dir;
-    //     }
-    //     return closestDirection;
-    // }
-}
-
-public class OldGrappleState : PlayerState {
-    public override string Name { get; set; } = "AccelGrapple";
-    private GrappleHook GrappleHook { get; set; }
-    private float _playerDistanceToHook;
-
-    [Export] private float GrappleForce = 600f;
-    [Export] private double GrappleGravDiv = 1.3;
-    private readonly DateTime _startTime;
-    private const float MaxSpeed = 150f;
-
-    public OldGrappleState(GrappleHook grappleHook, float playerDistanceToHook) {
-        _startTime = DateTime.Now;
-        GrappleHook = grappleHook;
-        _playerDistanceToHook = playerDistanceToHook;
-    }
-
-    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        var t = (float)(DateTime.Now - _startTime).TotalSeconds;
-        var swingAngle = Mathf.Sin(t * Mathf.Sqrt(player.Gravity / _playerDistanceToHook));
-
-        // Get new player position based on the pendulum motion
-        var direction = (player.GlobalPosition - GrappleHook.GlobalPosition).Normalized();
-        player.GlobalPosition += player.GlobalPosition + direction * swingAngle * _playerDistanceToHook;
-
-        if (inputs.IsPushingGrapple) return null;
-
-        if (player.IsOnFloor()) {
-            return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
-        }
-        return new FallState();
-    }
 }
 
 public class GrappleState : PlayerState {
-    public override string Name { get; set; } = "Grapple";
+    public override string Name => "Grapple";
 
     private readonly GrappleHook _grapple;
 
@@ -394,10 +332,10 @@ public class GrappleState : PlayerState {
     private readonly float _length;
     private readonly float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-    private readonly Vector2 _entryVelocity;
+    // private readonly Vector2 _entryVelocity;
 
     public GrappleState(Player player) {
-        _entryVelocity = player.Velocity;
+        // _entryVelocity = player.Velocity;
         player.Velocity = Vector2.Zero;
 
         _grapple = player.GrappleInstance;

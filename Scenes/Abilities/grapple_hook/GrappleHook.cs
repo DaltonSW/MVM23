@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class GrappleHook : Node2D {
@@ -43,7 +42,6 @@ public partial class GrappleHook : Node2D {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        // QueueRedraw();
         switch (_state) {
             case State.Flying:
                 var position = Position;
@@ -68,11 +66,4 @@ public partial class GrappleHook : Node2D {
         EmitSignal(nameof(GrappleHookStruck));
 
     }
-
-    // public override void _Draw() {
-    //     var from = Player.GlobalPosition;
-    //     var to = GlobalPosition - Player.GlobalPosition;
-    //     var color = Colors.Aqua;
-    //     DrawLine(from, to, color);
-    // }
 }
