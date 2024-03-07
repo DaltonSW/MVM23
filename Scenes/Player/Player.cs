@@ -9,7 +9,7 @@ using MVM23;
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 [GlobalClass]
 public partial class Player : CharacterBody2D {
-    [Export] public float RunSpeed = 150.0f;
+    public const float RunSpeed = 150.0f;
     [Export] public double EarlyJumpMaxBufferTime = 0.1;
     [Export] public double SuperJumpInitBufferLimit = 0.2; // Waits to start charging to give time to boost jump
 
@@ -31,10 +31,13 @@ public partial class Player : CharacterBody2D {
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     public bool PlayerCanDash { get; set; }
-    private IPlayerState CurrentState { get; set; }
+    private PlayerState CurrentState { get; set; }
 
     public bool CanThrowGrapple { get; set; }
-    private GrappleHook GrappleInstance { get; set; }
+    public GrappleHook GrappleInstance { get; set; }
+
+    public const float GroundFriction = RunSpeed * 20f;
+    public const float AirFriction = GroundFriction * 0.8f;
 
     private Sword Sword { get; set; }
 
@@ -105,8 +108,8 @@ public partial class Player : CharacterBody2D {
         else
             _timeSinceStartHoldingJump += delta;
 
-        if (!inputs.IsPushingGrapple && GrappleInstance != null) {
-            GrappleInstance.QueueFree();
+        if (!inputs.IsPushingGrapple) {
+            GrappleInstance?.QueueFree();
             OnGrappleFree();
         }
 
@@ -132,6 +135,7 @@ public partial class Player : CharacterBody2D {
         } 
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
+
         if (newState != null) {
             ChangeState(newState);
         }
@@ -159,7 +163,7 @@ public partial class Player : CharacterBody2D {
         DrawLine(from, to, color);
     }
 
-    private void ChangeState(IPlayerState newState) {
+    private void ChangeState(PlayerState newState) {
         GD.Print($"Changing from {CurrentState.Name} to {newState.Name}");
         CurrentState = newState;
 
@@ -273,13 +277,13 @@ public partial class Player : CharacterBody2D {
         GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
-    private void OnGrappleFree() {
+    public void OnGrappleFree() {
         GrappleInstance = null;
         QueueRedraw();
         CanThrowGrapple = true;
     }
 
     public void OnGrappleStruck() {
-        ChangeState(new GrappleState(GrappleInstance, GlobalPosition.DistanceTo(GrappleInstance.GlobalPosition)));
+        ChangeState(new GrappleState(this));
     }
 }
