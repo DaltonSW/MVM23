@@ -8,12 +8,20 @@
 
 config_version=5
 
+[addons]
+
+metroidvania_system/settings_file="res://MetSysSettings.tres"
+
 [application]
 
 config/name="MVM23"
 run/main_scene="res://Scenes/Levels/test_level/test_level.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+MetSys="*res://addons/MetroidvaniaSystem/Nodes/Singleton.tscn"
 
 [display]
 
@@ -30,7 +38,7 @@ project/assembly_name="MVM23"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugin.cfg", "res://addons/MetroidvaniaSystem/plugin.cfg")
 
 [filesystem]
 
