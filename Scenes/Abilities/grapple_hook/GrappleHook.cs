@@ -1,7 +1,7 @@
 using Godot;
 
 public partial class GrappleHook : Node2D {
-    [Export] public float Speed = 400f;
+    [Export] public float Speed = 750f;
     [Export] public double Lifespan = 1;
     private double _timeAlive;
     private bool IsStuck { get; set; }

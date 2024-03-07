@@ -332,10 +332,8 @@ public class GrappleState : PlayerState {
     private readonly float _length;
     private readonly float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-    // private readonly Vector2 _entryVelocity;
-
     public GrappleState(Player player) {
-        // _entryVelocity = player.Velocity;
+        var entryVelocity = player.Velocity;
         player.Velocity = Vector2.Zero;
 
         _grapple = player.GrappleInstance;
@@ -343,6 +341,10 @@ public class GrappleState : PlayerState {
 
         _curAngle = (float)Math.PI / 2 - _grapple.GlobalPosition.AngleToPoint(playerPos);
         _length = playerPos.DistanceTo(_grapple.GlobalPosition);
+
+        var dirToPlayer = (playerPos - _grapple.GlobalPosition).Normalized();
+        var tangentVec = new Vector2(dirToPlayer.Y, -dirToPlayer.X);
+        _angleVel = entryVelocity.Dot(tangentVec) / _length;
     }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
