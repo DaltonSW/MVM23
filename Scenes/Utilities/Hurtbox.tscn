@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp0sboaimndn7"]
+
+[ext_resource type="Script" path="res://Scenes/Utilities/Hurtbox.cs" id="1_3drnx"]
+
+[node name="Hurtbox" type="Area2D" groups=["hittable"]]
+script = ExtResource("1_3drnx")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, 1)
+scale = Vector2(1, 1.09659)
+polygon = PackedVector2Array(-15, -15.4192, -15, 13.7622, 15, 13.7622, 15, -15.4192)

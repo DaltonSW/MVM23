@@ -25,6 +25,9 @@ public partial class Player : CharacterBody2D {
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
 
+    private double _timeSinceMelee;
+    [Export] public float MeleeDuration { get; set; } = 0.2F;
+
     public bool CanSuperJump { get; set; }
     private bool IsDashing { get; set; }
     public bool PlayerCanDash { get; set; }
@@ -35,6 +38,8 @@ public partial class Player : CharacterBody2D {
 
     public const float GroundFriction = RunSpeed * 20f;
     public const float AirFriction = GroundFriction * 0.8f;
+
+    private Sword Sword { get; set; }
 
     private AnimatedSprite2D _sprite;
     public bool IsFacingLeft { get; private set; }
@@ -48,6 +53,7 @@ public partial class Player : CharacterBody2D {
     private Vector2 _reticleFreezePos;
 
     private PackedScene _grappleScene;
+    private PackedScene _swordScene;
 
 
     public override void _Ready() {
@@ -74,6 +80,7 @@ public partial class Player : CharacterBody2D {
         _reticle.Visible = false;
 
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
+        _swordScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/sword/Sword.tscn");
     }
 
     public override void _Process(double delta) {
@@ -113,6 +120,19 @@ public partial class Player : CharacterBody2D {
         else
             _timeSinceLeftGround += delta;
 
+        if (Sword is null && inputs.IsPushingMelee)
+        {
+            GD.Print("creating sword");
+            Sword = _swordScene.Instantiate<Sword>();
+            AddChild(Sword);
+            Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
+        }
+        if (Sword is Sword sword && sword.Lifetime >= MeleeDuration)
+        {
+            GD.Print("clearing sword");
+            sword.QueueFree();
+            Sword = null;
+        } 
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
 
@@ -123,7 +143,7 @@ public partial class Player : CharacterBody2D {
         if (inputs.IsPushingGrapple && CanThrowGrapple) {
             var grappleHook = _grappleScene.Instantiate<GrappleHook>();
             grappleHook.Position = GlobalPosition;
-            grappleHook.Rotation = GetAngleToMouse();
+            grappleHook.Rotation = GetAngleToMouse().Radians;
             GetParent().AddChild(grappleHook);
             GrappleInstance = grappleHook;
             grappleHook.Connect(nameof(GrappleHook.GrappleHookStruck), new Callable(this, nameof(OnGrappleStruck)));
@@ -159,6 +179,7 @@ public partial class Player : CharacterBody2D {
         public bool IsPushingCrouch { get; init; }
         public bool IsPushingDash { get; init; }
         public bool IsPushingGrapple { get; init; }
+        public bool IsPushingMelee { get; init; }
     }
 
     private static InputInfo GetInputs() {
@@ -168,7 +189,8 @@ public partial class Player : CharacterBody2D {
             IsPushingJump = Input.IsActionPressed("jump"),
             IsPushingCrouch = Input.IsActionPressed("move_down"),
             IsPushingDash = Input.IsActionPressed("dash"),
-            IsPushingGrapple = Input.IsActionPressed("grapple")
+            IsPushingGrapple = Input.IsActionPressed("grapple"),
+            IsPushingMelee = Input.IsActionPressed("melee"),
         };
 
         return inputInfo;
@@ -219,7 +241,7 @@ public partial class Player : CharacterBody2D {
         _dashParticles.Emitting = emit;
     }
 
-    private float GetAngleToMouse() => GetAngleTo(GetViewport().GetMousePosition());
+    private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetViewport().GetMousePosition()));
 
     private void FreezeReticle() {
         _reticleFrozen = true;
