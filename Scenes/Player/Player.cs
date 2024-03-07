@@ -126,11 +126,12 @@ public partial class Player : CharacterBody2D {
             AddChild(Sword);
             Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
-        if (Sword is Sword sword && sword.Lifetime >= MeleeDuratio   {
+
+        if (Sword is not null && Sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
-            sword.QueueFree();
+            Sword.QueueFree();
             Sword = null;
-       } 
+        }
 
         var newState = CurrentState.HandleInput(this, inputs, delta);
 
