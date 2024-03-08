@@ -1,12 +1,12 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://cmf1l7n5hl6hk"]
 
 [ext_resource type="Script" path="res://addons/MetroidvaniaSystem/Scripts/Settings.gd" id="1_r1vr8"]
-[ext_resource type="Resource" uid="uid://bt6s3nd8xo6b" path="res://addons/MetroidvaniaSystem/Themes/Exquisite/Theme.tres" id="2_owfwc"]
+[ext_resource type="Resource" uid="uid://clhjwcspi4mv" path="res://addons/MetroidvaniaSystem/Themes/Theme/Theme.tres" id="2_egwo5"]
 
 [resource]
 script = ExtResource("1_r1vr8")
-theme = ExtResource("2_owfwc")
+theme = ExtResource("2_egwo5")
 map_root_folder = "res://"
-in_game_cell_size = Vector2(1152, 648)
+in_game_cell_size = Vector2(1280, 720)
 collectible_list = Array[Dictionary]([])
 assign_uid_to_rooms = false
