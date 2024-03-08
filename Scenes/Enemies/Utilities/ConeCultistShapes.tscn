@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://p2gvd5ag5tu7"]
+
+[ext_resource type="Texture2D" uid="uid://kbkm66q0trwb" path="res://Scenes/Enemies/cone_walk.png" id="1_e1jvd"]
+[ext_resource type="PackedScene" uid="uid://bp0sboaimndn7" path="res://Scenes/Utilities/Hurtbox.tscn" id="2_y0y0r"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7svgw"]
+radius = 5.0
+height = 34.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wgsxi"]
+atlas = ExtResource("1_e1jvd")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ata20"]
+atlas = ExtResource("1_e1jvd")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fd8j"]
+atlas = ExtResource("1_e1jvd")
+region = Rect2(16, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ihqyt"]
+atlas = ExtResource("1_e1jvd")
+region = Rect2(32, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w2cux"]
+atlas = ExtResource("1_e1jvd")
+region = Rect2(48, 0, 16, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ukps6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wgsxi")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ata20")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fd8j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ihqyt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w2cux")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="CollisionShape2D" type="CollisionShape2D"]
+position = Vector2(-2, 7)
+shape = SubResource("CapsuleShape2D_7svgw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, -7)
+sprite_frames = SubResource("SpriteFrames_ukps6")
+animation = &"idle"
+frame_progress = 0.0294797
+
+[node name="LineOfSight" type="Area2D" parent="."]
+position = Vector2(2, -7)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LineOfSight"]
+position = Vector2(36, 0)
+scale = Vector2(1, 0.491)
+polygon = PackedVector2Array(-75, 46.8432, 318, -523.422, 386, 340.122)
+
+[node name="DropAheadRayCast" type="RayCast2D" parent="."]
+position = Vector2(5, 15)
+target_position = Vector2(0, 57)
+
+[node name="EdgeAheadRayCast" type="RayCast2D" parent="."]
+position = Vector2(5, 15)
+target_position = Vector2(4, 4)
+
+[node name="Hurtbox" parent="." instance=ExtResource("2_y0y0r")]
+position = Vector2(2, -7)
+
+[node name="CollisionPolygon2D" parent="Hurtbox" index="0"]
+polygon = PackedVector2Array(-8, -8.20726, -8, 20.9741, 4, 20.9741, 4, -8.20726)
+
+[editable path="Hurtbox"]

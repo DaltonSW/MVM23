@@ -126,7 +126,6 @@ public partial class Player : CharacterBody2D {
             AddChild(Sword);
             Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
-
         if (Sword is not null && Sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
             Sword.QueueFree();
@@ -240,7 +239,7 @@ public partial class Player : CharacterBody2D {
         _dashParticles.Emitting = emit;
     }
 
-    private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetViewport().GetMousePosition()));
+    private Angle GetAngleToMouse() => this.GetAngleObjectTo(GetViewport().GetMousePosition());
 
     private void FreezeReticle() {
         _reticleFrozen = true;
