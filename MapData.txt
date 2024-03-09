@@ -113,9 +113,9 @@
 [5,2,0]
 1,0,-1,-1|ffd700,c38000,c38000,,||Scenes/Levels/World 1/Rooms/post_stick_room.tscn
 [2,2,0]
--1,0,1,0|ffd700,,c38000,c38000,c38000||
+-1,0,1,0|ffd700,,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/crossroads_hallway.tscn
 [3,2,0]
-1,1,-1,0|ffd700,c38000,c38000,,c38000||
+1,1,-1,0|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/crossroads_hallway.tscn
 [3,1,0]
 1,0,-1,0|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/pre_dash_hallway.tscn
 [2,1,0]
@@ -123,27 +123,25 @@
 [1,1,0]
 1,0,1,0|ffd700,c38000,c38000,c38000,c38000|1|Scenes/Levels/World 1/Rooms/dash_room.tscn
 [1,2,0]
-1,-1,0,0|ffd700,c38000,,c38000,c38000||
+1,-1,0,0|ffd700,c38000,,c38000,c38000||Scenes/Levels/World 1/Rooms/vertical_health_upgrade.tscn
 [1,3,0]
-0,0,1,-1|ffd700,c38000,c38000,c38000,|0|
+0,0,1,-1|ffd700,c38000,c38000,c38000,|0|Scenes/Levels/World 1/Rooms/vertical_health_upgrade.tscn
 [3,3,0]
-1,1,0,1|ffd700,c38000,c38000,c38000,c38000||
+1,1,0,1|ffd700,c38000,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/superjump_middle_room.tscn
 [3,4,0]
-1,0,0,1|ffd700,c38000,c38000,c38000,c38000||
+1,0,0,1|ffd700,c38000,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/first_ceiling_transition.tscn
 [4,4,0]
-0,-1,1,0|ffd700,c38000,,c38000,c38000||
+0,-1,1,0|ffd700,c38000,,c38000,c38000||Scenes/Levels/World 1/Rooms/first_breakable_ceiling.tscn
 [4,5,0]
-0,1,0,-1|ffd700,c38000,c38000,c38000,||
-[4,6,0]
-0,0,1,1|ffd700,c38000,c38000,c38000,c38000||
+0,0,1,-1|ffd700,c38000,c38000,c38000,||Scenes/Levels/World 1/Rooms/first_breakable_ceiling.tscn
 [3,5,0]
-0,-1,-1,0|ffd700,c38000,,,c38000||
+1,-1,-1,0|ffd700,c38000,,,c38000||Scenes/Levels/World 1/Rooms/post_superjump_room.tscn
 [2,5,0]
--1,-1,0,0|ffd700,,,c38000,c38000||
+-1,-1,0,0|ffd700,,,c38000,c38000||Scenes/Levels/World 1/Rooms/post_superjump_room.tscn
 [2,6,0]
--1,0,1,-1|ffd700,,c38000,c38000,||
+-1,0,1,-1|ffd700,,c38000,c38000,||Scenes/Levels/World 1/Rooms/post_superjump_room.tscn
 [3,6,0]
-1,0,-1,-1|ffd700,c38000,c38000,,||
+0,0,-1,-1|ffd700,c38000,c38000,,||Scenes/Levels/World 1/Rooms/post_superjump_room.tscn
 [1,6,0]
 1,0,1,0|ffd700,c38000,c38000,c38000,c38000|1|Scenes/Levels/World 1/Rooms/superjump_room.tscn
 [0,6,0]
@@ -167,11 +165,11 @@
 [0,3,0]
 1,0,-1,0|ffd700,c38000,c38000,,c38000|0|Scenes/Levels/World 1/Rooms/long_fall.tscn
 [4,3,0]
-0,0,1,0|ffd700,c38000,c38000,c38000,c38000|0|
+0,0,1,0|ffd700,c38000,c38000,c38000,c38000|0|Scenes/Levels/World 1/Rooms/superjump_health_upgrade.tscn
 [8,2,0]
 0,0,1,0|ffd700,c38000,c38000,c38000,c38000|0|Scenes/Levels/World 1/Rooms/under_stairs.tscn
 [-2,1,0]
-1,1,0,0|959595,363636,363636,363636,363636||
+1,1,1,0|959595,363636,363636,363636,363636||
 [-2,2,0]
 0,0,1,1|959595,363636,363636,363636,363636||
 [-3,1,0]
