@@ -34,7 +34,8 @@ public partial class Player : CharacterBody2D {
     private PlayerState CurrentState { get; set; }
 
     private bool CanThrowGrapple { get; set; }
-    public GrappleHook GrappleInstance { get; set; }
+    public RayCast2D GrappleCheck { get; set; }
+    public Vector2 GrappledPoint { get; set; }
 
     public const float GroundFriction = RunSpeed * 20f;
     public const float AirFriction = GroundFriction * 0.8f;
@@ -63,6 +64,8 @@ public partial class Player : CharacterBody2D {
 
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
+        
+        GrappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
 
         CurrentState = new IdleState();
         _reticleFrozen = false;
@@ -77,7 +80,6 @@ public partial class Player : CharacterBody2D {
         _negBonkBuffer = GetNode<RayCast2D>("Sprite/NegBonkBuffer");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
         _reticle = GetNode<Node2D>("Reticle");
-        _reticle.Visible = false;
 
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
         _swordScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/sword/Sword.tscn");
@@ -87,6 +89,7 @@ public partial class Player : CharacterBody2D {
         if (_reticleFrozen) {
             _reticle.GlobalPosition = _reticleFreezePos;
         }
+        
         else {
             var mousePosition = GetViewport().GetMousePosition();
             _reticle.LookAt(mousePosition);
@@ -96,7 +99,7 @@ public partial class Player : CharacterBody2D {
         if (CurrentState.GetType() != typeof(DashState))
             SetEmittingDashParticles(false);
 
-        if (GrappleInstance != null)
+        if (GrappledPoint != Vector2.Inf)
             QueueRedraw();
     }
 
@@ -109,7 +112,6 @@ public partial class Player : CharacterBody2D {
             _timeSinceStartHoldingJump += delta;
 
         if (!inputs.IsPushingGrapple) {
-            GrappleInstance?.QueueFree();
             OnGrappleFree();
         }
 
@@ -140,26 +142,19 @@ public partial class Player : CharacterBody2D {
         }
 
         if (inputs.IsPushingGrapple && CanThrowGrapple) {
-            var grappleHook = _grappleScene.Instantiate<GrappleHook>();
-            grappleHook.Position = GlobalPosition;
-            grappleHook.Rotation = GetAngleToMouse().Radians;
-            GetParent().AddChild(grappleHook);
-            GrappleInstance = grappleHook;
-            grappleHook.Connect(nameof(GrappleHook.GrappleHookStruck), new Callable(this, nameof(OnGrappleStruck)));
-            grappleHook.Connect(nameof(GrappleHook.Freeing), new Callable(this, nameof(OnGrappleFree)));
-            CanThrowGrapple = false;
+            ThrowGrapple();
         }
 
         MoveAndSlide();
     }
 
     public override void _Draw() {
-        if (GrappleInstance == null) return;
+        if (GrappledPoint == Vector2.Inf) return;
 
         var from = Vector2.Zero;
-        var to = GrappleInstance.GlobalPosition - GlobalPosition;
+        var to = GrappledPoint - GlobalPosition;
         var color = Colors.Aqua;
-        DrawLine(from, to, color);
+        DrawLine(from, to, color, 2f);
     }
 
     private void ChangeState(PlayerState newState) {
@@ -249,6 +244,7 @@ public partial class Player : CharacterBody2D {
 
     private void RestoreReticle() {
         _reticleFrozen = false;
+        _reticleFreezePos = Vector2.Inf;
     }
 
     public void FaceLeft() => SetFaceDirection(true);
@@ -276,10 +272,20 @@ public partial class Player : CharacterBody2D {
         GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
+    private void ThrowGrapple() {
+        if (!GrappleCheck.IsColliding()) return;
+
+        GrappledPoint = GrappleCheck.GetCollisionPoint();
+        ChangeState(new GrappleState(this));
+        CanThrowGrapple = false;
+        // FreezeReticle();
+    }
+
     public void OnGrappleFree() {
-        GrappleInstance = null;
+        GrappledPoint = Vector2.Inf;
         QueueRedraw();
         CanThrowGrapple = true;
+        // RestoreReticle();
     }
 
     public void OnGrappleStruck() {

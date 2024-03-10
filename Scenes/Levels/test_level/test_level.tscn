@@ -1753,7 +1753,7 @@ texture = ExtResource("1_ajnvo")
 7:27/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSet" id="TileSet_4qcwa"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 3
 sources/0 = SubResource("TileSetAtlasSource_mtdig")
 
 [sub_resource type="LabelSettings" id="LabelSettings_ubrif"]
