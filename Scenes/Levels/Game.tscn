@@ -9,3 +9,7 @@ starting_map = "res://Scenes/Levels/World 1/Rooms/entry_room.tscn"
 
 [node name="Player" parent="." instance=ExtResource("2_0dx4k")]
 position = Vector2(211, 137)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="UI" type="CanvasLayer" parent="."]
