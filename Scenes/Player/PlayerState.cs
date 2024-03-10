@@ -12,6 +12,8 @@ public abstract class PlayerState {
         var velocity = player.Velocity;
 
         if (inputs.InputDirection.X != 0) {
+            // If you're in the air, keeps your velocity steady
+            // Needs to be changed to allow better air control
             if (player.Velocity.X != 0 && !player.IsOnFloor())
                 velocity.X = player.Velocity.X;
             else
