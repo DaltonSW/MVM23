@@ -1,5 +1,6 @@
 # This is the main script of the game. It manages the current map and some other stuff.
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
+class_name Game
 
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 const SAVE_PATH = "user://example_save_data.sav"
