@@ -25,6 +25,9 @@ public partial class Player : CharacterBody2D {
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
 
+    public float MaxHealth = 1;
+    public float CurrentHealth { get; set; }
+
     private double _timeSinceMelee;
     [Export] public float MeleeDuration { get; set; } = 0.2F;
 
@@ -64,7 +67,7 @@ public partial class Player : CharacterBody2D {
 
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
-        
+
         GrappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
 
         CurrentState = new IdleState();
@@ -83,13 +86,15 @@ public partial class Player : CharacterBody2D {
 
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
         _swordScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/sword/Sword.tscn");
+
+        CurrentHealth = MaxHealth;
     }
 
     public override void _Process(double delta) {
         if (_reticleFrozen) {
             _reticle.GlobalPosition = _reticleFreezePos;
         }
-        
+
         else {
             var mousePosition = GetViewport().GetMousePosition();
             _reticle.LookAt(mousePosition);
