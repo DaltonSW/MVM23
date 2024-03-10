@@ -129,3 +129,7 @@ emitting = false
 scale = Vector2(-1, 1)
 texture = ExtResource("10_kjnoh")
 offset = Vector2(-24, 0)
+
+[node name="GrappleCheck" type="RayCast2D" parent="Reticle"]
+target_position = Vector2(250, 0)
+collision_mask = 2
