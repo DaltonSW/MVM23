@@ -1,11 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvowo30alynsw"]
-
-[ext_resource type="Script" path="res://Scenes/UI/PauseMenu/PauseMenu.cs" id="1_2xmgu"]
+[gd_scene format=3 uid="uid://bvowo30alynsw"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_2xmgu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
