@@ -106,6 +106,12 @@ public class SuperJumpState : PlayerState {
             player.CanSuperJump = false;
             return new IdleState();
         }
+        
+        if (inputs.IsPushingDash) {
+            player.CanSuperJump = false;
+            return new DashState(inputs, player);
+        }
+        
         player.Velocity = new Vector2(0, SuperJumpVelocity);
         return null;
     }
