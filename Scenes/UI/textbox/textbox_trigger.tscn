@@ -1,12 +1,69 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhr61rfk7lex"]
+[gd_scene load_steps=15 format=3 uid="uid://dhr61rfk7lex"]
 
 [ext_resource type="Script" path="res://Scenes/UI/textbox/TextboxTrigger.cs" id="1_y2iv3"]
+[ext_resource type="Texture2D" uid="uid://6bmi78w50xxs" path="res://Scenes/UI/textbox/IndicatorSprites/E0.png" id="2_dopxq"]
+[ext_resource type="Texture2D" uid="uid://dxjk3f2s5dsrg" path="res://Scenes/UI/textbox/IndicatorSprites/E10.png" id="3_2c057"]
+[ext_resource type="Texture2D" uid="uid://xjh8qmkihtri" path="res://Scenes/UI/textbox/IndicatorSprites/E20.png" id="4_rypuc"]
+[ext_resource type="Texture2D" uid="uid://pnr88l7dcwwx" path="res://Scenes/UI/textbox/IndicatorSprites/E30.png" id="5_gbydw"]
+[ext_resource type="Texture2D" uid="uid://drxolxv3kobxn" path="res://Scenes/UI/textbox/IndicatorSprites/E40.png" id="6_igee0"]
+[ext_resource type="Texture2D" uid="uid://dq5tmgfs8a783" path="res://Scenes/UI/textbox/IndicatorSprites/E50.png" id="7_42ajn"]
+[ext_resource type="Texture2D" uid="uid://cm0jer0uddyfx" path="res://Scenes/UI/textbox/IndicatorSprites/E60.png" id="8_74pjo"]
+[ext_resource type="Texture2D" uid="uid://3d1xcm67k03e" path="res://Scenes/UI/textbox/IndicatorSprites/E70.png" id="9_s1ukt"]
+[ext_resource type="Texture2D" uid="uid://krn2duaqbx36" path="res://Scenes/UI/textbox/IndicatorSprites/E80.png" id="10_rtg6i"]
+[ext_resource type="Texture2D" uid="uid://c7f72bd5lbdpe" path="res://Scenes/UI/textbox/IndicatorSprites/E90.png" id="11_2fdwe"]
+[ext_resource type="Texture2D" uid="uid://dw0q4swl6kik1" path="res://Scenes/UI/textbox/IndicatorSprites/E100.png" id="12_htdhh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uc2bu"]
 radius = 11.4018
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ub26m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_dopxq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_2c057")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rypuc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_gbydw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_igee0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_42ajn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_74pjo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_s1ukt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_rtg6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_2fdwe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_htdhh")
+}],
+"loop": false,
+"name": &"fade-in",
+"speed": 15.0
+}]
 
 [node name="TextboxTrigger" type="Area2D"]
 script = ExtResource("1_y2iv3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_uc2bu")
+
+[node name="Indicator" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -43)
+sprite_frames = SubResource("SpriteFrames_ub26m")
+animation = &"fade-in"

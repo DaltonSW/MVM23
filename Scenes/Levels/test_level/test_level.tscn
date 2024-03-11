@@ -1795,7 +1795,7 @@ scale = Vector2(-1, 1)
 position = Vector2(284, 105)
 
 [node name="TextboxTrigger" parent="." instance=ExtResource("6_mrwh4")]
-position = Vector2(436, 283)
+position = Vector2(335, 278)
 TextboxID = "sample"
 
 [editable path="ConeWalker"]

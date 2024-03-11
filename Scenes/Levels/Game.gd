@@ -5,6 +5,8 @@ class_name Game
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 const SAVE_PATH = "user://example_save_data.sav"
 
+var pause_menu
+
 @export var starting_map: String
 
 # Called when the node enters the scene tree for the first time.
@@ -30,13 +32,21 @@ func _ready():
     load_room(starting_map)
     
     add_module("RoomTransitions.gd")
-    
 
+    pause_menu = get_node("UI/PauseMenu")
+    pause_menu.visible = false
+    
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+    if Input.is_action_just_pressed("pause"):
+        toggle_pause()
     pass
 
 func init_room():
     MetSys.get_current_room_instance().adjust_camera_limits($Player/Camera2D)
     # player.on_enter()
+
+func toggle_pause():
+    pause_menu.visible = !pause_menu.visible
+    get_tree().paused = !get_tree().paused
