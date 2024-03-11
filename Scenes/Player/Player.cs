@@ -11,7 +11,7 @@ using MVM23;
 public partial class Player : CharacterBody2D {
     public const float RunSpeed = 150.0f;
     [Export] public double EarlyJumpMaxBufferTime = 0.1;
-    [Export] public double SuperJumpInitBufferLimit = 0.2; // Waits to start charging to give time to boost jump
+    [Export] public double SuperJumpInitBufferLimit = 0.1; // Waits to start charging to give time to boost jump
 
     [Export] private float _jumpHeight = 70F;  // I believe this is pixels
     [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds

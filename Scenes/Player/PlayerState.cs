@@ -302,9 +302,7 @@ public class DashState : PlayerState {
 
         if (_dashTimeElapsed < DashDuration)
             return null;
-
-        player.SuperJumpCurrentBufferTime = 0;
-
+        
         player.SetEmittingDashParticles(false);
 
         // ReSharper disable once InvertIf
@@ -316,7 +314,10 @@ public class DashState : PlayerState {
         if (player.Velocity.X != 0)
             tempX = player.Velocity.X < 0 ? -Player.RunSpeed : Player.RunSpeed;
         player.Velocity = new Vector2(tempX, tempY);
-
+        
+        if (player.IsOnFloor() && inputs.IsPushingCrouch &&
+            player.SuperJumpCurrentBufferTime < player.SuperJumpInitBufferLimit)
+            return null;
 
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
