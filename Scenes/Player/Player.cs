@@ -52,7 +52,7 @@ public partial class Player : CharacterBody2D {
     private RayCast2D _negBonkCheck;
     private RayCast2D _negBonkBuffer;
     private CpuParticles2D _dashParticles;
-    private Node2D _reticle;
+    public Node2D Reticle { get; set; }
     private bool _reticleFrozen;
     private Vector2 _reticleFreezePos;
 
@@ -82,7 +82,7 @@ public partial class Player : CharacterBody2D {
         _negBonkCheck = GetNode<RayCast2D>("Sprite/NegBonkCheck");
         _negBonkBuffer = GetNode<RayCast2D>("Sprite/NegBonkBuffer");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
-        _reticle = GetNode<Node2D>("Reticle");
+        Reticle = GetNode<Node2D>("Reticle");
 
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
         _swordScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/sword/Sword.tscn");
@@ -91,14 +91,10 @@ public partial class Player : CharacterBody2D {
     }
 
     public override void _Process(double delta) {
-        if (_reticleFrozen) {
-            _reticle.GlobalPosition = _reticleFreezePos;
-        }
-
-        else {
+        if (CurrentState.Name != "Grapple") {
             var mousePosition = GetViewport().GetMousePosition();
-            _reticle.LookAt(mousePosition);
-            _reticle.Position = Vector2.Zero;
+            Reticle.LookAt(mousePosition);
+            Reticle.Position = Vector2.Zero;    
         }
 
         if (CurrentState.GetType() != typeof(DashState))
@@ -244,7 +240,7 @@ public partial class Player : CharacterBody2D {
 
     private void FreezeReticle() {
         _reticleFrozen = true;
-        _reticleFreezePos = _reticle.GlobalPosition;
+        _reticleFreezePos = Reticle.GlobalPosition;
     }
 
     private void RestoreReticle() {
