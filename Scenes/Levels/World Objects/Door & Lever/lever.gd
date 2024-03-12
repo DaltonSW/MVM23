@@ -1,7 +1,5 @@
 extends Area2D
 
-const Door = preload("res://Scenes/Levels/World Objects/Door & Lever/door.gd")
-
 @export var associated_ID: String
 
 var associated_object
