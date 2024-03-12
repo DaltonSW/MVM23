@@ -364,6 +364,7 @@ public class GrappleState : PlayerState {
                 tangentialExitVelocity.Y *= -1;
 
             player.Velocity = tangentialExitVelocity;
+            player.Reticle.Rotation = 0;
 
             if (player.IsOnFloor()) {
                 return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
@@ -374,6 +375,7 @@ public class GrappleState : PlayerState {
         if (player.IsOnFloor() || player.IsOnWall() || player.IsOnCeiling()) {
             player.GrappledPoint = Vector2.Inf;
             player.QueueRedraw();
+            player.Reticle.Rotation = 0;
             return new IdleState();
         }
 
