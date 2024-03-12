@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://sxgx7tpwoibv"]
+
+[ext_resource type="Texture2D" uid="uid://4p0lk1laamsi" path="res://Scenes/Levels/Virtual/City3.png" id="1_ob0t4"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+texture_filter = 1
+motion_scale = Vector2(0.5, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+texture = ExtResource("1_ob0t4")
+centered = false
