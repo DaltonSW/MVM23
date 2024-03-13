@@ -3,6 +3,8 @@ using System.Linq;
 
 public partial class Sword : Node2D
 {
+    [Export] public float KnockbackMagnitude { get; set; } = 250f;
+
     private Area2D _hitbox;
     
     public double Lifetime { get; private set; }
@@ -23,7 +25,7 @@ public partial class Sword : Node2D
             select (IHittable) area;
         foreach (var hittable in hittables)
         {
-            hittable.TakeHit();
+            hittable.TakeHit(Vector2s.FromPolar(KnockbackMagnitude, Rotation));
         }
     }
 }

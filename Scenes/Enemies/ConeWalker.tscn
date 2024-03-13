@@ -9,9 +9,10 @@ script = ExtResource("1_ldup0")
 
 [node name="Shapes" parent="." instance=ExtResource("2_f3jer")]
 
-[node name="XDirectionManager" parent="." instance=ExtResource("3_a3cei")]
+[node name="Hurtbox" parent="Shapes" index="4" node_paths=PackedStringArray("Hurtee")]
+Hurtee = NodePath("../..")
 
-[connection signal="Hurt" from="Shapes/Hurtbox" to="." method="_Hurt"]
+[node name="XDirectionManager" parent="." instance=ExtResource("3_a3cei")]
 
 [editable path="Shapes"]
 [editable path="Shapes/Hurtbox"]
