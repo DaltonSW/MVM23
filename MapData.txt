@@ -516,4 +516,3 @@
 0,1,0,0|abded1,4f819c,4f819c,4f819c,4f819c|1|Scenes/Levels/World 2/Rooms/skyscraper_one_roof.tscn
 [2,-11,0]
 -1,-1,0,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_upper.tscn
-

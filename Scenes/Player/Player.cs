@@ -278,4 +278,9 @@ public partial class Player : CharacterBody2D {
         CanThrowGrapple = true;
     }
 
+    public void TakeDamage(int amount = 1) {
+        CurrentHealth -= amount;
+        // if (CurrentHealth <= 0) QueueFree();
+    }
+
 }
