@@ -25,7 +25,7 @@ public partial class Player : CharacterBody2D {
     public double CoyoteTimeElapsed;
     public bool CoyoteTimeExpired;
 
-    public float MaxHealth = 1;
+    public int MaxHealth = 15;
     public float CurrentHealth { get; set; }
 
     private double _timeSinceMelee;
@@ -92,7 +92,7 @@ public partial class Player : CharacterBody2D {
 
     public override void _Process(double delta) {
         if (CurrentState.Name != "Grapple") {
-            var mousePosition = GetViewport().GetMousePosition();
+            var mousePosition = GetGlobalMousePosition();
             Reticle.LookAt(mousePosition);
             Reticle.Position = Vector2.Zero;    
         }
@@ -236,17 +236,7 @@ public partial class Player : CharacterBody2D {
         _dashParticles.Emitting = emit;
     }
 
-    private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetViewport().GetMousePosition()));
-
-    private void FreezeReticle() {
-        _reticleFrozen = true;
-        _reticleFreezePos = Reticle.GlobalPosition;
-    }
-
-    private void RestoreReticle() {
-        _reticleFrozen = false;
-        _reticleFreezePos = Vector2.Inf;
-    }
+    private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetGlobalMousePosition()));
 
     public void FaceLeft() => SetFaceDirection(true);
 
@@ -279,17 +269,11 @@ public partial class Player : CharacterBody2D {
         GrappledPoint = GrappleCheck.GetCollisionPoint();
         ChangeState(new GrappleState(this));
         CanThrowGrapple = false;
-        // FreezeReticle();
     }
 
     public void OnGrappleFree() {
         GrappledPoint = Vector2.Inf;
         QueueRedraw();
         CanThrowGrapple = true;
-        // RestoreReticle();
-    }
-
-    public void OnGrappleStruck() {
-        ChangeState(new GrappleState(this));
     }
 }
