@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://btjwofj6umq7t"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/Game.gd" id="1_p8v4f"]
+[ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_0dx4k"]
+[ext_resource type="PackedScene" uid="uid://d0r1wadg5l20h" path="res://Scenes/UI/PlayerHealth.tscn" id="3_521ps"]
+[ext_resource type="PackedScene" uid="uid://bvowo30alynsw" path="res://Scenes/UI/PauseMenu/pause_menu.tscn" id="4_in6ri"]
+[ext_resource type="Script" path="res://Scenes/Utilities/WorldStateManager.cs" id="5_dx1hd"]
+
+[node name="Game" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_p8v4f")
+starting_map = "res://Scenes/Levels/World 1/Rooms/entry_room.tscn"
+
+[node name="Player" parent="." instance=ExtResource("2_0dx4k")]
+process_mode = 1
+position = Vector2(91, 164)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PlayerHealth" parent="UI" instance=ExtResource("3_521ps")]
+offset = Vector2(4, 4)
+transform = Transform2D(1, 0, 0, 1, 4, 4)
+
+[node name="PauseMenu" parent="UI" instance=ExtResource("4_in6ri")]
+visible = false
+
+[node name="WSM" type="Node" parent="."]
+script = ExtResource("5_dx1hd")

@@ -12,6 +12,8 @@ public abstract class PlayerState {
         var velocity = player.Velocity;
 
         if (inputs.InputDirection.X != 0) {
+            // If you're in the air, keeps your velocity steady
+            // Needs to be changed to allow better air control
             if (player.Velocity.X != 0 && !player.IsOnFloor())
                 velocity.X = player.Velocity.X;
             else
@@ -104,6 +106,12 @@ public class SuperJumpState : PlayerState {
             player.CanSuperJump = false;
             return new IdleState();
         }
+        
+        if (inputs.IsPushingDash) {
+            player.CanSuperJump = false;
+            return new DashState(inputs, player);
+        }
+        
         player.Velocity = new Vector2(0, SuperJumpVelocity);
         return null;
     }
@@ -300,9 +308,7 @@ public class DashState : PlayerState {
 
         if (_dashTimeElapsed < DashDuration)
             return null;
-
-        player.SuperJumpCurrentBufferTime = 0;
-
+        
         player.SetEmittingDashParticles(false);
 
         // ReSharper disable once InvertIf
@@ -314,7 +320,10 @@ public class DashState : PlayerState {
         if (player.Velocity.X != 0)
             tempX = player.Velocity.X < 0 ? -Player.RunSpeed : Player.RunSpeed;
         player.Velocity = new Vector2(tempX, tempY);
-
+        
+        if (player.IsOnFloor() && inputs.IsPushingCrouch &&
+            player.SuperJumpCurrentBufferTime < player.SuperJumpInitBufferLimit)
+            return null;
 
         return player.IsOnFloor() ? new IdleState() : new FallState();
     }
@@ -322,8 +331,6 @@ public class DashState : PlayerState {
 
 public class GrappleState : PlayerState {
     public override string Name => "Grapple";
-
-    private readonly GrappleHook _grapple;
 
     private float _curAngle;
     private float _angleVel;
@@ -335,20 +342,19 @@ public class GrappleState : PlayerState {
     public GrappleState(Player player) {
         var entryVelocity = player.Velocity;
         player.Velocity = Vector2.Zero;
-
-        _grapple = player.GrappleInstance;
+        
         var playerPos = player.GlobalPosition;
 
-        _curAngle = (float)Math.PI / 2 - _grapple.GlobalPosition.AngleToPoint(playerPos);
-        _length = playerPos.DistanceTo(_grapple.GlobalPosition);
+        _curAngle = (float)Math.PI / 2 - player.GrappledPoint.AngleToPoint(playerPos);
+        _length = playerPos.DistanceTo(player.GrappledPoint);
 
-        var dirToPlayer = (playerPos - _grapple.GlobalPosition).Normalized();
+        var dirToPlayer = (playerPos - player.GrappledPoint).Normalized();
         var tangentVec = new Vector2(dirToPlayer.Y, -dirToPlayer.X);
         _angleVel = entryVelocity.Dot(tangentVec) / _length;
     }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        if (_grapple == null || !inputs.IsPushingGrapple) {
+        if (player.GrappledPoint == Vector2.Inf || !inputs.IsPushingGrapple) {
             // Calculate tangential exit velocity
             var exitVelocityDirection =
                 new Vector2((float)Math.Cos(_curAngle), (float)Math.Sin(_curAngle)).Normalized();
@@ -358,7 +364,7 @@ public class GrappleState : PlayerState {
                 tangentialExitVelocity.Y *= -1;
 
             player.Velocity = tangentialExitVelocity;
-
+            player.Reticle.Rotation = 0;
 
             if (player.IsOnFloor()) {
                 return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
@@ -367,9 +373,9 @@ public class GrappleState : PlayerState {
         }
 
         if (player.IsOnFloor() || player.IsOnWall() || player.IsOnCeiling()) {
-            player.GrappleInstance.QueueFree();
-            player.GrappleInstance = null;
+            player.GrappledPoint = Vector2.Inf;
             player.QueueRedraw();
+            player.Reticle.Rotation = 0;
             return new IdleState();
         }
 
@@ -393,8 +399,8 @@ public class GrappleState : PlayerState {
 
         var newPos = new Vector2
         {
-            X = _grapple.GlobalPosition.X + _length * (float)Math.Sin(_curAngle),
-            Y = _grapple.GlobalPosition.Y + _length * (float)Math.Cos(_curAngle)
+            X = player.GrappledPoint.X + _length * (float)Math.Sin(_curAngle),
+            Y = player.GrappledPoint.Y + _length * (float)Math.Cos(_curAngle)
         };
 
         player.GlobalPosition = newPos;
