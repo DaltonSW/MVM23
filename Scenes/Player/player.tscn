@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://co3marnlrukwe"]
+[gd_scene load_steps=17 format=3 uid="uid://co3marnlrukwe"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_l6vq3"]
-[ext_resource type="Texture2D" uid="uid://dyp2kyndqbnly" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
-[ext_resource type="Texture2D" uid="uid://dqkkmg4c86vjv" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
-[ext_resource type="Texture2D" uid="uid://bb4op5pn3yn07" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
-[ext_resource type="Texture2D" uid="uid://dxfdesm0su656" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
+[ext_resource type="Texture2D" uid="uid://3ewrvvf68ye0" path="res://Scenes/Player/Sprites/hippie_crouch.png" id="2_h0dwu"]
+[ext_resource type="Texture2D" uid="uid://by28y4qca7khu" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
+[ext_resource type="Texture2D" uid="uid://hxty2j1v8kym" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
+[ext_resource type="Texture2D" uid="uid://d2ovih3sn48rv" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
+[ext_resource type="Texture2D" uid="uid://bnq6tvouo886p" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
 size = Vector2(16, 28)
@@ -43,6 +44,14 @@ region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_agbor"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_h0dwu")
+}],
+"loop": true,
+"name": &"crouch",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ttd6e")
@@ -110,7 +119,7 @@ shape = SubResource("RectangleShape2D_cfoin")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_agbor")
-animation = &"fall"
+animation = &"jump"
 
 [node name="PosBonkCheck" type="RayCast2D" parent="Sprite"]
 position = Vector2(8, -12)

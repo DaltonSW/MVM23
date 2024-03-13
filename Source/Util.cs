@@ -58,6 +58,9 @@ public static class DoubleExtensions
 
 public static class Extensions
 {
+    public static Angle GetAngleObjectTo(this Node2D n, Vector2 pos) =>
+        Angle.FromRadians(n.GetAngleTo(pos));
+
     public static Angle AngleObject(this Vector2 v) =>
         Angle.FromRadians(v.Angle());
 
@@ -258,6 +261,23 @@ public class Angle
     {
         Radians = radians;
     }
+
+    /// https://stackoverflow.com/questions/1878907/how-can-i-find-the-smallest-difference-between-two-angles-around-a-point
+    public Angle SmallestAngleTo(Angle other)
+    {
+        var d = other.Radians - Radians;
+        if (d > 180)
+            d -= 360;
+        if (d < -180)
+            d += 360;
+        return Angle.FromRadians(d);
+    }
+
+    public Angle ReflectedOverY() =>
+        Angle.FromRadians(Mathf.Pi - Radians);
+
+    public Angle Lerp(Angle other, float weight) =>
+        Angle.FromRadians(Mathf.LerpAngle(this.Radians, other.Radians, weight));
 
     public Direction8 NearestDirection8() =>
         Radians switch

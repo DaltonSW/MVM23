@@ -23,6 +23,14 @@ public partial class XDirectionManager : Node2D
         }
     }
 
+    public float SpriteRotationFor(Angle angle) =>
+        _direction switch
+        {
+            XDirection.LEFT => angle.ReflectedOverY().Radians,
+            XDirection.RIGHT => angle.Radians,
+            _ => throw new ArgumentOutOfRangeException(nameof(_direction)),
+        };
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {

@@ -129,7 +129,6 @@ public partial class Player : CharacterBody2D {
             AddChild(Sword);
             Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
-
         if (Sword is not null && Sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
             Sword.QueueFree();
@@ -236,7 +235,9 @@ public partial class Player : CharacterBody2D {
         _dashParticles.Emitting = emit;
     }
 
+
     private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetGlobalMousePosition()));
+
 
     public void FaceLeft() => SetFaceDirection(true);
 
@@ -276,4 +277,5 @@ public partial class Player : CharacterBody2D {
         QueueRedraw();
         CanThrowGrapple = true;
     }
+
 }
