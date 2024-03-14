@@ -20,7 +20,9 @@ func _ready():
     if FileAccess.file_exists(SAVE_PATH):
         var save_manager := SaveManager.new()
         save_manager.load_from_text(SAVE_PATH)
-        # TODO: Assign player max health
+        $Player.Abilities = save_manager.get_value("player_abilities")
+        $Player.MaxHealth = save_manager.get_value("player_max_health")
+        $WSM.WorldObjects = save_manager.get_value("world_objects")
         var loaded_starting_map: String = save_manager.get_value("current_room")
         if not loaded_starting_map.is_empty(): # Some compatibility problem.
             starting_map = loaded_starting_map
@@ -47,13 +49,12 @@ func init_room():
     MetSys.get_current_room_instance().adjust_camera_limits($Player/Camera2D)
     # player.on_enter()
     
-# func save_game(current_room, world_objects, player_abilities):
-func save_game(player_max_health):
+func save_game():
     var save_manager := SaveManager.new()
     save_manager.set_value("current_room", MetSys.get_current_room_name())
-    # save_manager.set_value("player_max_health", player_max_health)
-    # save_manager.set_value("world_objects", world_objects)
-    # save_manager.set_value("player_abilities", player_abilities)
+    save_manager.set_value("player_max_health", $Player.MaxHealth)
+    save_manager.set_value("world_objects", $WSM.WorldObjects)
+    save_manager.set_value("player_abilities", $Player.Abilities)
     save_manager.save_as_text(SAVE_PATH)
 
 func toggle_pause():
