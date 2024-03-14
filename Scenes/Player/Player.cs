@@ -315,4 +315,5 @@ public partial class Player : CharacterBody2D, IHittable {
     }
 
     public bool MustKnockOffFloorToCreateDistance() => IsOnFloor();
+
 }
