@@ -23,6 +23,7 @@ func _ready():
         $Player.Abilities = save_manager.get_value("player_abilities")
         $Player.MaxHealth = save_manager.get_value("player_max_health")
         $WSM.WorldObjects = save_manager.get_value("world_objects")
+        $WSM.CurrentCheckpointID = save_manager.get_value("current_checkpoint")
         var loaded_starting_map: String = save_manager.get_value("current_room")
         if not loaded_starting_map.is_empty(): # Some compatibility problem.
             starting_map = loaded_starting_map
@@ -55,6 +56,7 @@ func save_game():
     save_manager.set_value("player_max_health", $Player.MaxHealth)
     save_manager.set_value("world_objects", $WSM.WorldObjects)
     save_manager.set_value("player_abilities", $Player.Abilities)
+    save_manager.set_value("current_checkpoint", $WSM.CurrentCheckpointID)
     save_manager.save_as_text(SAVE_PATH)
 
 func toggle_pause():

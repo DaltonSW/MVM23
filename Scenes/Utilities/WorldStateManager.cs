@@ -1,4 +1,5 @@
 using Godot;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace MVM23;
 
@@ -6,7 +7,7 @@ public partial class WorldStateManager : Node {
 
     public Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
     
-    private string _currentCheckpointID;
+    public string CurrentCheckpointID;
     private string _currentRoom;
     
     private GodotObject _game;
@@ -55,13 +56,13 @@ public partial class WorldStateManager : Node {
     }
 
     public void SetCurrentCheckpoint(string checkpointID) {
-        _currentCheckpointID = checkpointID;
+        CurrentCheckpointID = checkpointID;
     }
 
     public bool IsCurrentCheckpoint(string checkpointID) {
-        if (_currentCheckpointID == null) return false;
+        if (CurrentCheckpointID == null) return false;
         
-        return checkpointID == _currentCheckpointID;
+        return checkpointID == CurrentCheckpointID;
     }
 
     public void Save() {
