@@ -10,13 +10,14 @@ script = ExtResource("1_ioh8p")
 
 [node name="Shapes" parent="." instance=ExtResource("2_cldff")]
 
+[node name="Hurtbox" parent="Shapes" index="4" node_paths=PackedStringArray("Hurtee")]
+Hurtee = NodePath("../..")
+
 [node name="XDirectionManager" parent="." instance=ExtResource("3_y5b0e")]
 
 [node name="Gun" type="Sprite2D" parent="."]
 position = Vector2(5, 6)
 texture = ExtResource("3_xm5ao")
-
-[connection signal="Hurt" from="Shapes/Hurtbox" to="." method="_Hurt"]
 
 [editable path="Shapes"]
 [editable path="Shapes/Hurtbox"]

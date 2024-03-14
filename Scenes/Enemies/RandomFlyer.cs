@@ -2,9 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class RandomFlyer : Node2D
+public partial class RandomFlyer : Node2D, IHittable
 {
     [Export] bool Debug = false;
+    [Export] int StartHitPoints { get; set; } = 1;
 
     private const float MAX_FLOAT_SPEED = 30;
     private const float MIN_FLOAT_SPEED = 10;
@@ -18,6 +19,8 @@ public partial class RandomFlyer : Node2D
     private float _floatPathDistance; 
     private float _floatSpeed;
     private Sign _accelDirection;
+
+    private HitManager _hitManager;
 
     private RandomFlyerBody _body;
 
@@ -52,6 +55,8 @@ public partial class RandomFlyer : Node2D
         _floatPath.SetPoints(GenerateEssCurveInRandomDir(_body.Position));
         _floatPathDistance = 0;
         _floatSpeed = MIN_FLOAT_SPEED;
+
+        _hitManager = new HitManager(this, this, StartHitPoints, GetNode<AnimatedSprite2D>("Body/AnimatedSprite2D"));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -101,10 +106,9 @@ public partial class RandomFlyer : Node2D
             QueueRedraw();
     }
 
-    public void _Hurt()
+    public void TakeHit(Vector2 initialKnockbackVelocity)
     {
-        if (!IsQueuedForDeletion())
-            QueueFree();
+        _hitManager.TakeHit(initialKnockbackVelocity);
     }
 
     private static List<CurvePoint> GenerateEssCurveInRandomDir(Vector2 start) =>
