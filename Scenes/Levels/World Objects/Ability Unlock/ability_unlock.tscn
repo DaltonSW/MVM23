@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpn4gpvmfivah"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/World Objects/Ability Unlock/AbilityUnlock.cs" id="1_5h3mq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_32mr3"]
+radius = 13.1529
+
+[node name="AbilityUnlock" type="Area2D"]
+script = ExtResource("1_5h3mq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_32mr3")
