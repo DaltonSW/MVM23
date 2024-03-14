@@ -14,25 +14,9 @@ func _ready():
     # A trick for static object reference (before static vars were a thing).
     get_script().set_meta(&"singleton", self)
     
-    MetSys.reset_state()
-    set_player($Player)
+    room_loaded.connect(init_room, CONNECT_DEFERRED)    
     
-    if FileAccess.file_exists(SAVE_PATH):
-        var save_manager := SaveManager.new()
-        save_manager.load_from_text(SAVE_PATH)
-        $Player.Abilities = save_manager.get_value("player_abilities")
-        $Player.MaxHealth = save_manager.get_value("player_max_health")
-        $WSM.WorldObjects = save_manager.get_value("world_objects")
-        $WSM.CurrentCheckpointID = save_manager.get_value("current_checkpoint")
-        var loaded_starting_map: String = save_manager.get_value("current_room")
-        if not loaded_starting_map.is_empty(): # Some compatibility problem.
-            starting_map = loaded_starting_map
-    else:
-        MetSys.set_save_data()
-    
-    room_loaded.connect(init_room, CONNECT_DEFERRED)
-    
-    load_room(starting_map)
+    load_game()
     
     add_module("RoomTransitions.gd")
 
@@ -48,15 +32,44 @@ func _process(delta):
 
 func init_room():
     MetSys.get_current_room_instance().adjust_camera_limits($Player/Camera2D)
-    # player.on_enter()
+    
+func load_game():
+    MetSys.reset_state()
+    set_player($Player)
+    
+    if FileAccess.file_exists(SAVE_PATH):
+        var save_manager := SaveManager.new()
+        save_manager.load_from_text(SAVE_PATH)
+        
+        $Player.Abilities = save_manager.get_value("player_abilities")
+        $Player.MaxHealth = save_manager.get_value("player_max_health")
+        
+        $WSM.WorldObjects = save_manager.get_value("world_objects")
+        $WSM.CurrentCheckpointID = save_manager.get_value("current_checkpoint")
+        $WSM.GlobalRespawnLocation = save_manager.get_value("global_respawn_location")
+        
+        $Player.global_position = $WSM.GlobalRespawnLocation    
+        
+        var loaded_starting_map: String = save_manager.get_value("current_room")
+        if not loaded_starting_map.is_empty(): # Some compatibility problem.
+            starting_map = loaded_starting_map
+    else:
+        MetSys.set_save_data()
+    
+    load_room(starting_map)
     
 func save_game():
     var save_manager := SaveManager.new()
+    
     save_manager.set_value("current_room", MetSys.get_current_room_name())
-    save_manager.set_value("player_max_health", $Player.MaxHealth)
-    save_manager.set_value("world_objects", $WSM.WorldObjects)
+    
     save_manager.set_value("player_abilities", $Player.Abilities)
+    save_manager.set_value("player_max_health", $Player.MaxHealth)
+    
+    save_manager.set_value("world_objects", $WSM.WorldObjects)
     save_manager.set_value("current_checkpoint", $WSM.CurrentCheckpointID)
+    save_manager.set_value("global_respawn_location", $WSM.GlobalRespawnLocation)
+    
     save_manager.save_as_text(SAVE_PATH)
 
 func toggle_pause():
