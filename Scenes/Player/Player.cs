@@ -282,5 +282,4 @@ public partial class Player : CharacterBody2D {
         CurrentHealth -= amount;
         // if (CurrentHealth <= 0) QueueFree();
     }
-
 }
