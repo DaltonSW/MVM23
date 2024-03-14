@@ -41,14 +41,10 @@ public partial class WorldStateManager : Node {
     }
 
     public void SaveCurrentRoom() {
-        GD.Print(_game.Call("get_current_room_name").AsString());
+        RoomToLoad = _game.Call("get_room_name").AsString();
     }
 
     public Godot.Collections.Dictionary<string, bool> GetWorldObjects() {
         return WorldObjects;
-    }
-
-    public void GetRoomName() {
-        GD.Print(_game.Call("get_room_name"));
     }
 }
