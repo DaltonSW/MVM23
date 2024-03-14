@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Godot.Collections;
 using MVM23;
 
 // Credits:
@@ -65,27 +66,20 @@ public partial class Player : CharacterBody2D, IHittable {
 
     private const float KNOCKBACK_ON_HITTING_ENEMY = 100f;
 
-    public Godot.Collections.Dictionary<string, bool> Abilities;
-
-    private void InitiateAbilities() {
-        Abilities = new Godot.Collections.Dictionary<string, bool>
-        {
-            { "Stick", false },
-            { "Dash", false },
-            { "SuperJump", false },
-            { "Grapple", false },
-            { "DoubleDash", false },
-            { "DashOnKill", false },
-            { "KeyToWorldTwo", false },
-            { "WorldThreeKeyOne", false },
-            { "WorldThreeKeyTwo", false }
-        };
-    }
+    [Export] public Godot.Collections.Dictionary<string, bool> Abilities = new() {
+        { "Stick", false },
+        { "Dash", false },
+        { "SuperJump", false },
+        { "Grapple", false },
+        { "DoubleDash", false },
+        { "DashOnKill", false },
+        { "KeyToWorldTwo", false },
+        { "WorldThreeKeyOne", false },
+        { "WorldThreeKeyTwo", false }
+    };
 
     public override void _Ready() {
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
-        
-        InitiateAbilities();
         
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
         ApexGravity = Gravity / 2;
@@ -157,6 +151,7 @@ public partial class Player : CharacterBody2D, IHittable {
             AddChild(Sword);
             Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
+        
         if (Sword is not null && Sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
             Sword.QueueFree();
@@ -244,6 +239,8 @@ public partial class Player : CharacterBody2D, IHittable {
     // This function exists because I assume the logic is going to expand in the future
     // If it really is only this property, we can swap it out elsewhere maybe
     public bool CanDash() {
+        if (!Abilities["Dash"]) return false;
+        
         return PlayerCanDash;
     }
 
@@ -257,6 +254,8 @@ public partial class Player : CharacterBody2D, IHittable {
     }
 
     public bool CanStartCharge(InputInfo inputs) {
+        if (!Abilities["SuperJump"]) return false;
+        
         return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime >= SuperJumpInitBufferLimit;
     }
 
@@ -309,6 +308,8 @@ public partial class Player : CharacterBody2D, IHittable {
     }
 
     private void ThrowGrapple() {
+        if (!Abilities["Grapple"]) return;
+        
         if (!GrappleCheck.IsColliding()) return;
 
         GrappledPoint = GrappleCheck.GetCollisionPoint();
