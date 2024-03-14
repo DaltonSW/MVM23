@@ -4,8 +4,7 @@ namespace MVM23;
 
 public partial class WorldStateManager : Node {
 
-    private Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
-    private Godot.Collections.Dictionary<string, bool> PlayerAbilities { get; set; }
+    public Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
     
     private string _currentCheckpointID;
     private string _currentRoom;
@@ -18,6 +17,7 @@ public partial class WorldStateManager : Node {
         _player = GetNode<Player>("/root/Game/Player");
         
         // New stateful things should be added in format "<World>/<Object>/<Specifier>"
+        // The strings are entirely arbitrary, but that'll prevent overlap
         WorldObjects = new Godot.Collections.Dictionary<string, bool>
         {
             // Doors
@@ -27,6 +27,17 @@ public partial class WorldStateManager : Node {
 
             // Levers
             { "World1/Lever/Crossroads", false },
+            
+            // Unlock Items
+            { "Stick", false },
+            { "Dash", false },
+            { "SuperJump", false },
+            { "Grapple", false },
+            { "DoubleDash", false },
+            { "DashOnKill", false },
+            { "KeyToWorldTwo", false },
+            { "WorldThreeKeyOne", false },
+            { "WorldThreeKeyTwo", false },
 
             // Testing
             { "TestLever", false },
@@ -54,7 +65,7 @@ public partial class WorldStateManager : Node {
     }
 
     public void Save() {
-        _game.Call("save_game", _player.MaxHealth);
+        _game.Call("save_game");
         _currentRoom = _game.Call("get_room_name").AsString();
     }
 }
