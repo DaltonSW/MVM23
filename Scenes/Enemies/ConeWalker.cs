@@ -4,6 +4,7 @@ using System;
 public partial class ConeWalker : CharacterBody2D, IHittable
 {
     [Export] public int StartHitPoints { get; set; } = 3;
+    [Export] float KnockbackMagnitude { get; set; } = 200f;
 
     private HitManager _hitManager;
 
@@ -30,7 +31,7 @@ public partial class ConeWalker : CharacterBody2D, IHittable
                     new Patrol(edgeAheadRayCast),
                     target => new Chase(this, target)));
 
-        _hitManager = new HitManager(this, this, StartHitPoints, _sprite);
+        _hitManager = new HitManager(this, StartHitPoints, _sprite);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -48,7 +49,11 @@ public partial class ConeWalker : CharacterBody2D, IHittable
         _ai._PhysicsProcess(delta);
         _xDirMan.Direction = _ai.NextXDirection(_xDirMan.Direction);
         Velocity = CalcVelocity(delta);
-        MoveAndSlide();
+        bool collided = MoveAndSlide();
+        if (collided)
+        {
+            EnemyUtils.HitCollideeIfApplicable(this, GetLastSlideCollision(), KnockbackMagnitude);
+        }
     }
 
     private Vector2 CalcVelocity(double delta)
@@ -95,6 +100,13 @@ public partial class ConeWalker : CharacterBody2D, IHittable
     {
         _stunned = false;
     }
+
+    public void QueueDeath()
+    {
+        QueueFree();
+    }
+
+    public bool DeathQueued() => IsQueuedForDeletion();
 }
 
 /// Moves quickly, always switching directions toward a given target.
@@ -123,22 +135,21 @@ public class HitManager
     private const float KNOCKBACK_DRAG = 500f;
     private const double INVULNERABILITY_TIME = 0.5f;
     private const double FLICKER_TIME = 0.15f;
+    private const float KNOCKBACK_BOUNCE_MAGNITUDE = 30f;
 
-    private Node2D _self;
-    private IHittable _stunee;
+    private IHittable _hitee;
     private CanvasItem _bodySprite; 
-    private int _hitPoints;
+    public int HitPoints { get; set; }
 
     private double _invulnerabilityTimeElapsed;
     private double _flickerTimeElapsed;
 
     public Vector2 KnockbackVelocity { get; private set; } = Vector2.Zero;
 
-    public HitManager(Node2D self, IHittable stunee, int hitPoints, CanvasItem bodySprite)
+    public HitManager(IHittable hitee, int hitPoints, CanvasItem bodySprite)
     {
-        _self = self;
-        _stunee = stunee;
-        _hitPoints = hitPoints;
+        _hitee = hitee;
+        HitPoints = hitPoints;
         _invulnerabilityTimeElapsed = INVULNERABILITY_TIME;
         _flickerTimeElapsed = 0;
         _bodySprite = bodySprite;
@@ -162,7 +173,7 @@ public class HitManager
             }
             if (!Invulnerable())
             {
-                _stunee.Unstun();
+                _hitee.Unstun();
                 _bodySprite.ChangeModulate(m => m.WithA(1));
             }
         }
@@ -180,6 +191,12 @@ public class HitManager
             return;
         }
 
+        // adjust knockback to include upward vertical if on floor
+        if (_hitee.MustKnockOffFloorToCreateDistance())
+        {
+            _knockbackVelocity.Y = -KNOCKBACK_BOUNCE_MAGNITUDE;
+        }
+
         // apply knockback
         KnockbackVelocity += _knockbackVelocity;
 
@@ -188,18 +205,23 @@ public class HitManager
         _flickerTimeElapsed = 0;
 
         // stun
-        _stunee.Stun();
+        _hitee.Stun();
 
         // apply damage
-        _hitPoints -= 1;
-        if (Dead() && !_self.IsQueuedForDeletion())
+        HitPoints -= 1;
+        if (Dead() && !_hitee.DeathQueued())
         {
-            _self.QueueFree();
+            _hitee.QueueDeath();
         }
     }
 
+    public void TakeDamage(int amount = 1)
+    {
+        HitPoints -= amount;
+    }
+
     private bool Invulnerable() => _invulnerabilityTimeElapsed < INVULNERABILITY_TIME;
-    private bool Dead() => _hitPoints <= 0;
+    private bool Dead() => HitPoints <= 0;
 }
 
 public static class CanvasItemExtensions

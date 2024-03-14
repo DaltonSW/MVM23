@@ -61,6 +61,15 @@ public static class Extensions
     public static Angle GetAngleObjectTo(this Node2D n, Vector2 pos) =>
         Angle.FromRadians(n.GetAngleTo(pos));
 
+    public static Angle GetAngleObjectToPoint(this Node2D n, Vector2 other) =>
+        Angle.FromRadians(n.GetAngleToPoint(other));
+
+    public static float GetAngleToPoint(this Node2D n, Vector2 other) =>
+        n.GlobalPosition.AngleToPoint(other);
+    
+    public static float GetAngleToNode(this Node2D n, Node2D other) =>
+        n.GetAngleToPoint(other.GlobalPosition);
+
     public static Angle AngleObject(this Vector2 v) =>
         Angle.FromRadians(v.Angle());
 

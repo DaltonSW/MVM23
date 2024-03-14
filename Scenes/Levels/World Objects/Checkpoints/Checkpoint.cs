@@ -30,6 +30,6 @@ public partial class Checkpoint : Area2D
         _sprite.Play("active");
         _worldStateManager.SetCurrentCheckpoint(CheckpointID);
         _worldStateManager.Save();
-        _player.CurrentHealth = _player.MaxHealth;
+        _player.RestoreHitPoints();
     }
 }

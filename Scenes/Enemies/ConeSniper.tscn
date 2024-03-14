@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cfyypqwqfm4ha" path="res://Scenes/Enemies/rifle.png" id="3_xm5ao"]
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_y5b0e"]
 
-[node name="ConeSniper" type="CharacterBody2D"]
+[node name="ConeSniper" type="CharacterBody2D" groups=["hurt_player_on_collide"]]
 script = ExtResource("1_ioh8p")
 
 [node name="Shapes" parent="." instance=ExtResource("2_cldff")]

@@ -8,7 +8,7 @@ using MVM23;
 
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 [GlobalClass]
-public partial class Player : CharacterBody2D {
+public partial class Player : CharacterBody2D, IHittable {
     public const float RunSpeed = 150.0f;
     [Export] public double EarlyJumpMaxBufferTime = 0.1;
     [Export] public double SuperJumpInitBufferLimit = 0.1; // Waits to start charging to give time to boost jump
@@ -26,13 +26,12 @@ public partial class Player : CharacterBody2D {
     public bool CoyoteTimeExpired;
 
     public int MaxHealth = 15;
-    public float CurrentHealth { get; set; }
+    public float CurrentHealth { get => _hitManager.HitPoints; }
 
     private double _timeSinceMelee;
     [Export] public float MeleeDuration { get; set; } = 0.2F;
 
     public bool CanSuperJump { get; set; }
-    private bool IsDashing { get; set; }
     public bool PlayerCanDash { get; set; }
     private PlayerState CurrentState { get; set; }
 
@@ -59,6 +58,10 @@ public partial class Player : CharacterBody2D {
     private PackedScene _grappleScene;
     private PackedScene _swordScene;
 
+    private HitManager _hitManager;
+    public Vector2 KnockbackVelocity { get => _hitManager.KnockbackVelocity; }
+
+    private const float KNOCKBACK_ON_HITTING_ENEMY = 100f;
 
     public override void _Ready() {
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
@@ -87,7 +90,7 @@ public partial class Player : CharacterBody2D {
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
         _swordScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/sword/Sword.tscn");
 
-        CurrentHealth = MaxHealth;
+        _hitManager = new HitManager(this, MaxHealth, _sprite);
     }
 
     public override void _Process(double delta) {
@@ -106,6 +109,8 @@ public partial class Player : CharacterBody2D {
 
     public override void _PhysicsProcess(double delta) {
         var inputs = GetInputs();
+
+        _hitManager._PhysicsProcess(delta);
 
         if (!inputs.IsPushingJump)
             _timeSinceStartHoldingJump = 0;
@@ -145,7 +150,18 @@ public partial class Player : CharacterBody2D {
             ThrowGrapple();
         }
 
-        MoveAndSlide();
+        bool collided = MoveAndSlide();
+        if (collided
+                && GetLastSlideCollision().GetCollider() is Node2D colliderNode // TODO: go through all collisions. Might collide with enemy, then floor, which would ignore enemy?
+                && colliderNode.IsInGroup("hurt_player_on_collide"))
+        {
+            if (!"Dash".Equals(CurrentState.Name)) // TODO: smells like type-checking. use a method on PlayerState for that sweet polymorphism?
+            {
+                var knockback = Vector2s.FromPolar(KNOCKBACK_ON_HITTING_ENEMY,
+                        colliderNode.GetAngleToNode(this));
+                TakeHit(knockback);
+            }
+        }
     }
 
     public override void _Draw() {
@@ -279,7 +295,25 @@ public partial class Player : CharacterBody2D {
     }
 
     public void TakeDamage(int amount = 1) {
-        CurrentHealth -= amount;
-        // if (CurrentHealth <= 0) QueueFree();
+        _hitManager.TakeDamage(amount);
     }
+
+    public void TakeHit(Vector2 initialKnockbackVelocity) {
+        _hitManager.TakeHit(initialKnockbackVelocity);
+    }
+
+    public bool DeathQueued() => false;
+
+    public void QueueDeath() {
+        // TODO: load saved game                
+        GetTree().Paused = true;
+    }
+
+    public void RestoreHitPoints()
+    {
+        _hitManager.HitPoints = MaxHealth;
+    }
+
+    public bool MustKnockOffFloorToCreateDistance() => IsOnFloor();
+
 }

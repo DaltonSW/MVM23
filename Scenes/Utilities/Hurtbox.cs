@@ -9,5 +9,9 @@ public partial class Hurtbox : Area2D, IHittable
     {
         ((IHittable) Hurtee).TakeHit(initialKnockbackVelocity);
     }
+
+    // TODO: break apart the interfaces so this doesn't need to happen
+    public bool DeathQueued() => true;
+    public void QueueDeath() { }
 }
 
