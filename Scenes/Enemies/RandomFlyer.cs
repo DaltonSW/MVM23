@@ -2,9 +2,11 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class RandomFlyer : Node2D
+public partial class RandomFlyer : Node2D, IHittable
 {
     [Export] bool Debug = false;
+    [Export] int StartHitPoints { get; set; } = 1;
+    [Export] float KnockbackMagnitude { get; set; } = 100f;
 
     private const float MAX_FLOAT_SPEED = 30;
     private const float MIN_FLOAT_SPEED = 10;
@@ -18,6 +20,8 @@ public partial class RandomFlyer : Node2D
     private float _floatPathDistance; 
     private float _floatSpeed;
     private Sign _accelDirection;
+
+    private HitManager _hitManager;
 
     private RandomFlyerBody _body;
 
@@ -52,6 +56,8 @@ public partial class RandomFlyer : Node2D
         _floatPath.SetPoints(GenerateEssCurveInRandomDir(_body.Position));
         _floatPathDistance = 0;
         _floatSpeed = MIN_FLOAT_SPEED;
+
+        _hitManager = new HitManager(this, StartHitPoints, GetNode<AnimatedSprite2D>("Body/AnimatedSprite2D"));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -92,6 +98,7 @@ public partial class RandomFlyer : Node2D
         // path going the opposite direction.
         if (maybeCollision is KinematicCollision2D collision)
         {
+            EnemyUtils.HitCollideeIfApplicable(_body, collision, KnockbackMagnitude);
             _floatPath.SetPoints(GenerateEssCurveOfRandomLength(_body.Position,
                         collision.GetAngle() + (float)-Constants.PI_OVER_2));
             _floatPathDistance = 0;
@@ -101,11 +108,17 @@ public partial class RandomFlyer : Node2D
             QueueRedraw();
     }
 
-    public void _Hurt()
+    public void TakeHit(Vector2 initialKnockbackVelocity)
     {
-        if (!IsQueuedForDeletion())
-            QueueFree();
+        _hitManager.TakeHit(initialKnockbackVelocity);
     }
+
+    public void QueueDeath()
+    {
+        QueueFree();
+    }
+
+    public bool DeathQueued() => IsQueuedForDeletion();
 
     private static List<CurvePoint> GenerateEssCurveInRandomDir(Vector2 start) =>
         GenerateEssCurveOfRandomLength(start, Constants.NEG_TO_POS_PI.RandF());
@@ -131,4 +144,18 @@ public partial class RandomFlyer : Node2D
         return list;
     }
 
+}
+
+public class EnemyUtils
+{
+    public static void HitCollideeIfApplicable(Node2D self, KinematicCollision2D collision, float knockbackMagnitude)
+    {
+        if (collision.GetCollider() is Node2D colliderNode
+                && colliderNode.IsInGroup("enemy_hurt_on_collide"))
+        {
+            var knockback = Vector2s.FromPolar(knockbackMagnitude,
+                    self.GetAngleToNode(colliderNode));
+            ((IHittable) colliderNode).TakeHit(knockback);
+        }
+    }
 }

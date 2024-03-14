@@ -2,10 +2,16 @@ using Godot;
 
 public partial class Hurtbox : Area2D, IHittable
 {
+    [Export] public Node Hurtee { get; set; }
     [Signal] public delegate void HurtEventHandler();
 
-    public void TakeHit()
+    public void TakeHit(Vector2 initialKnockbackVelocity)
     {
-        EmitSignal(SignalName.Hurt);
+        ((IHittable) Hurtee).TakeHit(initialKnockbackVelocity);
     }
+
+    // TODO: break apart the interfaces so this doesn't need to happen
+    public bool DeathQueued() => true;
+    public void QueueDeath() { }
 }
+

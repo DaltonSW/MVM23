@@ -4,14 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://p2gvd5ag5tu7" path="res://Scenes/Enemies/Utilities/ConeCultistShapes.tscn" id="2_f3jer"]
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_a3cei"]
 
-[node name="ConeWalker" type="CharacterBody2D"]
+[node name="ConeWalker" type="CharacterBody2D" groups=["hurt_player_on_collide"]]
 script = ExtResource("1_ldup0")
 
 [node name="Shapes" parent="." instance=ExtResource("2_f3jer")]
 
-[node name="XDirectionManager" parent="." instance=ExtResource("3_a3cei")]
+[node name="Hurtbox" parent="Shapes" index="4" node_paths=PackedStringArray("Hurtee")]
+Hurtee = NodePath("../..")
 
-[connection signal="Hurt" from="Shapes/Hurtbox" to="." method="_Hurt"]
+[node name="XDirectionManager" parent="." instance=ExtResource("3_a3cei")]
 
 [editable path="Shapes"]
 [editable path="Shapes/Hurtbox"]

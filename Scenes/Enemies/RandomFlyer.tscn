@@ -45,7 +45,7 @@ animations = [{
 [node name="RandomFlyer" type="Node2D"]
 script = ExtResource("1_pb1ik")
 
-[node name="Body" type="CharacterBody2D" parent="."]
+[node name="Body" type="CharacterBody2D" parent="." groups=["hurt_player_on_collide"]]
 script = ExtResource("2_mw4us")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Body"]
@@ -56,11 +56,10 @@ polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
 
 [node name="XDirectionManager" parent="Body" instance=ExtResource("3_c5c8c")]
 
-[node name="Hurtbox" parent="Body" instance=ExtResource("5_dw17x")]
+[node name="Hurtbox" parent="Body" node_paths=PackedStringArray("Hurtee") instance=ExtResource("5_dw17x")]
+Hurtee = NodePath("../..")
 
 [node name="CollisionPolygon2D" parent="Body/Hurtbox" index="0"]
 polygon = PackedVector2Array(-24, -4.55959, -24, 6.38342, 23, 6.38342, 4, -4.55959)
-
-[connection signal="Hurt" from="Body/Hurtbox" to="." method="_Hurt"]
 
 [editable path="Body/Hurtbox"]

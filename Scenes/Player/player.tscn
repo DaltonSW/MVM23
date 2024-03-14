@@ -97,7 +97,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D" groups=["enemy_target"]]
+[node name="Player" type="CharacterBody2D" groups=["enemy_hurt_on_collide", "enemy_target"]]
 script = ExtResource("1_l6vq3")
 
 [node name="Reticle" type="Node2D" parent="."]

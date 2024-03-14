@@ -1,9 +1,10 @@
 using Godot;
 using System;
-using System.Linq;
 
-public partial class ConeSniper : CharacterBody2D
+public partial class ConeSniper : CharacterBody2D, IHittable
 {
+    [Export] public int StartHitPoints { get; set; } = 2;
+    [Export] float KnockbackMagnitude { get; set; } = 100f;
 
     private AnimatedSprite2D _sprite;
     private XDirectionManager _xDirMan;
@@ -11,6 +12,8 @@ public partial class ConeSniper : CharacterBody2D
     private float _gravity;
 
     private IAi _ai;
+
+    private HitManager _hitManager;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -28,6 +31,8 @@ public partial class ConeSniper : CharacterBody2D
                 new NoticeTarget(lineOfSight,
                     new Patrol(edgeAheadRayCast),
                     target => new FireAtWill(gun, this, target, _xDirMan)));
+
+        _hitManager = new HitManager(this, StartHitPoints, _sprite);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,10 +46,15 @@ public partial class ConeSniper : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
+        _hitManager._PhysicsProcess(delta);
         _ai._PhysicsProcess(delta);
         _xDirMan.Direction = _ai.NextXDirection(_xDirMan.Direction);
         Velocity = CalcVelocity(delta);
-        MoveAndSlide();
+        bool collided = MoveAndSlide();
+        if (collided)
+        {
+            EnemyUtils.HitCollideeIfApplicable(this, GetLastSlideCollision(), KnockbackMagnitude);
+        }
     }
 
     private Vector2 CalcVelocity(double delta)
@@ -54,7 +64,10 @@ public partial class ConeSniper : CharacterBody2D
         // fake friction
         velocity.X = 0;
 
-        if (IsOnFloor())
+        // knockback
+        velocity += _hitManager.KnockbackVelocity;
+
+        if (IsOnFloor() && !_stunned)
         {
             // foot
             velocity += (float)delta * _ai.FootSpeed() * _xDirMan.Direction.UnitVector();
@@ -72,12 +85,29 @@ public partial class ConeSniper : CharacterBody2D
             _sprite.Play(animation);
     }
 
-    public void _Hurt()
+    public void TakeHit(Vector2 initialKnockbackVelocity)
     {
-        if (!IsQueuedForDeletion())
-            QueueFree();
+        _hitManager.TakeHit(initialKnockbackVelocity);
     }
 
+    private bool _stunned = false;
+
+    public void Stun()
+    {
+        _stunned = true;
+    }
+
+    public void Unstun()
+    {
+        _stunned = false;
+    }
+
+    public void QueueDeath()
+    {
+        QueueFree();
+    }
+
+    public bool DeathQueued() => IsQueuedForDeletion();
 }
 
 

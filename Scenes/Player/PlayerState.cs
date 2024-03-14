@@ -11,6 +11,9 @@ public abstract class PlayerState {
     protected static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
         var velocity = player.Velocity;
 
+        GD.Print(player.KnockbackVelocity);
+        velocity += player.KnockbackVelocity;
+
         if (inputs.InputDirection.X != 0) {
             // If you're in the air, keeps your velocity steady
             // Needs to be changed to allow better air control
