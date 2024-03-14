@@ -10,9 +10,8 @@ using MVM23;
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 [GlobalClass]
 public partial class Player : CharacterBody2D, IHittable {
-    
     #region Properties
-    
+
     public bool CanSuperJump { get; set; }
     public bool PlayerCanDash { get; set; }
     public Vector2 GrappledPoint { get; set; }
@@ -20,18 +19,24 @@ public partial class Player : CharacterBody2D, IHittable {
     public float Gravity { get; private set; }
     public float JumpSpeed { get; private set; }
     public float ApexGravity { get; private set; }
-    
+
     public double SuperJumpCurrentBufferTime { get; set; }
     public double CoyoteTimeElapsed { get; set; }
     public bool CoyoteTimeExpired { get; set; }
     public int MaxHealth { get; private set; } = 15;
-    public float CurrentHealth { get => _hitManager.HitPoints; }
-    public Vector2 KnockbackVelocity { get => _hitManager.KnockbackVelocity; }
+
+    public float CurrentHealth {
+        get => _hitManager.HitPoints;
+    }
+
+    public Vector2 KnockbackVelocity {
+        get => _hitManager.KnockbackVelocity;
+    }
 
     #endregion
-    
+
     #region Fields
-    
+
     private WorldStateManager _worldStateManager;
     private RayCast2D _grappleCheck;
     private PlayerState _currentState;
@@ -54,29 +59,30 @@ public partial class Player : CharacterBody2D, IHittable {
     private PackedScene _swordScene;
 
     private HitManager _hitManager;
-    
+
     #endregion
-    
+
     #region Constants
-    
+
     public const float RunSpeed = 150.0f;
     public const float GroundFriction = RunSpeed * 20f;
     public const float AirFriction = GroundFriction * 0.8f;
     private const float KnockbackOnHittingEnemy = 100f;
 
     #endregion
-    
+
     #region Exports
-    
+
     [Export] public double EarlyJumpMaxBufferTime = 0.1;
     [Export] public double SuperJumpInitBufferLimit = 0.1; // Waits to start charging to give time to boost jump
 
     [Export] private float _jumpHeight = 70F;  // I believe this is pixels
     [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
     [Export] public float MeleeDuration { get; set; } = 0.2F;
-    
+
     // ReSharper disable once RedundantNameQualifier
-    [Export] public Godot.Collections.Dictionary<string, bool> Abilities = new() {
+    [Export] public Godot.Collections.Dictionary<string, bool> Abilities = new()
+    {
         { "Stick", false },
         { "Dash", false },
         { "SuperJump", false },
@@ -87,14 +93,34 @@ public partial class Player : CharacterBody2D, IHittable {
         { "WorldThreeKeyOne", false },
         { "WorldThreeKeyTwo", false }
     };
-    
+
     #endregion
-    
+
+    #region Classes/Enums
+
+    public class InputInfo {
+        public Vector2 InputDirection { get; init; }
+        public bool IsPushingJump { get; init; }
+        public bool IsPushingCrouch { get; init; }
+        public bool IsPushingDash { get; init; }
+        public bool IsPushingGrapple { get; init; }
+        public bool IsPushingMelee { get; init; }
+    }
+
+    public enum JumpType {
+        None,
+        Normal,
+        CoyoteTime,
+        BoostJump
+    }
+
+    #endregion
+
     #region Override Methods
 
     public override void _Ready() {
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
-        
+
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
         ApexGravity = Gravity / 2;
         JumpSpeed = (float)Math.Sqrt(2 * _jumpHeight * Gravity);
@@ -128,7 +154,7 @@ public partial class Player : CharacterBody2D, IHittable {
         if (_currentState.Name != "Grapple") {
             var mousePosition = GetGlobalMousePosition();
             Reticle.LookAt(mousePosition);
-            Reticle.Position = Vector2.Zero;    
+            Reticle.Position = Vector2.Zero;
         }
 
         if (_currentState.GetType() != typeof(DashState))
@@ -165,7 +191,7 @@ public partial class Player : CharacterBody2D, IHittable {
             AddChild(_sword);
             _sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
-        
+
         if (_sword is not null && _sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
             _sword.QueueFree();
@@ -183,14 +209,14 @@ public partial class Player : CharacterBody2D, IHittable {
         }
 
         bool collided = MoveAndSlide();
-        if (collided
-                && GetLastSlideCollision().GetCollider() is Node2D colliderNode // TODO: go through all collisions. Might collide with enemy, then floor, which would ignore enemy?
-                && colliderNode.IsInGroup("hurt_player_on_collide"))
-        {
-            if (!"Dash".Equals(_currentState.Name)) // TODO: smells like type-checking. use a method on PlayerState for that sweet polymorphism?
+        if (collided && GetLastSlideCollision()
+                             .GetCollider() is Node2D
+                         colliderNode // TODO: go through all collisions. Might collide with enemy, then floor, which would ignore enemy?
+                     && colliderNode.IsInGroup("hurt_player_on_collide")) {
+            if (!"Dash".Equals(_currentState
+                    .Name)) // TODO: smells like type-checking. use a method on PlayerState for that sweet polymorphism?
             {
-                var knockback = Vector2s.FromPolar(KnockbackOnHittingEnemy,
-                        colliderNode.GetAngleToNode(this));
+                var knockback = Vector2s.FromPolar(KnockbackOnHittingEnemy, colliderNode.GetAngleToNode(this));
                 TakeHit(knockback);
             }
         }
@@ -204,34 +230,91 @@ public partial class Player : CharacterBody2D, IHittable {
         var color = Colors.Aqua;
         DrawLine(from, to, color, 2f);
     }
-    
+
     #endregion
-    
+
     #region Public Methods
+
+    public void UnlockAbility(string unlock) {
+        Abilities[unlock] = true;
+        _worldStateManager.Save();
+    }
+
+    // This function exists because I assume the logic is going to expand in the future
+    // If it really is only this property, we can swap it out elsewhere maybe
+    public bool CanDash() {
+        if (!Abilities["Dash"]) return false;
+
+        return PlayerCanDash;
+    }
+
+    public JumpType CanJump() {
+        if (!IsOnFloor() && !CoyoteTimeExpired && _timeSinceStartHoldingJump < _timeSinceLeftGround)
+            return JumpType.CoyoteTime;
+
+        if (IsOnFloor() && _timeSinceStartHoldingJump < EarlyJumpMaxBufferTime)
+            return _currentState.GetType() == typeof(DashState) ? JumpType.BoostJump : JumpType.Normal;
+        return JumpType.None;
+    }
+
+    public bool CanStartCharge(InputInfo inputs) {
+        if (!Abilities["SuperJump"]) return false;
+
+        return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime >= SuperJumpInitBufferLimit;
+    }
+
+    public void ResetJumpBuffers() {
+        CoyoteTimeExpired = false;
+        CoyoteTimeElapsed = 0;
+        SuperJumpCurrentBufferTime = 0;
+    }
+
+    public void NudgePlayer(int nudgeAmount, Vector2 nudgeEnterVelocity) {
+        var playerPos = GlobalPosition;
+        Velocity = nudgeEnterVelocity;
+        GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
+    }
+
+
+    public void ChangeAnimation(string animation) {
+        if (_sprite.Animation != animation)
+            _sprite.Play(animation);
+    }
+
+    public void QueueDeath() {
+        // TODO: load saved game                
+        GetTree().Paused = true;
+    }
+
+    public void SetEmittingDashParticles(bool emit) => _dashParticles.Emitting = emit;
+
+    public void TakeDamage(int amount = 1) => _hitManager.TakeDamage(amount);
+
+    public void TakeHit(Vector2 initialKnockbackVelocity) => _hitManager.TakeHit(initialKnockbackVelocity);
+
+    public bool DeathQueued() => false; // Necessary to implement HitManager
+
+    public void RestoreHitPoints() => _hitManager.HitPoints = MaxHealth;
+
+    public bool MustKnockOffFloorToCreateDistance() => IsOnFloor();
+
+    public void FaceLeft() => SetFaceDirection(true);
+
+    public void FaceRight() => SetFaceDirection(false);
+
+    public bool ShouldNudgePositive() => _negBonkCheck.IsColliding() && !_negBonkBuffer.IsColliding();
+
+    public bool ShouldNudgeNegative() => _posBonkCheck.IsColliding() && !_posBonkBuffer.IsColliding();
     
+    public void ChangeColor(Color color) => _sprite.Modulate = color;
+
     #endregion
-    
+
     #region Private Methods
-    
-    #endregion
 
     private void ChangeState(PlayerState newState) {
         GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
         _currentState = newState;
-
-        //  Consider if a "push down automaton"(?) pattern is useful
-        //  Basically just a stack that stores the previous states
-        //  If you can "shoot" from idle or running or jumping, it shouldn't need to keep track of specific prev state
-        //  It should be able to return something like PlayerState.Previous to go back to whatever the last one was
-    }
-
-    public class InputInfo {
-        public Vector2 InputDirection { get; init; }
-        public bool IsPushingJump { get; init; }
-        public bool IsPushingCrouch { get; init; }
-        public bool IsPushingDash { get; init; }
-        public bool IsPushingGrapple { get; init; }
-        public bool IsPushingMelee { get; init; }
     }
 
     private static InputInfo GetInputs() {
@@ -248,92 +331,14 @@ public partial class Player : CharacterBody2D, IHittable {
         return inputInfo;
     }
 
-    public void UnlockAbility(string unlock) {
-        Abilities[unlock] = true;
-        _worldStateManager.Save();
-    }
-
-    public enum JumpType {
-        None,
-        Normal,
-        CoyoteTime,
-        BoostJump
-    }
-
-    // This function exists because I assume the logic is going to expand in the future
-    // If it really is only this property, we can swap it out elsewhere maybe
-    public bool CanDash() {
-        if (!Abilities["Dash"]) return false;
-        
-        return PlayerCanDash;
-    }
-
-    public JumpType CanJump() {
-        if (!IsOnFloor() && !CoyoteTimeExpired && _timeSinceStartHoldingJump < _timeSinceLeftGround)
-            return JumpType.CoyoteTime;
-
-        if (IsOnFloor() && _timeSinceStartHoldingJump < EarlyJumpMaxBufferTime)
-            return _currentState.GetType() == typeof(DashState) ? JumpType.BoostJump : JumpType.Normal;
-        return JumpType.None;
-    }
-
-    public bool CanStartCharge(InputInfo inputs) {
-        if (!Abilities["SuperJump"]) return false;
-        
-        return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime >= SuperJumpInitBufferLimit;
-    }
-
-    public void ResetJumpBuffers() {
-        CoyoteTimeExpired = false;
-        CoyoteTimeElapsed = 0;
-        SuperJumpCurrentBufferTime = 0;
-    }
-
-    public void ChangeColor(Color color) {
-        _sprite.Modulate = color;
-    }
-
-    public void ChangeAnimation(string animation) {
-        if (_sprite.Animation != animation)
-            _sprite.Play(animation);
-    }
-
-    public void SetEmittingDashParticles(bool emit) {
-        _dashParticles.Emitting = emit;
-    }
-
-
-    private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetGlobalMousePosition()));
-
-
-    public void FaceLeft() => SetFaceDirection(true);
-
-    public void FaceRight() => SetFaceDirection(false);
-
     private void SetFaceDirection(bool faceLeft) {
         _isFacingLeft = faceLeft;
         _sprite.FlipH = !_isFacingLeft;
     }
 
-    public bool ShouldNudgePositive() {
-        return _negBonkCheck.IsColliding() && !_negBonkBuffer.IsColliding();
-    }
-
-
-    public bool ShouldNudgeNegative() {
-        return _posBonkCheck.IsColliding() && !_posBonkBuffer.IsColliding();
-    }
-
-
-    public void NudgePlayer(int nudgeAmount, Vector2 nudgeEnterVelocity) {
-        var playerPos = GlobalPosition;
-        Velocity = nudgeEnterVelocity;
-        GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
-    }
-
     private void ThrowGrapple() {
         if (!Abilities["Grapple"]) return;
-        
+
         if (!_grappleCheck.IsColliding()) return;
 
         GrappledPoint = _grappleCheck.GetCollisionPoint();
@@ -346,27 +351,8 @@ public partial class Player : CharacterBody2D, IHittable {
         QueueRedraw();
         _canThrowGrapple = true;
     }
+    
+    private Angle GetAngleToMouse() => Angle.FromRadians(GetAngleTo(GetGlobalMousePosition()));
 
-    public void TakeDamage(int amount = 1) {
-        _hitManager.TakeDamage(amount);
-    }
-
-    public void TakeHit(Vector2 initialKnockbackVelocity) {
-        _hitManager.TakeHit(initialKnockbackVelocity);
-    }
-
-    public bool DeathQueued() => false;
-
-    public void QueueDeath() {
-        // TODO: load saved game                
-        GetTree().Paused = true;
-    }
-
-    public void RestoreHitPoints()
-    {
-        _hitManager.HitPoints = MaxHealth;
-    }
-
-    public bool MustKnockOffFloorToCreateDistance() => IsOnFloor();
-
+    #endregion
 }
