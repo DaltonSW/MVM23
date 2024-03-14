@@ -12,6 +12,14 @@ public partial class SlimeBoss : CharacterBody2D {
         Death
     }
 
+    private enum Difficulty {
+        Easy,
+        Medium,
+        Hard
+    }
+
+    [Export] private Difficulty _difficulty = Difficulty.Easy;
+
     private Random _random;
 
     private AnimatedSprite2D _sprite;
@@ -83,7 +91,6 @@ public partial class SlimeBoss : CharacterBody2D {
         
         var collision = MoveAndCollide(Velocity * (float)delta);
         if (collision == null) return;
-        //if (collision.GetCollider().IsClass("Slime")) return;
         var normal = collision.GetNormal();
         
         if (normal == Vector2.Up)
@@ -92,7 +99,7 @@ public partial class SlimeBoss : CharacterBody2D {
                 _state = State.Idle;
                 _sprite.Play("idle");
                 _completedIdleLoops = 0;
-                // Shoot(); // If we want a "hard mode" thing where he shoots twice per boing
+                if (_difficulty == Difficulty.Hard) Shoot(); 
             }
             Velocity = new Vector2(0, 0);
             _canFlip = true;
@@ -156,8 +163,9 @@ public partial class SlimeBoss : CharacterBody2D {
         return new Vector2(velocity.X + JumpSpeedHoriz * dir, velocity.Y - _jumpSpeed);
     }
     
-    private void Shoot()
-    {
+    private void Shoot() {
+        if (_difficulty == Difficulty.Easy) return;
+        
         foreach (var node in GetTree().GetNodesInGroup("spawns"))
         {
             var point = (Marker2D)node;
