@@ -4,6 +4,7 @@ using System;
 public partial class ConeSniper : CharacterBody2D, IHittable
 {
     [Export] public int StartHitPoints { get; set; } = 2;
+    [Export] float KnockbackMagnitude { get; set; } = 100f;
 
     private AnimatedSprite2D _sprite;
     private XDirectionManager _xDirMan;
@@ -31,7 +32,7 @@ public partial class ConeSniper : CharacterBody2D, IHittable
                     new Patrol(edgeAheadRayCast),
                     target => new FireAtWill(gun, this, target, _xDirMan)));
 
-        _hitManager = new HitManager(this, this, StartHitPoints, _sprite);
+        _hitManager = new HitManager(this, StartHitPoints, _sprite);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,7 +50,11 @@ public partial class ConeSniper : CharacterBody2D, IHittable
         _ai._PhysicsProcess(delta);
         _xDirMan.Direction = _ai.NextXDirection(_xDirMan.Direction);
         Velocity = CalcVelocity(delta);
-        MoveAndSlide();
+        bool collided = MoveAndSlide();
+        if (collided)
+        {
+            EnemyUtils.HitCollideeIfApplicable(this, GetLastSlideCollision(), KnockbackMagnitude);
+        }
     }
 
     private Vector2 CalcVelocity(double delta)
@@ -96,6 +101,13 @@ public partial class ConeSniper : CharacterBody2D, IHittable
     {
         _stunned = false;
     }
+
+    public void QueueDeath()
+    {
+        QueueFree();
+    }
+
+    public bool DeathQueued() => IsQueuedForDeletion();
 }
 
 
