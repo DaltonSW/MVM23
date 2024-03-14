@@ -50,3 +50,6 @@ func init_room():
 func toggle_pause():
     pause_menu.visible = !pause_menu.visible
     get_tree().paused = !get_tree().paused
+
+func get_room_name():
+    return MetSys.get_current_room_name()

@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://dok4pmd8ygm37"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/World Objects/Checkpoints/Checkpoint.cs" id="1_bt3i0"]
+[ext_resource type="Texture2D" uid="uid://cguqi7o2mn0xi" path="res://Scenes/Levels/World Objects/Checkpoints/active_0.png" id="2_38e2j"]
+[ext_resource type="Texture2D" uid="uid://cgfdkrlf6ux5k" path="res://Scenes/Levels/World Objects/Checkpoints/inactive.png" id="2_wa8yv"]
+[ext_resource type="Texture2D" uid="uid://uc45cohfid26" path="res://Scenes/Levels/World Objects/Checkpoints/active_1.png" id="3_tv6jp"]
+[ext_resource type="Texture2D" uid="uid://eybxr5brlqpj" path="res://Scenes/Levels/World Objects/Checkpoints/active_2.png" id="4_0rrek"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6orpl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_38e2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tv6jp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_0rrek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tv6jp")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_wa8yv")
+}],
+"loop": true,
+"name": &"inactive",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sv7wo"]
+
+[node name="Checkpoint" type="Area2D"]
+script = ExtResource("1_bt3i0")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_6orpl")
+animation = &"inactive"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sv7wo")
