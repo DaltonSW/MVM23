@@ -11,7 +11,7 @@ public abstract class PlayerState {
     protected static Vector2 GenericPositionUpdates(Player player, Player.InputInfo inputs, double delta) {
         var velocity = player.Velocity;
 
-        GD.Print(player.KnockbackVelocity);
+        // GD.Print(player.KnockbackVelocity);
         velocity += player.KnockbackVelocity;
 
         if (inputs.InputDirection.X != 0) {
