@@ -119,6 +119,8 @@ pause={
 
 2d_physics/layer_1="normal"
 2d_physics/layer_2="grapple"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="projectiles"
 
 [rendering]
 
