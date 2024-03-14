@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Godot.Collections;
 using MVM23;
 
 // Credits:
@@ -9,6 +10,8 @@ using MVM23;
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 [GlobalClass]
 public partial class Player : CharacterBody2D, IHittable {
+    private WorldStateManager _worldStateManager;
+    
     public const float RunSpeed = 150.0f;
     [Export] public double EarlyJumpMaxBufferTime = 0.1;
     [Export] public double SuperJumpInitBufferLimit = 0.1; // Waits to start charging to give time to boost jump
@@ -63,7 +66,21 @@ public partial class Player : CharacterBody2D, IHittable {
 
     private const float KNOCKBACK_ON_HITTING_ENEMY = 100f;
 
+    [Export] public Godot.Collections.Dictionary<string, bool> Abilities = new() {
+        { "Stick", false },
+        { "Dash", false },
+        { "SuperJump", false },
+        { "Grapple", false },
+        { "DoubleDash", false },
+        { "DashOnKill", false },
+        { "KeyToWorldTwo", false },
+        { "WorldThreeKeyOne", false },
+        { "WorldThreeKeyTwo", false }
+    };
+
     public override void _Ready() {
+        _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
+        
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
         ApexGravity = Gravity / 2;
         JumpSpeed = (float)Math.Sqrt(2 * _jumpHeight * Gravity);
@@ -128,12 +145,13 @@ public partial class Player : CharacterBody2D, IHittable {
         else
             _timeSinceLeftGround += delta;
 
-        if (Sword is null && inputs.IsPushingMelee) {
+        if (Sword is null && inputs.IsPushingMelee && Abilities["Stick"]) {
             GD.Print("creating sword");
             Sword = _swordScene.Instantiate<Sword>();
             AddChild(Sword);
             Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
+        
         if (Sword is not null && Sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
             Sword.QueueFree();
@@ -206,6 +224,11 @@ public partial class Player : CharacterBody2D, IHittable {
         return inputInfo;
     }
 
+    public void UnlockAbility(string unlock) {
+        Abilities[unlock] = true;
+        _worldStateManager.Save();
+    }
+
     public enum JumpType {
         None,
         Normal,
@@ -216,6 +239,8 @@ public partial class Player : CharacterBody2D, IHittable {
     // This function exists because I assume the logic is going to expand in the future
     // If it really is only this property, we can swap it out elsewhere maybe
     public bool CanDash() {
+        if (!Abilities["Dash"]) return false;
+        
         return PlayerCanDash;
     }
 
@@ -229,6 +254,8 @@ public partial class Player : CharacterBody2D, IHittable {
     }
 
     public bool CanStartCharge(InputInfo inputs) {
+        if (!Abilities["SuperJump"]) return false;
+        
         return IsOnFloor() && inputs.IsPushingCrouch && SuperJumpCurrentBufferTime >= SuperJumpInitBufferLimit;
     }
 
@@ -281,6 +308,8 @@ public partial class Player : CharacterBody2D, IHittable {
     }
 
     private void ThrowGrapple() {
+        if (!Abilities["Grapple"]) return;
+        
         if (!GrappleCheck.IsColliding()) return;
 
         GrappledPoint = GrappleCheck.GetCollisionPoint();
