@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://go8drq6a1dbl"]
+[gd_scene load_steps=5 format=3 uid="uid://go8drq6a1dbl"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_tjx3k"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_t6yt6"]
 [ext_resource type="PackedScene" uid="uid://dok4pmd8ygm37" path="res://Scenes/Levels/World Objects/Checkpoints/checkpoint.tscn" id="3_glqek"]
+[ext_resource type="PackedScene" uid="uid://gpdxpxul7dov" path="res://Scenes/Levels/World 1/Wood Background.tscn" id="4_pub8f"]
 
 [node name="BigStairs" type="Node2D"]
 
@@ -15,3 +16,5 @@ layer_0/tile_data = PackedInt32Array(0, 1572864, 1, 65536, 1572864, 1, 131072, 1
 
 [node name="Checkpoint" parent="." instance=ExtResource("3_glqek")]
 position = Vector2(1164, 305)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("4_pub8f")]

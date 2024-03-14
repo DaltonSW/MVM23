@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvuoj5b4kbpsi"]
+
+[ext_resource type="Texture2D" uid="uid://dccqvuunlo1vg" path="res://Scenes/Levels/World 2/City2.png" id="1_llbgt"]
+[ext_resource type="Shader" path="res://Scenes/Levels/World 2/SnowCity.gdshader" id="2_f611t"]
+[ext_resource type="Texture2D" uid="uid://m826758ujk6f" path="res://Scenes/Levels/World 2/Snow.png" id="3_yph7b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ov6g4"]
+shader = ExtResource("2_f611t")
+shader_parameter/speed = 0.075
+shader_parameter/direction = Vector2(1, -1)
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 0)
+motion_mirroring = Vector2(640, 0)
+
+[node name="City" type="Sprite2D" parent="ParallaxLayer"]
+texture = ExtResource("1_llbgt")
+centered = false
+
+[node name="Snow" type="Sprite2D" parent="ParallaxLayer"]
+material = SubResource("ShaderMaterial_ov6g4")
+texture = ExtResource("3_yph7b")
+centered = false
