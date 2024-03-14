@@ -15,7 +15,7 @@ metroidvania_system/settings_file="res://MetSysSettings.tres"
 [application]
 
 config/name="MVM23"
-run/main_scene="res://Scenes/Levels/Game.tscn"
+run/main_scene="res://Scenes/Levels/test_level/test_level.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -119,6 +119,8 @@ pause={
 
 2d_physics/layer_1="normal"
 2d_physics/layer_2="grapple"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="projectiles"
 
 [rendering]
 

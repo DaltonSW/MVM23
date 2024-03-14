@@ -36,9 +36,14 @@ public partial class SlimeBoss : CharacterBody2D {
     private bool _isFacingLeft;
     private bool _canFlip;
 
+    private PackedScene _projectileScene;
+
     public override void _Ready() {
         _state = State.Idle;
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
+        
+        _projectileScene = GD.Load<PackedScene>("res://Scenes/Enemies/Boss/boss_projectile.tscn");
+
 
         _random = new Random();
         
@@ -66,6 +71,7 @@ public partial class SlimeBoss : CharacterBody2D {
                 _state = State.Jumping;
                 velocity = StartJump(velocity);
                 _sprite.Play("jump");
+                Shoot();
                 break;
             case State.Death:
                 if (!_sprite.IsPlaying())
@@ -149,4 +155,17 @@ public partial class SlimeBoss : CharacterBody2D {
         var dir = _isFacingLeft ? -1 : 1;
         return new Vector2(velocity.X + JumpSpeedHoriz * dir, velocity.Y - _jumpSpeed);
     }
+    
+    private void Shoot()
+    {
+        foreach (var node in GetTree().GetNodesInGroup("spawns"))
+        {
+            var point = (Marker2D)node;
+            var projectile = (BossProjectile)_projectileScene.Instantiate();
+            projectile.GlobalPosition = point.GlobalPosition;
+            projectile.GlobalRotation = point.GlobalRotation;
+            GetParent().AddChild(projectile);
+        }
+    }
+
 }
