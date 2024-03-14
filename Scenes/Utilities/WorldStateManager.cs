@@ -8,6 +8,7 @@ public partial class WorldStateManager : Node {
     public Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
     
     public string CurrentCheckpointID;
+    public Vector2 GlobalRespawnLocation;
     private string _currentRoom;
     
     private GodotObject _game;
@@ -55,8 +56,9 @@ public partial class WorldStateManager : Node {
         return WorldObjects[objectID];
     }
 
-    public void SetCurrentCheckpoint(string checkpointID) {
+    public void SetCurrentCheckpoint(string checkpointID, Vector2 respawnLocation) {
         CurrentCheckpointID = checkpointID;
+        GlobalRespawnLocation = respawnLocation;
     }
 
     public bool IsCurrentCheckpoint(string checkpointID) {
