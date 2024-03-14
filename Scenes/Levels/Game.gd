@@ -51,7 +51,7 @@ func init_room():
 func save_game(player_max_health):
     var save_manager := SaveManager.new()
     save_manager.set_value("current_room", MetSys.get_current_room_name())
-    save_manager.set_value("player_max_health", player_max_health)
+    # save_manager.set_value("player_max_health", player_max_health)
     # save_manager.set_value("world_objects", world_objects)
     # save_manager.set_value("player_abilities", player_abilities)
     save_manager.save_as_text(SAVE_PATH)
