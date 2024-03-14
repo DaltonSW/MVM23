@@ -10,51 +10,43 @@ using MVM23;
 [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
 [GlobalClass]
 public partial class Player : CharacterBody2D, IHittable {
-    private WorldStateManager _worldStateManager;
     
-    public const float RunSpeed = 150.0f;
-    [Export] public double EarlyJumpMaxBufferTime = 0.1;
-    [Export] public double SuperJumpInitBufferLimit = 0.1; // Waits to start charging to give time to boost jump
-
-    [Export] private float _jumpHeight = 70F;  // I believe this is pixels
-    [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
-    public float Gravity;
-    public float JumpSpeed;
-    public float ApexGravity;
-
-    private double _timeSinceStartHoldingJump;
-    private double _timeSinceLeftGround;
-    public double SuperJumpCurrentBufferTime;
-    public double CoyoteTimeElapsed;
-    public bool CoyoteTimeExpired;
-
-    public int MaxHealth = 15;
-    public float CurrentHealth { get => _hitManager.HitPoints; }
-
-    private double _timeSinceMelee;
-    [Export] public float MeleeDuration { get; set; } = 0.2F;
-
+    #region Properties
+    
     public bool CanSuperJump { get; set; }
     public bool PlayerCanDash { get; set; }
-    private PlayerState CurrentState { get; set; }
-
-    private bool CanThrowGrapple { get; set; }
-    public RayCast2D GrappleCheck { get; set; }
     public Vector2 GrappledPoint { get; set; }
+    public Node2D Reticle { get; private set; }
+    public float Gravity { get; private set; }
+    public float JumpSpeed { get; private set; }
+    public float ApexGravity { get; private set; }
+    
+    public double SuperJumpCurrentBufferTime { get; set; }
+    public double CoyoteTimeElapsed { get; set; }
+    public bool CoyoteTimeExpired { get; set; }
+    public int MaxHealth { get; private set; } = 15;
+    public float CurrentHealth { get => _hitManager.HitPoints; }
+    public Vector2 KnockbackVelocity { get => _hitManager.KnockbackVelocity; }
 
-    public const float GroundFriction = RunSpeed * 20f;
-    public const float AirFriction = GroundFriction * 0.8f;
-
-    private Sword Sword { get; set; }
-
+    #endregion
+    
+    #region Fields
+    
+    private WorldStateManager _worldStateManager;
+    private RayCast2D _grappleCheck;
+    private PlayerState _currentState;
+    private Sword _sword;
+    private bool _canThrowGrapple;
+    private double _timeSinceStartHoldingJump;
+    private double _timeSinceLeftGround;
+    private double _timeSinceMelee;
     private AnimatedSprite2D _sprite;
-    public bool IsFacingLeft { get; private set; }
+    private bool _isFacingLeft;
     private RayCast2D _posBonkCheck;
     private RayCast2D _posBonkBuffer;
     private RayCast2D _negBonkCheck;
     private RayCast2D _negBonkBuffer;
     private CpuParticles2D _dashParticles;
-    public Node2D Reticle { get; set; }
     private bool _reticleFrozen;
     private Vector2 _reticleFreezePos;
 
@@ -62,10 +54,28 @@ public partial class Player : CharacterBody2D, IHittable {
     private PackedScene _swordScene;
 
     private HitManager _hitManager;
-    public Vector2 KnockbackVelocity { get => _hitManager.KnockbackVelocity; }
+    
+    #endregion
+    
+    #region Constants
+    
+    public const float RunSpeed = 150.0f;
+    public const float GroundFriction = RunSpeed * 20f;
+    public const float AirFriction = GroundFriction * 0.8f;
+    private const float KnockbackOnHittingEnemy = 100f;
 
-    private const float KNOCKBACK_ON_HITTING_ENEMY = 100f;
+    #endregion
+    
+    #region Exports
+    
+    [Export] public double EarlyJumpMaxBufferTime = 0.1;
+    [Export] public double SuperJumpInitBufferLimit = 0.1; // Waits to start charging to give time to boost jump
 
+    [Export] private float _jumpHeight = 70F;  // I believe this is pixels
+    [Export] private float _timeInAir = 0.17F; // No idea what this unit is. Definitely NOT seconds
+    [Export] public float MeleeDuration { get; set; } = 0.2F;
+    
+    // ReSharper disable once RedundantNameQualifier
     [Export] public Godot.Collections.Dictionary<string, bool> Abilities = new() {
         { "Stick", false },
         { "Dash", false },
@@ -77,6 +87,10 @@ public partial class Player : CharacterBody2D, IHittable {
         { "WorldThreeKeyOne", false },
         { "WorldThreeKeyTwo", false }
     };
+    
+    #endregion
+    
+    #region Override Methods
 
     public override void _Ready() {
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
@@ -88,12 +102,12 @@ public partial class Player : CharacterBody2D, IHittable {
         // Set project gravity so it syncs to other nodes
         ProjectSettings.SetSetting("physics/2d/default_gravity", Gravity);
 
-        GrappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
+        _grappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
 
-        CurrentState = new IdleState();
+        _currentState = new IdleState();
         _reticleFrozen = false;
         PlayerCanDash = true;
-        CanThrowGrapple = true;
+        _canThrowGrapple = true;
         _reticleFreezePos = Vector2.Zero;
 
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
@@ -111,13 +125,13 @@ public partial class Player : CharacterBody2D, IHittable {
     }
 
     public override void _Process(double delta) {
-        if (CurrentState.Name != "Grapple") {
+        if (_currentState.Name != "Grapple") {
             var mousePosition = GetGlobalMousePosition();
             Reticle.LookAt(mousePosition);
             Reticle.Position = Vector2.Zero;    
         }
 
-        if (CurrentState.GetType() != typeof(DashState))
+        if (_currentState.GetType() != typeof(DashState))
             SetEmittingDashParticles(false);
 
         if (GrappledPoint != Vector2.Inf)
@@ -145,26 +159,26 @@ public partial class Player : CharacterBody2D, IHittable {
         else
             _timeSinceLeftGround += delta;
 
-        if (Sword is null && inputs.IsPushingMelee && Abilities["Stick"]) {
+        if (_sword is null && inputs.IsPushingMelee && Abilities["Stick"]) {
             GD.Print("creating sword");
-            Sword = _swordScene.Instantiate<Sword>();
-            AddChild(Sword);
-            Sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
+            _sword = _swordScene.Instantiate<Sword>();
+            AddChild(_sword);
+            _sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
         
-        if (Sword is not null && Sword.Lifetime >= MeleeDuration) {
+        if (_sword is not null && _sword.Lifetime >= MeleeDuration) {
             GD.Print("clearing sword");
-            Sword.QueueFree();
-            Sword = null;
+            _sword.QueueFree();
+            _sword = null;
         }
 
-        var newState = CurrentState.HandleInput(this, inputs, delta);
+        var newState = _currentState.HandleInput(this, inputs, delta);
 
         if (newState != null) {
             ChangeState(newState);
         }
 
-        if (inputs.IsPushingGrapple && CanThrowGrapple) {
+        if (inputs.IsPushingGrapple && _canThrowGrapple) {
             ThrowGrapple();
         }
 
@@ -173,9 +187,9 @@ public partial class Player : CharacterBody2D, IHittable {
                 && GetLastSlideCollision().GetCollider() is Node2D colliderNode // TODO: go through all collisions. Might collide with enemy, then floor, which would ignore enemy?
                 && colliderNode.IsInGroup("hurt_player_on_collide"))
         {
-            if (!"Dash".Equals(CurrentState.Name)) // TODO: smells like type-checking. use a method on PlayerState for that sweet polymorphism?
+            if (!"Dash".Equals(_currentState.Name)) // TODO: smells like type-checking. use a method on PlayerState for that sweet polymorphism?
             {
-                var knockback = Vector2s.FromPolar(KNOCKBACK_ON_HITTING_ENEMY,
+                var knockback = Vector2s.FromPolar(KnockbackOnHittingEnemy,
                         colliderNode.GetAngleToNode(this));
                 TakeHit(knockback);
             }
@@ -190,10 +204,20 @@ public partial class Player : CharacterBody2D, IHittable {
         var color = Colors.Aqua;
         DrawLine(from, to, color, 2f);
     }
+    
+    #endregion
+    
+    #region Public Methods
+    
+    #endregion
+    
+    #region Private Methods
+    
+    #endregion
 
     private void ChangeState(PlayerState newState) {
-        GD.Print($"Changing from {CurrentState.Name} to {newState.Name}");
-        CurrentState = newState;
+        GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
+        _currentState = newState;
 
         //  Consider if a "push down automaton"(?) pattern is useful
         //  Basically just a stack that stores the previous states
@@ -249,7 +273,7 @@ public partial class Player : CharacterBody2D, IHittable {
             return JumpType.CoyoteTime;
 
         if (IsOnFloor() && _timeSinceStartHoldingJump < EarlyJumpMaxBufferTime)
-            return CurrentState.GetType() == typeof(DashState) ? JumpType.BoostJump : JumpType.Normal;
+            return _currentState.GetType() == typeof(DashState) ? JumpType.BoostJump : JumpType.Normal;
         return JumpType.None;
     }
 
@@ -287,8 +311,8 @@ public partial class Player : CharacterBody2D, IHittable {
     public void FaceRight() => SetFaceDirection(false);
 
     private void SetFaceDirection(bool faceLeft) {
-        IsFacingLeft = faceLeft;
-        _sprite.FlipH = !IsFacingLeft;
+        _isFacingLeft = faceLeft;
+        _sprite.FlipH = !_isFacingLeft;
     }
 
     public bool ShouldNudgePositive() {
@@ -310,17 +334,17 @@ public partial class Player : CharacterBody2D, IHittable {
     private void ThrowGrapple() {
         if (!Abilities["Grapple"]) return;
         
-        if (!GrappleCheck.IsColliding()) return;
+        if (!_grappleCheck.IsColliding()) return;
 
-        GrappledPoint = GrappleCheck.GetCollisionPoint();
+        GrappledPoint = _grappleCheck.GetCollisionPoint();
         ChangeState(new GrappleState(this));
-        CanThrowGrapple = false;
+        _canThrowGrapple = false;
     }
 
-    public void OnGrappleFree() {
+    private void OnGrappleFree() {
         GrappledPoint = Vector2.Inf;
         QueueRedraw();
-        CanThrowGrapple = true;
+        _canThrowGrapple = true;
     }
 
     public void TakeDamage(int amount = 1) {
