@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dok4pmd8ygm37"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/World Objects/Checkpoints/Checkpoint.cs" id="1_bt3i0"]
+[ext_resource type="Texture2D" uid="uid://cgfdkrlf6ux5k" path="res://Scenes/Levels/World Objects/Checkpoints/Inactive.png" id="2_5s4ud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sv7wo"]
+
+[node name="Checkpoint" type="Area2D"]
+script = ExtResource("1_bt3i0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_5s4ud")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sv7wo")

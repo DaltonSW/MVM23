@@ -3,10 +3,18 @@ using Godot;
 namespace MVM23;
 
 public partial class WorldStateManager : Node {
-    public Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
+    
+    private Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
+    private Godot.Collections.Dictionary<string, bool> PlayerAbilities { get; set; }
+    
+    public string RoomToLoad { get; set; }
+    
+    private GodotObject _game;
 
     public override void _Ready() {
         // New stateful things should be added in format "<World>/<Object>/<Specifier>"
+        _game = GetNode<GodotObject>("/root/Game");
+        
         WorldObjects = new Godot.Collections.Dictionary<string, bool>
         {
             // Doors
@@ -32,7 +40,15 @@ public partial class WorldStateManager : Node {
         return WorldObjects[objectID];
     }
 
+    public void SaveCurrentRoom() {
+        GD.Print(_game.Call("get_current_room_name").AsString());
+    }
+
     public Godot.Collections.Dictionary<string, bool> GetWorldObjects() {
         return WorldObjects;
+    }
+
+    public void GetRoomName() {
+        GD.Print(_game.Call("get_room_name"));
     }
 }
