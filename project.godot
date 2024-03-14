@@ -15,7 +15,7 @@ metroidvania_system/settings_file="res://MetSysSettings.tres"
 [application]
 
 config/name="MVM23"
-run/main_scene="res://Scenes/Levels/test_level/test_level.tscn"
+run/main_scene="res://Scenes/Levels/Game.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
