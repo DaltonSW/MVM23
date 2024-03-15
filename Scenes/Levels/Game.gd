@@ -61,11 +61,11 @@ func load_game():
     
     load_room_wrapper(starting_map)
     
-func load_room_wrapper(map):
-    load_room(map)
+func load_room_wrapper(new_map):
+    load_room(new_map)
 
-func teleport_player(map, tele_pos):
-    load_room_wrapper(map)
+func teleport_player(new_map, tele_pos):
+    load_room_wrapper(new_map)
     $Player.global_position = tele_pos
    
 static func print_hello():

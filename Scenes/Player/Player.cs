@@ -103,6 +103,7 @@ public partial class Player : CharacterBody2D, IHittable {
         { "DoubleDash", false },
         { "DashOnKill", false },
         { "KeyToWorldTwo", false },
+        { "WorldTwoBossKey", false },
         { "WorldThreeKeyOne", false },
         { "WorldThreeKeyTwo", false }
     };
