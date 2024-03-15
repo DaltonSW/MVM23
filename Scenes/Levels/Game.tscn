@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://btjwofj6umq7t"]
+[gd_scene load_steps=7 format=3 uid="uid://btjwofj6umq7t"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/Game.gd" id="1_p8v4f"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_0dx4k"]
+[ext_resource type="PackedScene" uid="uid://b2yrjlexgqqvi" path="res://addons/audio-manager/AudioManager.tscn" id="4_2clki"]
 [ext_resource type="Script" path="res://Scenes/Utilities/WorldStateManager.cs" id="5_dx1hd"]
+[ext_resource type="AudioStream" uid="uid://blts7fjxmujti" path="res://Assets/Music/MainMenu.wav" id="5_eo24v"]
+[ext_resource type="AudioStream" uid="uid://cmdoi3uponpcd" path="res://Assets/Music/Game.wav" id="6_eyf0d"]
 
 [node name="Game" type="Node2D"]
 process_mode = 3
@@ -19,3 +22,6 @@ position = Vector2(91, 164)
 
 [node name="WSM" type="Node" parent="."]
 script = ExtResource("5_dx1hd")
+
+[node name="AudioManager" parent="." instance=ExtResource("4_2clki")]
+music = Array[Resource]([ExtResource("5_eo24v"), ExtResource("6_eyf0d"), null])
