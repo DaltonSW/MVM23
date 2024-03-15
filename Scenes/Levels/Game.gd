@@ -2,10 +2,10 @@
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 class_name Game
 
+var pause_menu = preload("res://Scenes/UI/PauseMenu/PauseMenu.tscn")
+
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 const SAVE_PATH = "user://example_save_data.sav"
-
-var pause_menu
 
 @export var starting_map: String
 
@@ -19,15 +19,12 @@ func _ready():
     load_game()
     
     add_module("RoomTransitions.gd")
-
-    pause_menu = get_node("UI/PauseMenu")
-    pause_menu.visible = false
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
     if Input.is_action_just_pressed("pause"):
-        toggle_pause()
+        show_pause_menu()
     pass
 
 func init_room():
@@ -72,9 +69,10 @@ func save_game():
     
     save_manager.save_as_text(SAVE_PATH)
 
-func toggle_pause():
-    pause_menu.visible = !pause_menu.visible
-    get_tree().paused = !get_tree().paused
+func show_pause_menu():
+    var instance = pause_menu.instantiate()
+    # instance.global_position = $Player/Camera2D.global_position
+    $UI.add_child(instance)
 
 func get_room_name():
     return MetSys.get_current_room_name()

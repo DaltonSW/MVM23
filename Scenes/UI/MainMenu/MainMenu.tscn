@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c52yrln04mxrk" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
 
 [node name="Menu" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
