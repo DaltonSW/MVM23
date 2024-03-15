@@ -32,6 +32,7 @@ public partial class WorldStateManager : Node {
             { "WorldTwoBossDoor", false },
             { "WorldThreeDoorOne", false },
             { "WorldThreeDoorTwo", false },
+            { "DoubleDashDoor", false },
 
             // Levers
             { "World1/Lever/Crossroads", false },
@@ -84,6 +85,9 @@ public partial class WorldStateManager : Node {
                 break;
             case "WorldThreeKeyTwo":
                 WorldObjects["WorldThreeDoorTwo"] = true;
+                break;
+            case "DoubleDash":
+                WorldObjects["DoubleDashDoor"] = true;
                 break;
         }
     }
