@@ -29,7 +29,26 @@ func _process(_delta):
 
 func init_room():
     MetSys.get_current_room_instance().adjust_camera_limits($Player/Camera2D)
-    
+    play_world_music()
+
+func play_world_music():
+    var current_room_name = MetSys.get_current_room_name()
+    if "World 1" in current_room_name:
+        if "Boss" in current_room_name:
+            $AudioManager.play_music("W1_Boss")
+        else:
+            $AudioManager.play_music("W1")
+    elif "World 2" in current_room_name:
+        if "Boss" in current_room_name:
+            $AudioManager.play_music("W2_Boss")
+        else:
+            $AudioManager.play_music("W2")
+    elif "Virtual" in current_room_name:
+        if "Boss" in current_room_name:
+            $AudioManager.play_music("W3_Boss")
+        else:
+            $AudioManager.play_music("W3")
+
 func load_game():
     MetSys.reset_state()
     set_player($Player)
@@ -88,6 +107,17 @@ func save_game():
 func show_pause_menu():
     var instance = pause_menu.instantiate()
     $UI.add_child(instance)
+    instance.SetGame(self)
+    play_pause_music()
+
+func play_pause_music():
+    var current_room_name = MetSys.get_current_room_name()
+    if "World 1" in current_room_name:
+        $AudioManager.play_music("W1_Pause")
+    elif "World 2" in current_room_name:
+        $AudioManager.play_music("W2_Pause")
+    elif "Virtual" in current_room_name:
+        $AudioManager.play_music("W3_Pause")
 
 func get_room_name():
     return MetSys.get_current_room_name()

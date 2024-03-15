@@ -6,6 +6,12 @@ public partial class PauseMenu : Sprite2D {
     private Button _mainMenuButton;
     private Button _quitButton;
 
+    private GodotObject _game;
+
+    public void SetGame(GodotObject game) {
+        _game = game;
+    }
+
     public override void _Ready() {
         GetTree().Paused = true;
         
@@ -13,7 +19,6 @@ public partial class PauseMenu : Sprite2D {
         _loadSaveButton = GetNode<Button>("VBoxContainer/LoadSaveButton");
         _mainMenuButton = GetNode<Button>("VBoxContainer/MainMenuButton");
         _quitButton = GetNode<Button>("VBoxContainer/QuitButton");
-        
     }
 
     public override void _Process(double delta) {
@@ -30,6 +35,7 @@ public partial class PauseMenu : Sprite2D {
 
     private void _on_ResumeButton_pressed() {
         GetTree().Paused = false;
+        _game.Call("play_world_music");
         QueueFree();
     }
     
