@@ -3,7 +3,7 @@ using System;
 
 namespace MVM23;
 
-public partial class SlimeBoss : CharacterBody2D {
+public partial class SlimeBoss : CharacterBody2D, IHittable {
     
     private enum State {
         Idle,
@@ -23,10 +23,11 @@ public partial class SlimeBoss : CharacterBody2D {
     private Random _random;
 
     private AnimatedSprite2D _sprite;
+    private HitManager _hitManager;
     
     // Health properties
-    [Export] private float _maxHealth = 100;
-    private float _currentHealth;
+    [Export] private int _maxHealth = 5;
+    [Export] private int _currentHealth;
     
     // Attack properties
     [Export] public int MinIdleLoopsBeforeJump = 4;
@@ -52,6 +53,7 @@ public partial class SlimeBoss : CharacterBody2D {
         
         _projectileScene = GD.Load<PackedScene>("res://Scenes/Enemies/Boss/boss_projectile.tscn");
 
+        _hitManager = new HitManager(this, _maxHealth + _maxHealth * (int)_difficulty, _sprite);
 
         _random = new Random();
         
@@ -61,6 +63,18 @@ public partial class SlimeBoss : CharacterBody2D {
         _sprite.Play("idle");
         _canFlip = true;
     }
+    
+    public void TakeHit(Vector2 initialKnockbackVelocity)
+    {
+        _hitManager.TakeHit(initialKnockbackVelocity);
+    }
+    
+    public void QueueDeath()
+    {
+        QueueFree();
+    }
+
+    public bool DeathQueued() => IsQueuedForDeletion();
 
 
     public override void _PhysicsProcess(double delta) {
