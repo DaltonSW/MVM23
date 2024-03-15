@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://btjwofj6umq7t"]
+[gd_scene load_steps=8 format=3 uid="uid://btjwofj6umq7t"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/Game.gd" id="1_p8v4f"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_0dx4k"]
 [ext_resource type="PackedScene" uid="uid://b2yrjlexgqqvi" path="res://addons/audio-manager/AudioManager.tscn" id="4_2clki"]
+[ext_resource type="AudioStream" uid="uid://bc5wgaieqbm04" path="res://Assets/SFX/Dash.wav" id="5_7642v"]
 [ext_resource type="Script" path="res://Scenes/Utilities/WorldStateManager.cs" id="5_dx1hd"]
+[ext_resource type="AudioStream" uid="uid://c1tg5msxgooo8" path="res://Assets/SFX/Jump.wav" id="6_8pi7v"]
+[ext_resource type="AudioStream" uid="uid://cwdod0ek3m31u" path="res://Assets/SFX/Sword.wav" id="7_f1mkb"]
 
 [node name="Game" type="Node2D"]
 process_mode = 3
@@ -22,3 +25,4 @@ position = Vector2(91, 164)
 script = ExtResource("5_dx1hd")
 
 [node name="AudioManager" parent="." instance=ExtResource("4_2clki")]
+effects = Array[Resource]([ExtResource("5_7642v"), ExtResource("6_8pi7v"), ExtResource("7_f1mkb")])

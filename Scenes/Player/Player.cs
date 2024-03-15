@@ -48,6 +48,7 @@ public partial class Player : CharacterBody2D, IHittable {
     #region Fields
 
     private WorldStateManager _worldStateManager;
+    private GodotObject _audioManager;
     private RayCast2D _grappleCheck;
     private PlayerState _currentState;
     private Sword _sword;
@@ -134,6 +135,7 @@ public partial class Player : CharacterBody2D, IHittable {
 
     public override void _Ready() {
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
+        _audioManager = GetNode<GodotObject>("/root/Game/AudioManager");
 
         Gravity = (float)(_jumpHeight / (2 * Math.Pow(_timeInAir, 2)));
         ApexGravity = Gravity / 2;
@@ -209,6 +211,7 @@ public partial class Player : CharacterBody2D, IHittable {
             GD.Print("creating sword");
             _sword = _swordScene.Instantiate<Sword>();
             AddChild(_sword);
+            PlaySound("Sword");
             _sword.Rotation = GetAngleToMouse().NearestDirection8().Radians();
         }
 
@@ -254,6 +257,10 @@ public partial class Player : CharacterBody2D, IHittable {
     #endregion
 
     #region Public Methods
+
+    public void PlaySound(string sound) {
+        _audioManager.Call("play_fx", sound);
+    }
 
     public void UnlockAbility(string unlock) {
         Abilities[unlock] = true;
