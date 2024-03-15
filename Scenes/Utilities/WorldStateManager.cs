@@ -38,6 +38,7 @@ public partial class WorldStateManager : Node {
             { "DoubleDash", false },
             { "DashOnKill", false },
             { "KeyToWorldTwo", false },
+            { "WorldTwoBossKey", false},
             { "WorldThreeKeyOne", false },
             { "WorldThreeKeyTwo", false },
 
