@@ -23,7 +23,7 @@ public partial class Player : CharacterBody2D, IHittable {
     public double SuperJumpCurrentBufferTime { get; set; }
     public double CoyoteTimeElapsed { get; set; }
     public bool CoyoteTimeExpired { get; set; }
-    public int MaxHealth { get; private set; } = 15;
+    public int MaxHealth { get; private set; } = 5;
 
     public float CurrentHealth {
         get => _hitManager.HitPoints;
