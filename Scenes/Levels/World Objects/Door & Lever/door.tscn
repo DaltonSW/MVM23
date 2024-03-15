@@ -1,11 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://bp2m8h76moghn"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/World Objects/Door & Lever/Door.cs" id="1_arfuk"]
-[ext_resource type="Texture2D" uid="uid://eailrdnc0wq0" path="res://icon.svg" id="2_tyso4"]
+[ext_resource type="Texture2D" uid="uid://b08wxcydfbsnh" path="res://icon.svg" id="2_tyso4"]
 
 [node name="Door" type="Node2D"]
 script = ExtResource("1_arfuk")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_tyso4")

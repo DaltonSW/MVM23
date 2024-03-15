@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cjh7r5omh82ye"]
+[gd_scene load_steps=7 format=3 uid="uid://cjh7r5omh82ye"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_ae308"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_ca5h7"]
 [ext_resource type="PackedScene" uid="uid://gpdxpxul7dov" path="res://Scenes/Levels/World 1/Wood Background.tscn" id="3_wyyv1"]
 [ext_resource type="PackedScene" uid="uid://l1pht3bvo7gc" path="res://Scenes/Enemies/ConeWalker.tscn" id="4_anydd"]
 [ext_resource type="PackedScene" uid="uid://bxmn2bkeaqomj" path="res://Scenes/Enemies/RandomFlyer.tscn" id="5_18v3j"]
+[ext_resource type="PackedScene" uid="uid://calvd3fseh7l4" path="res://Scenes/Levels/World Objects/Health Upgrade/health_upgrade.tscn" id="6_5vkcd"]
 
 [node name="VerticalHealthUpgrade" type="Node2D"]
 
@@ -25,3 +26,7 @@ position = Vector2(111, 677)
 
 [node name="RandomFlyer" parent="." instance=ExtResource("5_18v3j")]
 position = Vector2(359, 219)
+
+[node name="HealthUpgrade" parent="." instance=ExtResource("6_5vkcd")]
+position = Vector2(94, 484)
+HealthUpgradeID = "Health5"

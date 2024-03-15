@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://tx7d3efxq8gi"]
+[gd_scene load_steps=7 format=3 uid="uid://tx7d3efxq8gi"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_aal7k"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="1_vr02q"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_lyto7"]
 [ext_resource type="PackedScene" uid="uid://cpn4gpvmfivah" path="res://Scenes/Levels/World Objects/Ability Unlock/ability_unlock.tscn" id="4_wicm1"]
 [ext_resource type="Texture2D" uid="uid://y50pafykbmwi" path="res://Scenes/Abilities/grapple_hook/grappling_hook.png" id="5_l2qch"]
+[ext_resource type="PackedScene" uid="uid://calvd3fseh7l4" path="res://Scenes/Levels/World Objects/Health Upgrade/health_upgrade.tscn" id="6_33yrp"]
 
 [node name="CourtyardRight" type="Node2D"]
 
@@ -23,3 +24,7 @@ _myUnlock = "Grapple"
 
 [node name="Sprite2D" type="Sprite2D" parent="AbilityUnlock"]
 texture = ExtResource("5_l2qch")
+
+[node name="HealthUpgrade" parent="." instance=ExtResource("6_33yrp")]
+position = Vector2(1250, 161)
+HealthUpgradeID = "Health8"

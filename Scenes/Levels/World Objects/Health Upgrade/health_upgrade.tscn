@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://calvd3fseh7l4"]
+[gd_scene load_steps=4 format=3 uid="uid://calvd3fseh7l4"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/World Objects/Health Upgrade/HealthUpgrade.cs" id="1_qt51s"]
+[ext_resource type="Texture2D" uid="uid://f73tkhcyg0ii" path="res://Scenes/Abilities/health/health.png" id="2_xt2rf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q0164"]
 radius = 15.0333
@@ -12,3 +13,4 @@ script = ExtResource("1_qt51s")
 shape = SubResource("CircleShape2D_q0164")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_xt2rf")

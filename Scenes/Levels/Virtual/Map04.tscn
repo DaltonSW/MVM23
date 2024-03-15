@@ -19,6 +19,7 @@ layer_0/tile_data = PackedInt32Array(3014659, 65536, 9, 2949123, 65536, 9, 28835
 
 [node name="AbilityUnlock" parent="." instance=ExtResource("4_l8lcj")]
 position = Vector2(586, 526)
+_myUnlock = "WorldTwoBossKey"
 
 [node name="Sprite2D" type="Sprite2D" parent="AbilityUnlock"]
 texture = ExtResource("5_x0m1t")

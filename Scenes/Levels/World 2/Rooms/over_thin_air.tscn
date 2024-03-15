@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ci7231fqwukm"]
+[gd_scene load_steps=6 format=3 uid="uid://ci7231fqwukm"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_r2g7b"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_o4q23"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_avhlx"]
 [ext_resource type="PackedScene" uid="uid://bfkabr4b4tedi" path="res://Scenes/Enemies/ConeSniper.tscn" id="4_0x2i8"]
+[ext_resource type="PackedScene" uid="uid://calvd3fseh7l4" path="res://Scenes/Levels/World Objects/Health Upgrade/health_upgrade.tscn" id="5_vui15"]
 
 [node name="OverThinAir" type="Node2D"]
 
@@ -18,3 +19,7 @@ layer_0/tile_data = PackedInt32Array(2883663, 393216, 6, 2883658, 0, 15, 2883659
 
 [node name="ConeSniper" parent="." instance=ExtResource("4_0x2i8")]
 position = Vector2(1205, 261)
+
+[node name="HealthUpgrade" parent="." instance=ExtResource("5_vui15")]
+position = Vector2(222, 204)
+HealthUpgradeID = "Health11"
