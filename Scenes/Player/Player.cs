@@ -130,7 +130,6 @@ public partial class Player : CharacterBody2D, IHittable {
 
         _grappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
 
-        _currentState = new IdleState(this);
         _reticleFrozen = false;
         PlayerCanDash = true;
         _canThrowGrapple = true;
@@ -148,6 +147,7 @@ public partial class Player : CharacterBody2D, IHittable {
         _swordScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/sword/Sword.tscn");
 
         _hitManager = new HitManager(this, MaxHealth, _sprite);
+        _currentState = new IdleState(this);
     }
 
     public override void _Process(double delta) {
