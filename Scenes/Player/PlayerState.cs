@@ -287,7 +287,7 @@ public class DashState : PlayerState {
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
-        player.PlayerCanDash = false;
+        player.DashesAvailable -= 1;
         player.Invulnerable = true;
         player.ResetDashGraceTime();
     }
