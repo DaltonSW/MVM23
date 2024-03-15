@@ -67,6 +67,9 @@ public static class Extensions
     public static float GetAngleToPoint(this Node2D n, Vector2 other) =>
         n.GlobalPosition.AngleToPoint(other);
     
+    public static Angle GetAngleObjectToNode(this Node2D n, Node2D other) =>
+        Angle.FromRadians(n.GetAngleToNode(other));
+
     public static float GetAngleToNode(this Node2D n, Node2D other) =>
         n.GetAngleToPoint(other.GlobalPosition);
 
@@ -283,7 +286,13 @@ public class Angle
     }
 
     public Angle ReflectedOverY() =>
-        Angle.FromRadians(Mathf.Pi - Radians);
+        Angle.FromRadians(
+                Radians switch
+                {
+                    < 0  => -Mathf.Pi - Radians,
+                    >= 0 => Mathf.Pi - Radians,
+                    _ => throw new ArgumentOutOfRangeException(nameof(Radians)),
+                });
 
     public Angle Lerp(Angle other, float weight) =>
         Angle.FromRadians(Mathf.LerpAngle(this.Radians, other.Radians, weight));
