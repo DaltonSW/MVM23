@@ -7,7 +7,7 @@
 [node name="Game" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_p8v4f")
-starting_map = "res://Scenes/Levels/World 2/Rooms/elevator_building.tscn"
+starting_map = "res://Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn"
 
 [node name="Player" parent="." instance=ExtResource("2_0dx4k")]
 process_mode = 1
