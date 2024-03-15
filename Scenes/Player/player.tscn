@@ -1,20 +1,21 @@
-[gd_scene load_steps=16 format=3 uid="uid://co3marnlrukwe"]
+[gd_scene load_steps=20 format=3 uid="uid://co3marnlrukwe"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_l6vq3"]
-[ext_resource type="Texture2D" uid="uid://dyp2kyndqbnly" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
-[ext_resource type="Texture2D" uid="uid://dqkkmg4c86vjv" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
-[ext_resource type="Texture2D" uid="uid://bb4op5pn3yn07" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
-[ext_resource type="Texture2D" uid="uid://dxfdesm0su656" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
+[ext_resource type="Texture2D" uid="uid://dcnj1hvm8ajnx" path="res://Scenes/Player/Sprites/char_charging.png" id="3_87exv"]
+[ext_resource type="Texture2D" uid="uid://dpdn78cbfs20a" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
+[ext_resource type="Texture2D" uid="uid://b8xmxn6g7ensk" path="res://Scenes/Player/Sprites/char_dash.png" id="4_t7ooy"]
+[ext_resource type="Texture2D" uid="uid://b52gjexdgmppl" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
+[ext_resource type="Texture2D" uid="uid://bvwooa42b5m50" path="res://Scenes/Player/Sprites/char_falling.png" id="5_wov8y"]
+[ext_resource type="Texture2D" uid="uid://cp5dj51fm6p0i" path="res://Scenes/Player/Sprites/char_grapple.png" id="6_ulv1e"]
+[ext_resource type="Texture2D" uid="uid://d1bg57c3l3bk7" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
+[ext_resource type="Texture2D" uid="uid://csl8ooys8ilo2" path="res://Scenes/Player/Sprites/char_superjump.png" id="10_chj6v"]
+[ext_resource type="Texture2D" uid="uid://bbd061fklk2th" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
 size = Vector2(16, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pbjb5"]
 atlas = ExtResource("4_4n0h4")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ttd6e"]
-atlas = ExtResource("5_24xm3")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8vt4y"]
@@ -45,7 +46,7 @@ region = Rect2(96, 0, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pbjb5")
+"texture": ExtResource("3_87exv")
 }],
 "loop": true,
 "name": &"charging",
@@ -53,7 +54,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pbjb5")
+"texture": ExtResource("4_t7ooy")
 }],
 "loop": true,
 "name": &"dash",
@@ -61,7 +62,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ttd6e")
+"texture": ExtResource("5_wov8y")
 }],
 "loop": true,
 "name": &"fall",
@@ -69,7 +70,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pbjb5")
+"texture": ExtResource("6_ulv1e")
 }],
 "loop": true,
 "name": &"grapple",
@@ -113,7 +114,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pbjb5")
+"texture": ExtResource("10_chj6v")
 }],
 "loop": true,
 "name": &"superjump",
@@ -142,7 +143,7 @@ shape = SubResource("RectangleShape2D_cfoin")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_agbor")
-animation = &"idle"
+animation = &"superjump"
 
 [node name="PosBonkCheck" type="RayCast2D" parent="Sprite"]
 position = Vector2(8, -12)
