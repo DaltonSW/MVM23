@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cb5pyu6qdjbuh"]
 
 [ext_resource type="Script" path="res://Scenes/Enemies/Boss/BossProjectile.cs" id="1_d24qs"]
-[ext_resource type="Texture2D" uid="uid://takpp2rgdcd2" path="res://Scenes/Enemies/Boss/Projectile.png" id="2_n1ger"]
+[ext_resource type="Texture2D" uid="uid://c1r32iiuv48og" path="res://Scenes/Enemies/Boss/Projectile.png" id="2_n1ger"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qjrky"]
 radius = 8.0
@@ -14,4 +14,11 @@ script = ExtResource("1_d24qs")
 texture = ExtResource("2_n1ger")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qjrky")
+
+[node name="DashCollisionArea" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DashCollisionArea"]
 shape = SubResource("CircleShape2D_qjrky")

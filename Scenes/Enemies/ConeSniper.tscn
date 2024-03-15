@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_y5b0e"]
 
 [node name="ConeSniper" type="CharacterBody2D" groups=["hurt_player_on_collide"]]
+collision_layer = 4
 script = ExtResource("1_ioh8p")
 
 [node name="Shapes" parent="." instance=ExtResource("2_cldff")]

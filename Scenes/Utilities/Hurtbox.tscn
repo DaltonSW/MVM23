@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://Scenes/Utilities/Hurtbox.cs" id="1_3drnx"]
 
 [node name="Hurtbox" type="Area2D" groups=["hittable"]]
+collision_layer = 17
+collision_mask = 17
 script = ExtResource("1_3drnx")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

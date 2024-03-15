@@ -168,8 +168,6 @@ public class FireAtWill : IAi
                 var targetAngle = _self.GetAngleObjectToNode(_target);
                 _aim = _aim.Lerp(targetAngle, (float)(delta * READY_SPEED));
 
-                GD.Print("aim: " + _aim.Radians);
-                GD.Print(_xDirMan.SpriteRotationFor(_aim));
                 // TODO: combine into one gun node
                 var gunRotation = _xDirMan.SpriteRotationFor(_aim); 
                 _gun.Rotation = gunRotation;
@@ -222,7 +220,10 @@ public class FireAtWill : IAi
     }
 
     public XDirection NextXDirection(XDirection current) =>
-        _self.XDirectionTo(_target);
+        _state switch {
+            ShootingState.READYING => _self.XDirectionTo(_target),
+            _ => current,
+        };
     public float FootSpeed() => 0;
 }
 

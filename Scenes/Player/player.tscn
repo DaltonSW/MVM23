@@ -1,10 +1,10 @@
 [gd_scene load_steps=16 format=3 uid="uid://co3marnlrukwe"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_l6vq3"]
-[ext_resource type="Texture2D" uid="uid://dyp2kyndqbnly" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
-[ext_resource type="Texture2D" uid="uid://dqkkmg4c86vjv" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
-[ext_resource type="Texture2D" uid="uid://bb4op5pn3yn07" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
-[ext_resource type="Texture2D" uid="uid://dxfdesm0su656" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
+[ext_resource type="Texture2D" uid="uid://by28y4qca7khu" path="res://Scenes/Player/Sprites/char_idle.png" id="4_4n0h4"]
+[ext_resource type="Texture2D" uid="uid://hxty2j1v8kym" path="res://Scenes/Player/Sprites/char_jump.png" id="5_24xm3"]
+[ext_resource type="Texture2D" uid="uid://d2ovih3sn48rv" path="res://Scenes/Player/Sprites/char_walk.png" id="7_xaavf"]
+[ext_resource type="Texture2D" uid="uid://bnq6tvouo886p" path="res://Scenes/Player/Sprites/reticle.png" id="10_kjnoh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cfoin"]
 size = Vector2(16, 28)
@@ -120,7 +120,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D" groups=["enemy_hurt_on_collide", "enemy_target"]]
+[node name="Player" type="CharacterBody2D" groups=["enemy_hitboxes_hurt", "enemy_hurt_on_collide", "enemy_target"]]
+collision_layer = 5
 script = ExtResource("1_l6vq3")
 
 [node name="Reticle" type="Node2D" parent="."]
@@ -166,3 +167,11 @@ collide_with_areas = true
 
 [node name="DashParticles" type="CPUParticles2D" parent="."]
 emitting = false
+
+[node name="DashCollisionArea" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DashCollisionArea"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_cfoin")

@@ -46,6 +46,7 @@ animations = [{
 script = ExtResource("1_pb1ik")
 
 [node name="Body" type="CharacterBody2D" parent="." groups=["hurt_player_on_collide"]]
+collision_layer = 4
 script = ExtResource("2_mw4us")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Body"]
@@ -61,5 +62,10 @@ Hurtee = NodePath("../..")
 
 [node name="CollisionPolygon2D" parent="Body/Hurtbox" index="0"]
 polygon = PackedVector2Array(-24, -4.55959, -24, 6.38342, 23, 6.38342, 4, -4.55959)
+
+[node name="DashCollisionArea" type="Area2D" parent="Body"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body/DashCollisionArea"]
+polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
 
 [editable path="Body/Hurtbox"]
