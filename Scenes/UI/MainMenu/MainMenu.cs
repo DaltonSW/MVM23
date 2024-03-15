@@ -1,8 +1,6 @@
 using Godot;
 
 public partial class MainMenu : Control {
-    private AudioStreamPlayer _audioPlayer;
-    private AudioStreamWav _menuSong;
     private Sprite2D _creditsSprite;
 
     private Button _newGameButton;
@@ -11,18 +9,11 @@ public partial class MainMenu : Control {
     private Button _quitButton;
 
     public override void _Ready() {
-        // _menuSong = GD.Load<AudioStreamWav>("res://Assets/Sounds/MainMenu.wav");
-        // _audioPlayer = GetNode<AudioStreamPlayer>("AudioPlayer");
         _creditsSprite = GetNode<Sprite2D>("Credits");
         _newGameButton = GetNode<Button>("HBoxContainer/NewGameButton");
         _loadGameButton = GetNode<Button>("HBoxContainer/LoadGameButton");
         _creditsButton = GetNode<Button>("HBoxContainer/CreditsButton");
         _quitButton = GetNode<Button>("HBoxContainer/QuitButton");
-
-        // _audioPlayer.Autoplay = true;
-        // _audioPlayer.Stream = _menuSong;
-        // _audioPlayer.VolumeDb = -5f;
-        // _audioPlayer.Play();
     }
 
     public override void _Process(double delta) {
