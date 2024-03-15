@@ -22,7 +22,7 @@ func _ready():
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
     if Input.is_action_just_pressed("pause"):
         show_pause_menu()
     pass
@@ -59,8 +59,18 @@ func load_game():
     else:
         MetSys.set_save_data()
     
-    load_room(starting_map)
+    load_room_wrapper(starting_map)
     
+func load_room_wrapper(map):
+    load_room(map)
+
+func teleport_player(map, tele_pos):
+    load_room_wrapper(map)
+    $Player.global_position = tele_pos
+   
+static func print_hello():
+    print("Hello!") 
+
 func save_game():
     var save_manager := SaveManager.new()
     
