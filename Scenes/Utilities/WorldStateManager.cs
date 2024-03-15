@@ -26,6 +26,13 @@ public partial class WorldStateManager : Node {
             { "World1/Door/CrossroadsRight", false },
             { "World1/Door/BigRoomBottomLeft", false },
             { "World1/Door/BigRoomTopRight", false },
+            
+            // Key Doors
+            { "DoorToWorldTwo", false },
+            { "WorldTwoBossDoor", false },
+            { "WorldThreeDoorOne", false },
+            { "WorldThreeDoorTwo", false },
+            { "DoubleDashDoor", false },
 
             // Levers
             { "World1/Lever/Crossroads", false },
@@ -41,6 +48,21 @@ public partial class WorldStateManager : Node {
             { "WorldTwoBossKey", false},
             { "WorldThreeKeyOne", false },
             { "WorldThreeKeyTwo", false },
+            
+            // Health Upgrades
+            {"Health1", false},
+            {"Health2", false},
+            {"Health3", false},
+            {"Health4", false},
+            {"Health5", false},
+            {"Health6", false},
+            {"Health7", false},
+            {"Health8", false},
+            {"Health9", false},
+            {"Health10", false},
+            {"Health11", false},
+            {"Health12", false},
+            {"Health13", false},
 
             // Testing
             { "TestLever", false },
@@ -51,6 +73,23 @@ public partial class WorldStateManager : Node {
 
     public void SetObjectAsActivated(string objectID) {
         WorldObjects[objectID] = true;
+        switch (objectID) {
+            case "KeyToWorldTwo":
+                WorldObjects["DoorToWorldTwo"] = true;
+                break;
+            case "WorldTwoBossKey":
+                WorldObjects["WorldTwoBossDoor"] = true;
+                break;
+            case "WorldThreeKeyOne":
+                WorldObjects["WorldThreeDoorOne"] = true;
+                break;
+            case "WorldThreeKeyTwo":
+                WorldObjects["WorldThreeDoorTwo"] = true;
+                break;
+            case "DoubleDash":
+                WorldObjects["DoubleDashDoor"] = true;
+                break;
+        }
     }
 
     public bool IsObjectActivated(string objectID) {
