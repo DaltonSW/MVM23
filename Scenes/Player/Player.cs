@@ -325,6 +325,8 @@ public partial class Player : CharacterBody2D, IHittable {
     public bool DeathQueued() => false; // Necessary to implement HitManager
 
     public void RestoreHitPoints() => _hitManager.HitPoints = MaxHealth;
+    
+    public void AddHealth() => MaxHealth += 1;
 
     public bool MustKnockOffFloorToCreateDistance() => IsOnFloor();
 
