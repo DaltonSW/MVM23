@@ -136,11 +136,12 @@ public class JumpState : PlayerState {
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
 
-    private const float BoostJumpVertMult = 0.75F;
-    private const float BoostJumpHorzMult = 2.5F;
+    private const float BoostJumpVertMult = 0.8F;
+    private const float BoostJumpHorzMult = 1.1F;
 
     public JumpState(Player player, Player.JumpType jumpType) {
         player.ChangeAnimation("jump");
+        player.PlaySound("Jump");
         
         var jumpSpeed = player.JumpSpeed;
         var horizSpeed = player.Velocity.X;
@@ -284,6 +285,7 @@ public class DashState : PlayerState {
 
     public DashState(Player.InputInfo inputs, Player player) {
         player.ChangeAnimation("dash");
+        player.PlaySound("Dash");
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;

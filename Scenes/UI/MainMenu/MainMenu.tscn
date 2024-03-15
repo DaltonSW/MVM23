@@ -29,6 +29,7 @@ scale = Vector2(1.00156, 1.00278)
 texture = ExtResource("3_o51p4")
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
+autoplay = true
 
 [node name="Credits" type="Sprite2D" parent="."]
 visible = false
