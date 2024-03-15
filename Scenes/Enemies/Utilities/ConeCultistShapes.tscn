@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://p2gvd5ag5tu7"]
+[gd_scene load_steps=11 format=3 uid="uid://p2gvd5ag5tu7"]
 
 [ext_resource type="Texture2D" uid="uid://kbkm66q0trwb" path="res://Scenes/Enemies/cone_walk.png" id="1_e1jvd"]
 [ext_resource type="PackedScene" uid="uid://bp0sboaimndn7" path="res://Scenes/Utilities/Hurtbox.tscn" id="2_y0y0r"]
@@ -55,6 +55,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1nvj6"]
+radius = 5.0
+height = 34.0
+
 [node name="CollisionShape2D" type="CollisionShape2D"]
 position = Vector2(-2, 7)
 shape = SubResource("CapsuleShape2D_7svgw")
@@ -86,5 +90,12 @@ position = Vector2(2, -7)
 
 [node name="CollisionPolygon2D" parent="Hurtbox" index="0"]
 polygon = PackedVector2Array(-8, -8.20726, -8, 20.9741, 4, 20.9741, 4, -8.20726)
+
+[node name="DashCollisionArea" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DashCollisionArea"]
+shape = SubResource("CapsuleShape2D_1nvj6")
 
 [editable path="Hurtbox"]

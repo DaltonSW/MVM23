@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_a3cei"]
 
 [node name="ConeWalker" type="CharacterBody2D" groups=["hurt_player_on_collide"]]
+collision_layer = 4
 script = ExtResource("1_ldup0")
 
 [node name="Shapes" parent="." instance=ExtResource("2_f3jer")]

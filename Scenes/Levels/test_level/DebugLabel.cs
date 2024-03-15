@@ -12,6 +12,6 @@ public partial class DebugLabel : Label {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        Text = $"Superjump Buffer: {_player.SuperJumpCurrentBufferTime}";
+        Text = $"Superjump Buffer: {_player.CurrentHealth}";
     }
 }

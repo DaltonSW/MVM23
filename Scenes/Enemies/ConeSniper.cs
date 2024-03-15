@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class ConeSniper : CharacterBody2D, IHittable
 {
@@ -7,6 +8,7 @@ public partial class ConeSniper : CharacterBody2D, IHittable
     [Export] float KnockbackMagnitude { get; set; } = 100f;
 
     private AnimatedSprite2D _sprite;
+    private Polygon2D _laserSight;
     private XDirectionManager _xDirMan;
 
     private float _gravity;
@@ -23,6 +25,9 @@ public partial class ConeSniper : CharacterBody2D, IHittable
         var dropAheadRayCast = GetNode<RayCast2D>("Shapes/DropAheadRayCast");
         var edgeAheadRayCast = GetNode<RayCast2D>("Shapes/EdgeAheadRayCast");
         var gun = GetNode<Sprite2D>("Gun");
+        var beamArea = GetNode<Area2D>("BeamArea");
+        var beam = GetNode<Polygon2D>("Beam");
+        var laserSight = GetNode<Polygon2D>("LaserSight");
         _xDirMan = GetNode<XDirectionManager>("XDirectionManager");
 
         _gravity = (float)ProjectSettings.GetSetting("physics/2d/default_gravity");
@@ -30,7 +35,7 @@ public partial class ConeSniper : CharacterBody2D, IHittable
         _ai = new AvoidDrops(dropAheadRayCast,
                 new NoticeTarget(lineOfSight,
                     new Patrol(edgeAheadRayCast),
-                    target => new FireAtWill(gun, this, target, _xDirMan)));
+                    target => new FireAtWill(gun, laserSight, beam, beamArea, this, target, _xDirMan)));
 
         _hitManager = new HitManager(this, StartHitPoints, _sprite);
     }
@@ -113,12 +118,17 @@ public partial class ConeSniper : CharacterBody2D, IHittable
 
 public class FireAtWill : IAi
 {
+    private const float KNOCKBACK_MAGNITUDE = 100f;
     private const float READY_THRESHOLD = (float) Math.PI / 128;
-    private const float READY_SPEED = 2f;
+    private const float READY_SPEED = 3f;
     private const double AIM_DURATION = 0.5f;
     private const double FIRE_DURATION = 0.1f;
 
     private Node2D _gun;
+    private Node2D _aimingIndicator;
+    private Node2D _damageIndicator;
+    private Area2D _hitbox;
+
     private Node2D _self;
     private Node2D _target;
     private XDirectionManager _xDirMan;
@@ -129,9 +139,19 @@ public class FireAtWill : IAi
 
     private ShootingState _state;
 
-    public FireAtWill(Node2D gun, Node2D self, Node2D target, XDirectionManager xDirMan)
+    public FireAtWill(
+            Node2D gun,
+            Node2D aimingIndicator,
+            Node2D damageIndicator,
+            Area2D damageZone,
+            Node2D self,
+            Node2D target,
+            XDirectionManager xDirMan)
     {
         _gun = gun;
+        _aimingIndicator = aimingIndicator;
+        _damageIndicator = damageIndicator;
+        _hitbox = damageZone;
         _self = self;
         _target = target;
         _xDirMan = xDirMan;
@@ -145,34 +165,54 @@ public class FireAtWill : IAi
         switch (_state)
         {
             case ShootingState.READYING:
-                var targetAngle = _self.GetAngleObjectTo(_target.GlobalPosition);
+                var targetAngle = _self.GetAngleObjectToNode(_target);
                 _aim = _aim.Lerp(targetAngle, (float)(delta * READY_SPEED));
-                _gun.Rotation = _xDirMan.SpriteRotationFor(_aim);
+
+                // TODO: combine into one gun node
+                var gunRotation = _xDirMan.SpriteRotationFor(_aim); 
+                _gun.Rotation = gunRotation;
+                _aimingIndicator.Rotation = gunRotation;
+                _damageIndicator.Rotation = gunRotation;
+                _hitbox.Rotation = gunRotation;
+
+                _aimingIndicator.Visible = true;
 
                 var aimError = Math.Abs(_aim.SmallestAngleTo(targetAngle).Radians);
                 if (aimError <= READY_THRESHOLD)
                 {            
                     nextState = ShootingState.AIMING;
+                    _aimingIndicator.Visible = false;
                     _aimTimeElapsed = 0;
                 }
                 break;
 
             case ShootingState.AIMING:
                 _aimTimeElapsed += delta;
+                _aimingIndicator.Visible = true;
                 if (_aimTimeElapsed >= AIM_DURATION)
                 {
                     nextState = ShootingState.FIRING;
+                    _aimingIndicator.Visible = false;
                     _fireTimeElapsed = 0;
                 }
                 break;
 
             case ShootingState.FIRING:
                 _fireTimeElapsed += delta;
-                _gun.Scale = _gun.Scale.MapX(x => x*5);
+                _damageIndicator.Visible = true;
+                
+                var hittables =
+                    from body in _hitbox.GetOverlappingBodies()
+                    where body.IsInGroup("enemy_hitboxes_hurt")
+                    select body;
+                foreach (var hittable in hittables)
+                {
+                    ((IHittable) hittable).TakeHit(Vector2s.FromPolar(KNOCKBACK_MAGNITUDE, _gun.GetAngleToNode(hittable)));
+                }
                 if (_fireTimeElapsed >= AIM_DURATION)
                 {
                     nextState = ShootingState.READYING;
-                    _gun.Scale = _gun.Scale.WithX(1);
+                    _damageIndicator.Visible = false;
                 }
                 break;
         }
@@ -180,7 +220,10 @@ public class FireAtWill : IAi
     }
 
     public XDirection NextXDirection(XDirection current) =>
-        _self.XDirectionTo(_target);
+        _state switch {
+            ShootingState.READYING => _self.XDirectionTo(_target),
+            _ => current,
+        };
     public float FootSpeed() => 0;
 }
 
