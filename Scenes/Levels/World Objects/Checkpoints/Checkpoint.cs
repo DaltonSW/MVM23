@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 using MVM23;
 
@@ -28,7 +27,7 @@ public partial class Checkpoint : Area2D
         if (!OverlapsBody(_player)) return;
 
         _sprite.Play("active");
-        _worldStateManager.SetCurrentCheckpoint(CheckpointID);
+        _worldStateManager.SetCurrentCheckpoint(CheckpointID, GlobalPosition);
         _worldStateManager.Save();
         _player.RestoreHitPoints();
     }

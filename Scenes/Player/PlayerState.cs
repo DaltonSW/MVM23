@@ -40,17 +40,18 @@ public abstract class PlayerState {
     }
 }
 
-// Consider "GroundedState" and "AerialState" as intermediate classes?
-
 public class IdleState : PlayerState {
     public override string Name => "Idle";
 
-    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public IdleState(Player player) {
         player.ChangeAnimation("idle");
+    }
+
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.Velocity = GenericPositionUpdates(player, inputs, delta);
 
         if (player.CanStartCharge(inputs))
-            return new ChargeState();
+            return new ChargeState(player);
 
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(inputs, player);
@@ -63,12 +64,12 @@ public class IdleState : PlayerState {
         }
 
         if (!player.IsOnFloor())
-            return new FallState();
+            return new FallState(player);
 
         // ReSharper disable once ConvertIfStatementToReturnStatement
         if (inputs.InputDirection.X == 0) return null;
 
-        return new RunState();
+        return new RunState(player);
     }
 }
 
@@ -79,13 +80,17 @@ public class ChargeState : PlayerState {
 
     private double _currentChargeTime;
 
+    public ChargeState(Player player) {
+        player.ChangeAnimation("charging");
+    }
+
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.Velocity = Vector2.Zero;
         if (!inputs.IsPushingCrouch) {
             player.ChangeColor(Colors.White);
             _currentChargeTime = 0;
-            return player.CanSuperJump ? new SuperJumpState() : new IdleState();
+            return player.CanSuperJump ? new SuperJumpState(player) : new IdleState(player);
         }
 
         _currentChargeTime += delta;
@@ -102,12 +107,16 @@ public class SuperJumpState : PlayerState {
     public override string Name => "Super Jump";
 
     [Export] public float SuperJumpVelocity = -750f;
+    
+    public SuperJumpState(Player player) {
+        player.ChangeAnimation("superjump");
+    }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.SuperJumpCurrentBufferTime = 0;
         if (inputs.IsPushingCrouch) {
             player.CanSuperJump = false;
-            return new IdleState();
+            return new IdleState(player);
         }
         
         if (inputs.IsPushingDash) {
@@ -130,6 +139,8 @@ public class JumpState : PlayerState {
     private const float BoostJumpHorzMult = 2.5F;
 
     public JumpState(Player player, Player.JumpType jumpType) {
+        player.ChangeAnimation("jump");
+        
         var jumpSpeed = player.JumpSpeed;
         var horizSpeed = player.Velocity.X;
 
@@ -153,8 +164,6 @@ public class JumpState : PlayerState {
     }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        player.ChangeAnimation("jump");
-
         var velocity = GenericPositionUpdates(player, inputs, delta);
 
         player.Velocity = velocity;
@@ -178,10 +187,10 @@ public class JumpState : PlayerState {
         _nudgeEnterVel = player.Velocity;
 
         if (player.Velocity.Y > 0)
-            return new FallState();
+            return new FallState(player);
 
         if (player.IsOnFloor())
-            return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
+            return player.Velocity == Vector2.Zero ? new IdleState(player) : new RunState(player);
 
         return null;
     }
@@ -191,10 +200,12 @@ public class FallState : PlayerState {
     public override string Name => "Fall";
 
     [Export] public double CoyoteTimeBuffer = 0.1;
+    
+    public FallState(Player player) {
+        player.ChangeAnimation("fall");
+    }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
-        player.ChangeAnimation("fall");
-
         player.Velocity = GenericPositionUpdates(player, inputs, delta);
 
         if (!player.CoyoteTimeExpired) {
@@ -221,20 +232,22 @@ public class FallState : PlayerState {
         if (!player.IsOnFloor()) return null;
 
         player.ResetJumpBuffers();
-        return player.Velocity == Vector2.Zero ? new IdleState() : new RunState();
+        return player.Velocity == Vector2.Zero ? new IdleState(player) : new RunState(player);
     }
 }
 
 public class RunState : PlayerState {
     public override string Name => "Run";
 
-    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+    public RunState(Player player) {
         player.ChangeAnimation("run");
+    }
 
+    public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
         player.Velocity = GenericPositionUpdates(player, inputs, delta);
 
         if (player.CanStartCharge(inputs))
-            return new ChargeState();
+            return new ChargeState(player);
 
         if (inputs.IsPushingDash && player.CanDash())
             return new DashState(inputs, player);
@@ -247,10 +260,10 @@ public class RunState : PlayerState {
         }
 
         if (!player.IsOnFloor())
-            return new FallState();
+            return new FallState(player);
 
         if (inputs.InputDirection == Vector2.Zero & player.Velocity == Vector2.Zero)
-            return new IdleState();
+            return new IdleState(player);
 
         return null;
     }
@@ -269,6 +282,7 @@ public class DashState : PlayerState {
     private readonly Vector2 _dashCurrentAngle;
 
     public DashState(Player.InputInfo inputs, Player player) {
+        player.ChangeAnimation("dash");
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
@@ -280,7 +294,6 @@ public class DashState : PlayerState {
             player.SuperJumpCurrentBufferTime += delta;
 
         _dashTimeElapsed += delta;
-        player.ChangeAnimation("jump");
         player.SetEmittingDashParticles(true);
 
         player.Velocity = _dashCurrentAngle * (float)DashSpeed;
@@ -299,7 +312,7 @@ public class DashState : PlayerState {
 
         if (player.CanStartCharge(inputs)) {
             player.SuperJumpCurrentBufferTime = 0;
-            return new ChargeState();
+            return new ChargeState(player);
         }
 
         if (inputs.IsPushingJump) {
@@ -328,7 +341,7 @@ public class DashState : PlayerState {
             player.SuperJumpCurrentBufferTime < player.SuperJumpInitBufferLimit)
             return null;
 
-        return player.IsOnFloor() ? new IdleState() : new FallState();
+        return player.IsOnFloor() ? new IdleState(player) : new FallState(player);
     }
 }
 
@@ -343,6 +356,8 @@ public class GrappleState : PlayerState {
     private readonly float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
     public GrappleState(Player player) {
+        player.ChangeAnimation("grapple");
+        
         var entryVelocity = player.Velocity;
         player.Velocity = Vector2.Zero;
         
@@ -370,16 +385,16 @@ public class GrappleState : PlayerState {
             player.Reticle.Rotation = 0;
 
             if (player.IsOnFloor()) {
-                return inputs.InputDirection.X != 0 ? new RunState() : new IdleState();
+                return inputs.InputDirection.X != 0 ? new RunState(player) : new IdleState(player);
             }
-            return new FallState();
+            return new FallState(player);
         }
 
         if (player.IsOnFloor() || player.IsOnWall() || player.IsOnCeiling()) {
             player.GrappledPoint = Vector2.Inf;
             player.QueueRedraw();
             player.Reticle.Rotation = 0;
-            return new IdleState();
+            return new IdleState(player);
         }
 
         // if (player.IsOnCeiling()) {
