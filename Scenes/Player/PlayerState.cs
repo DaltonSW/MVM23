@@ -136,8 +136,8 @@ public class JumpState : PlayerState {
     private Vector2 _nudgeEnterVel = Vector2.Inf;
     private const int NudgeAmount = 6;
 
-    private const float BoostJumpVertMult = 0.75F;
-    private const float BoostJumpHorzMult = 2.5F;
+    private const float BoostJumpVertMult = 0.8F;
+    private const float BoostJumpHorzMult = 1.1F;
 
     public JumpState(Player player, Player.JumpType jumpType) {
         player.ChangeAnimation("jump");
