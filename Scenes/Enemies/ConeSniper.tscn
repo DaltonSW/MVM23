@@ -15,9 +15,28 @@ Hurtee = NodePath("../..")
 
 [node name="XDirectionManager" parent="." instance=ExtResource("3_y5b0e")]
 
+[node name="LaserSight" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(15, 4)
+color = Color(1, 0, 0, 0.87451)
+polygon = PackedVector2Array(0, -4, 640, -4, 640, -3, 0, -3)
+
 [node name="Gun" type="Sprite2D" parent="."]
-position = Vector2(5, 6)
+position = Vector2(15, 4)
 texture = ExtResource("3_xm5ao")
+
+[node name="BeamArea" type="Area2D" parent="."]
+position = Vector2(15, 4)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BeamArea"]
+position = Vector2(15, 4)
+polygon = PackedVector2Array(-9, -9, 625, -9, 625, 3, -9, 3)
+
+[node name="Beam" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(15, 4)
+color = Color(0.929412, 0, 0.658824, 0.87451)
+polygon = PackedVector2Array(6, -5, 640, -5, 640, 7, 6, 7)
 
 [editable path="Shapes"]
 [editable path="Shapes/Hurtbox"]

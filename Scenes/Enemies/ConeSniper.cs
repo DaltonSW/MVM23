@@ -7,6 +7,7 @@ public partial class ConeSniper : CharacterBody2D, IHittable
     [Export] float KnockbackMagnitude { get; set; } = 100f;
 
     private AnimatedSprite2D _sprite;
+    private Polygon2D _laserSight;
     private XDirectionManager _xDirMan;
 
     private float _gravity;
@@ -23,6 +24,9 @@ public partial class ConeSniper : CharacterBody2D, IHittable
         var dropAheadRayCast = GetNode<RayCast2D>("Shapes/DropAheadRayCast");
         var edgeAheadRayCast = GetNode<RayCast2D>("Shapes/EdgeAheadRayCast");
         var gun = GetNode<Sprite2D>("Gun");
+        var beamArea = GetNode<Area2D>("BeamArea");
+        var beam = GetNode<Polygon2D>("Beam");
+        var laserSight = GetNode<Polygon2D>("LaserSight");
         _xDirMan = GetNode<XDirectionManager>("XDirectionManager");
 
         _gravity = (float)ProjectSettings.GetSetting("physics/2d/default_gravity");
@@ -30,7 +34,7 @@ public partial class ConeSniper : CharacterBody2D, IHittable
         _ai = new AvoidDrops(dropAheadRayCast,
                 new NoticeTarget(lineOfSight,
                     new Patrol(edgeAheadRayCast),
-                    target => new FireAtWill(gun, this, target, _xDirMan)));
+                    target => new FireAtWill(gun, laserSight, beam, beamArea, this, target, _xDirMan)));
 
         _hitManager = new HitManager(this, StartHitPoints, _sprite);
     }
@@ -119,6 +123,10 @@ public class FireAtWill : IAi
     private const double FIRE_DURATION = 0.1f;
 
     private Node2D _gun;
+    private Node2D _aimingIndicator;
+    private Node2D _damageIndicator;
+    private Area2D _damageZone;
+
     private Node2D _self;
     private Node2D _target;
     private XDirectionManager _xDirMan;
@@ -129,9 +137,19 @@ public class FireAtWill : IAi
 
     private ShootingState _state;
 
-    public FireAtWill(Node2D gun, Node2D self, Node2D target, XDirectionManager xDirMan)
+    public FireAtWill(
+            Node2D gun,
+            Node2D aimingIndicator,
+            Node2D damageIndicator,
+            Area2D damageZone,
+            Node2D self,
+            Node2D target,
+            XDirectionManager xDirMan)
     {
         _gun = gun;
+        _aimingIndicator = aimingIndicator;
+        _damageIndicator = damageIndicator;
+        _damageZone = damageZone;
         _self = self;
         _target = target;
         _xDirMan = xDirMan;
@@ -159,20 +177,22 @@ public class FireAtWill : IAi
 
             case ShootingState.AIMING:
                 _aimTimeElapsed += delta;
+                _aimingIndicator.Visible = true;
                 if (_aimTimeElapsed >= AIM_DURATION)
                 {
                     nextState = ShootingState.FIRING;
+                    _aimingIndicator.Visible = false;
                     _fireTimeElapsed = 0;
                 }
                 break;
 
             case ShootingState.FIRING:
                 _fireTimeElapsed += delta;
-                _gun.Scale = _gun.Scale.MapX(x => x*5);
+                _damageIndicator.Visible = true;
                 if (_fireTimeElapsed >= AIM_DURATION)
                 {
                     nextState = ShootingState.READYING;
-                    _gun.Scale = _gun.Scale.WithX(1);
+                    _damageIndicator.Visible = false;
                 }
                 break;
         }
