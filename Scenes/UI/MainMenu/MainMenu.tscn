@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bifuw6ucq8mqh"]
+[gd_scene load_steps=8 format=3 uid="uid://bifuw6ucq8mqh"]
 
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu/MainMenu.cs" id="1"]
 [ext_resource type="FontFile" uid="uid://d3120b42atyy8" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
 [ext_resource type="Texture2D" uid="uid://d3uiu5wvw63dd" path="res://Scenes/UI/MainMenu/MainMenu.png" id="3_o51p4"]
-[ext_resource type="AudioStream" uid="uid://blts7fjxmujti" path="res://Assets/Music/MainMenu.wav" id="3_uq5rg"]
 [ext_resource type="Texture2D" uid="uid://dcl66hdq63b7u" path="res://Scenes/UI/MainMenu/Buttons/PlayGame.png" id="4_7dcyt"]
 [ext_resource type="Texture2D" uid="uid://b6cjvdii3n6b6" path="res://Scenes/UI/MainMenu/Buttons/LoadGameDisabled.png" id="4_gival"]
 [ext_resource type="Texture2D" uid="uid://crjiek4eruaxl" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
@@ -30,7 +29,6 @@ scale = Vector2(1.00156, 1.00278)
 texture = ExtResource("3_o51p4")
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_uq5rg")
 autoplay = true
 
 [node name="Credits" type="Sprite2D" parent="."]

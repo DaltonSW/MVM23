@@ -141,6 +141,7 @@ public class JumpState : PlayerState {
 
     public JumpState(Player player, Player.JumpType jumpType) {
         player.ChangeAnimation("jump");
+        player.PlaySound("Jump");
         
         var jumpSpeed = player.JumpSpeed;
         var horizSpeed = player.Velocity.X;
@@ -284,6 +285,7 @@ public class DashState : PlayerState {
 
     public DashState(Player.InputInfo inputs, Player player) {
         player.ChangeAnimation("dash");
+        player.PlaySound("Dash");
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
