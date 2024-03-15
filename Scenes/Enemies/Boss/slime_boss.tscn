@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4c3b4l58cefj"]
+[gd_scene load_steps=5 format=3 uid="uid://d4c3b4l58cefj"]
 
 [ext_resource type="Script" path="res://Scenes/Enemies/Boss/SlimeBoss.cs" id="1_l5k8e"]
 [ext_resource type="SpriteFrames" uid="uid://o7ljpa5p4sqs" path="res://Scenes/Enemies/Boss/Frames/SlimeBossSpriteFrames.tres" id="2_qv7wa"]
+[ext_resource type="PackedScene" uid="uid://bp0sboaimndn7" path="res://Scenes/Utilities/Hurtbox.tscn" id="3_aiyk5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ontgf"]
 radius = 33.0
@@ -38,3 +39,19 @@ rotation = -0.785398
 
 [node name="spawn5" type="Marker2D" parent="." groups=["spawns"]]
 position = Vector2(60, 0)
+
+[node name="DashCollisionArea" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DashCollisionArea"]
+position = Vector2(0, 6)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_ontgf")
+
+[node name="Hurtbox" parent="." instance=ExtResource("3_aiyk5")]
+
+[node name="CollisionPolygon2D" parent="Hurtbox" index="0"]
+polygon = PackedVector2Array(-26, -21.886, -41, 11.8549, -35, 30.0933, -12, 37.3886, 31, 33.741, 41, 10.943, 28, -19.1503, 0, -26.4456)
+
+[editable path="Hurtbox"]

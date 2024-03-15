@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Godot;
 namespace MVM23;
 
@@ -287,9 +288,22 @@ public class DashState : PlayerState {
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
         player.DashesAvailable -= 1;
+        player.Invulnerable = true;
+        player.ResetDashGraceTime();
     }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {
+        player.ResetDashGraceTime();
+
+        var hittables =
+            from area in player.DashCollisionArea.GetOverlappingAreas()
+            where area.IsInGroup("hittable")
+            select (IHittable) area;
+        foreach (var hittable in hittables)
+        {
+            hittable.TakeHit(Vector2.Zero);
+        }
+
         if (player.IsOnFloor())
             player.SuperJumpCurrentBufferTime += delta;
 
@@ -312,12 +326,14 @@ public class DashState : PlayerState {
 
         if (player.CanStartCharge(inputs)) {
             player.SuperJumpCurrentBufferTime = 0;
+            player.ResetDashGraceTime(); 
             return new ChargeState(player);
         }
 
         if (inputs.IsPushingJump) {
             if (player.CanJump() == Player.JumpType.BoostJump) {
                 player.SuperJumpCurrentBufferTime = 0;
+                player.ResetDashGraceTime(); 
                 return new JumpState(player, Player.JumpType.BoostJump);
             }
         }
@@ -341,7 +357,24 @@ public class DashState : PlayerState {
             player.SuperJumpCurrentBufferTime < player.SuperJumpInitBufferLimit)
             return null;
 
+        player.ResetDashGraceTime(); 
         return player.IsOnFloor() ? new IdleState(player) : new FallState(player);
+    }
+
+    private void ClearEnemies(Player player)
+    {
+        if (player.DashCollisionArea.GetOverlappingAreas().Count > 0)
+        {
+            // moving the player an extra couple times if they're inside an
+            // enemy. Sometimes gives a little too much of a boost and the
+            // enemy doesn't really get hurt, but any less and it doesn't
+            // seem to reliably clear the enemies...
+            // It might be that the player is entering and exiting the
+            // dash state on the same frame due to touching the floor,
+            // and they perfectly clear the enemy without this?
+            player.MoveAndSlide();
+            player.MoveAndSlide();
+        }
     }
 }
 

@@ -18,6 +18,7 @@ public partial class Player : CharacterBody2D, IHittable {
     public float Gravity { get; private set; }
     public float JumpSpeed { get; private set; }
     public float ApexGravity { get; private set; }
+    public Area2D DashCollisionArea { get; private set; }
 
     public double SuperJumpCurrentBufferTime { get; set; }
     public double CoyoteTimeElapsed { get; set; }
@@ -34,6 +35,13 @@ public partial class Player : CharacterBody2D, IHittable {
     
     [Export] public int MaxDashes { get; set; }
     [Export] public int DashesAvailable { get; set; }
+
+    public bool Invulnerable {
+        set {
+            _hitManager.Invulnerable = value;
+            SetCollisionMaskValue(ENEMY_COLLISION_LAYER, !value);
+        }
+    }
 
     #endregion
 
@@ -56,6 +64,7 @@ public partial class Player : CharacterBody2D, IHittable {
     private CpuParticles2D _dashParticles;
     private bool _reticleFrozen;
     private Vector2 _reticleFreezePos;
+    private double _dashGraceTimeElapsed;
 
     private PackedScene _grappleScene;
     private PackedScene _swordScene;
@@ -66,6 +75,8 @@ public partial class Player : CharacterBody2D, IHittable {
 
     #region Constants
 
+    private const float DASH_GRACE_TIME = 0.2f;
+    private const int ENEMY_COLLISION_LAYER = 3;
     public const float RunSpeed = 150.0f;
     public const float GroundFriction = RunSpeed * 20f;
     public const float AirFriction = GroundFriction * 0.8f;
@@ -142,6 +153,7 @@ public partial class Player : CharacterBody2D, IHittable {
         _negBonkCheck = GetNode<RayCast2D>("Sprite/NegBonkCheck");
         _negBonkBuffer = GetNode<RayCast2D>("Sprite/NegBonkBuffer");
         _dashParticles = GetNode<CpuParticles2D>("DashParticles");
+        DashCollisionArea = GetNode<Area2D>("DashCollisionArea");
         Reticle = GetNode<Node2D>("Reticle");
 
         _grappleScene = ResourceLoader.Load<PackedScene>("res://Scenes/Abilities/grapple_hook/grapple_hook.tscn");
@@ -169,6 +181,12 @@ public partial class Player : CharacterBody2D, IHittable {
         var inputs = GetInputs();
 
         _hitManager._PhysicsProcess(delta);
+
+        _dashGraceTimeElapsed += delta;
+        if (_dashGraceTimeElapsed > DASH_GRACE_TIME)
+        {
+            Invulnerable = false;
+        }
 
         if (!inputs.IsPushingJump)
             _timeSinceStartHoldingJump = 0;
@@ -276,6 +294,9 @@ public partial class Player : CharacterBody2D, IHittable {
         GlobalPosition = new Vector2(playerPos.X + nudgeAmount, playerPos.Y);
     }
 
+    public void ResetDashGraceTime() {
+        _dashGraceTimeElapsed = 0;
+    }
 
     public void ChangeAnimation(string animation) {
         if (_sprite.Animation != animation)

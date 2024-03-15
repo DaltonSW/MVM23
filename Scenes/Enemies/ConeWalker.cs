@@ -137,11 +137,12 @@ public class HitManager
     private const double FLICKER_TIME = 0.15f;
     private const float KNOCKBACK_BOUNCE_MAGNITUDE = 30f;
 
+    private bool _invulnerabilityOverride;
     private IHittable _hitee;
     private CanvasItem _bodySprite; 
     public int HitPoints { get; set; }
 
-    private double _invulnerabilityTimeElapsed;
+    private double _postHitInvulnerabilityTimeElapsed;
     private double _flickerTimeElapsed;
 
     public Vector2 KnockbackVelocity { get; private set; } = Vector2.Zero;
@@ -150,8 +151,9 @@ public class HitManager
     {
         _hitee = hitee;
         HitPoints = hitPoints;
-        _invulnerabilityTimeElapsed = INVULNERABILITY_TIME;
+        _postHitInvulnerabilityTimeElapsed = INVULNERABILITY_TIME;
         _flickerTimeElapsed = 0;
+        _invulnerabilityOverride = false;
         _bodySprite = bodySprite;
     }
 
@@ -161,9 +163,8 @@ public class HitManager
         {
             return;
         }
-        if (Invulnerable())
+        if (Invulnerable)
         {
-            _invulnerabilityTimeElapsed += delta;
             _flickerTimeElapsed += delta;
             if (_flickerTimeElapsed > FLICKER_TIME)
             {
@@ -171,12 +172,17 @@ public class HitManager
                             a == 1 ? 0.5f : 1));
                 _flickerTimeElapsed = 0;
             }
-            if (!Invulnerable())
+        }
+        if (PostHitInvulnerable())
+        {
+            _postHitInvulnerabilityTimeElapsed += delta;
+            if (!PostHitInvulnerable())
             {
                 _hitee.Unstun();
-                _bodySprite.ChangeModulate(m => m.WithA(1));
             }
         }
+        if (_bodySprite.Modulate.A != 1 && !Invulnerable)
+            _bodySprite.ChangeModulate(m => m.WithA(1));
 
         KnockbackVelocity = KnockbackVelocity.MoveToward(
                 Vector2.Zero,
@@ -186,7 +192,7 @@ public class HitManager
 
     public void TakeHit(Vector2 _knockbackVelocity)
     {
-        if (Dead() || Invulnerable())
+        if (Dead() || Invulnerable)
         {
             return;
         }
@@ -201,7 +207,7 @@ public class HitManager
         KnockbackVelocity += _knockbackVelocity;
 
         // start invulnerability
-        _invulnerabilityTimeElapsed = 0;
+        _postHitInvulnerabilityTimeElapsed = 0;
         _flickerTimeElapsed = 0;
 
         // stun
@@ -220,7 +226,11 @@ public class HitManager
         HitPoints -= amount;
     }
 
-    private bool Invulnerable() => _invulnerabilityTimeElapsed < INVULNERABILITY_TIME;
+    public bool Invulnerable {
+        private get => _invulnerabilityOverride || PostHitInvulnerable();
+        set => _invulnerabilityOverride = value;
+    }
+    private bool PostHitInvulnerable() => _postHitInvulnerabilityTimeElapsed < INVULNERABILITY_TIME;
     private bool Dead() => HitPoints <= 0;
 }
 
