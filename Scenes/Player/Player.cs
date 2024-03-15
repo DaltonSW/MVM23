@@ -130,7 +130,7 @@ public partial class Player : CharacterBody2D, IHittable {
 
         _grappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
 
-        _currentState = new IdleState();
+        _currentState = new IdleState(this);
         _reticleFrozen = false;
         PlayerCanDash = true;
         _canThrowGrapple = true;
@@ -240,8 +240,6 @@ public partial class Player : CharacterBody2D, IHittable {
         _worldStateManager.Save();
     }
 
-    // This function exists because I assume the logic is going to expand in the future
-    // If it really is only this property, we can swap it out elsewhere maybe
     public bool CanDash() {
         if (!Abilities["Dash"]) return false;
 
