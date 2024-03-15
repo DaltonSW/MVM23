@@ -1,9 +1,9 @@
-[gd_resource type="SpriteFrames" load_steps=28 format=3 uid="uid://o7ljpa5p4sqs"]
+[gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://o7ljpa5p4sqs"]
 
-[ext_resource type="Texture2D" uid="uid://bcatrnskkajla" path="res://Scenes/Enemies/Boss/Frames/aniDead.png" id="1_81urj"]
-[ext_resource type="Texture2D" uid="uid://7vr82gppcmks" path="res://Scenes/Enemies/Boss/Frames/aniIdle.png" id="2_f7lr5"]
-[ext_resource type="Texture2D" uid="uid://csdhyah2auith" path="res://Scenes/Enemies/Boss/Frames/aniJump.png" id="3_wvnci"]
-[ext_resource type="Texture2D" uid="uid://b1j6ua5arm8e" path="res://Scenes/Enemies/Boss/Frames/aniSquish.png" id="4_11f78"]
+[ext_resource type="Texture2D" uid="uid://cmji50pyma77w" path="res://Scenes/Enemies/Boss/Frames/aniDead.png" id="1_81urj"]
+[ext_resource type="Texture2D" uid="uid://bq2cpbg7c1vyi" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniIdle.png" id="2_j1bh5"]
+[ext_resource type="Texture2D" uid="uid://cysi2nre4ssqw" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniJump.png" id="3_sj2gb"]
+[ext_resource type="Texture2D" uid="uid://bopikagop77of" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniSquish.png" id="4_2oxhb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_frmqx"]
 atlas = ExtResource("1_81urj")
@@ -33,69 +33,37 @@ region = Rect2(640, 0, 128, 84)
 atlas = ExtResource("1_81urj")
 region = Rect2(768, 0, 128, 84)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dedxj"]
-atlas = ExtResource("2_f7lr5")
-region = Rect2(0, 0, 88, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_67rla"]
+atlas = ExtResource("2_j1bh5")
+region = Rect2(0, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_80ixa"]
-atlas = ExtResource("2_f7lr5")
-region = Rect2(88, 0, 88, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_4tphl"]
+atlas = ExtResource("2_j1bh5")
+region = Rect2(32, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i0k8n"]
-atlas = ExtResource("2_f7lr5")
-region = Rect2(176, 0, 88, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5ixa"]
+atlas = ExtResource("3_sj2gb")
+region = Rect2(0, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pfqhn"]
-atlas = ExtResource("2_f7lr5")
-region = Rect2(264, 0, 88, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3xkg"]
+atlas = ExtResource("4_2oxhb")
+region = Rect2(0, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8qggi"]
-atlas = ExtResource("3_wvnci")
-region = Rect2(0, 0, 80, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfyln"]
+atlas = ExtResource("4_2oxhb")
+region = Rect2(32, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_71moa"]
-atlas = ExtResource("3_wvnci")
-region = Rect2(80, 0, 80, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_g63q7"]
+atlas = ExtResource("4_2oxhb")
+region = Rect2(64, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0wsin"]
-atlas = ExtResource("3_wvnci")
-region = Rect2(160, 0, 80, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8iqf"]
+atlas = ExtResource("4_2oxhb")
+region = Rect2(96, 0, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jtvpr"]
-atlas = ExtResource("3_wvnci")
-region = Rect2(240, 0, 80, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q2a6h"]
-atlas = ExtResource("3_wvnci")
-region = Rect2(320, 0, 80, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ybjoi"]
-atlas = ExtResource("4_11f78")
-region = Rect2(0, 0, 128, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i3fuf"]
-atlas = ExtResource("4_11f78")
-region = Rect2(128, 0, 128, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7osf2"]
-atlas = ExtResource("4_11f78")
-region = Rect2(256, 0, 128, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_luoms"]
-atlas = ExtResource("4_11f78")
-region = Rect2(384, 0, 128, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5nsr6"]
-atlas = ExtResource("4_11f78")
-region = Rect2(512, 0, 128, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b4ukb"]
-atlas = ExtResource("4_11f78")
-region = Rect2(640, 0, 128, 84)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yihh7"]
-atlas = ExtResource("4_11f78")
-region = Rect2(768, 0, 128, 84)
+[sub_resource type="AtlasTexture" id="AtlasTexture_smgqw"]
+atlas = ExtResource("4_2oxhb")
+region = Rect2(128, 0, 32, 48)
 
 [resource]
 animations = [{
@@ -127,16 +95,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dedxj")
+"texture": SubResource("AtlasTexture_67rla")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_80ixa")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_i0k8n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pfqhn")
+"texture": SubResource("AtlasTexture_4tphl")
 }],
 "loop": false,
 "name": &"idle",
@@ -144,19 +106,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8qggi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_71moa")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0wsin")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jtvpr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q2a6h")
+"texture": SubResource("AtlasTexture_g5ixa")
 }],
 "loop": false,
 "name": &"jump",
@@ -164,25 +114,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ybjoi")
+"texture": SubResource("AtlasTexture_n3xkg")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i3fuf")
+"texture": SubResource("AtlasTexture_kfyln")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_7osf2")
+"texture": SubResource("AtlasTexture_g63q7")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_luoms")
+"texture": SubResource("AtlasTexture_p8iqf")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_5nsr6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b4ukb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yihh7")
+"texture": SubResource("AtlasTexture_smgqw")
 }],
 "loop": false,
 "name": &"jumpsquat",
