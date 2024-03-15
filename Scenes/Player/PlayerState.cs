@@ -286,7 +286,7 @@ public class DashState : PlayerState {
         player.SuperJumpCurrentBufferTime = 0;
         _dashTimeElapsed = 0;
         _dashCurrentAngle = inputs.InputDirection;
-        player.PlayerCanDash = false;
+        player.DashesAvailable -= 1;
     }
 
     public override PlayerState HandleInput(Player player, Player.InputInfo inputs, double delta) {

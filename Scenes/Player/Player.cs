@@ -13,7 +13,6 @@ public partial class Player : CharacterBody2D, IHittable {
     #region Properties
 
     public bool CanSuperJump { get; set; }
-    public bool PlayerCanDash { get; set; }
     public Vector2 GrappledPoint { get; set; }
     public Node2D Reticle { get; private set; }
     public float Gravity { get; private set; }
@@ -32,6 +31,9 @@ public partial class Player : CharacterBody2D, IHittable {
     public Vector2 KnockbackVelocity {
         get => _hitManager.KnockbackVelocity;
     }
+    
+    [Export] public int MaxDashes { get; set; }
+    [Export] public int DashesAvailable { get; set; }
 
     #endregion
 
@@ -131,7 +133,6 @@ public partial class Player : CharacterBody2D, IHittable {
         _grappleCheck = GetNode<RayCast2D>("Reticle/GrappleCheck");
 
         _reticleFrozen = false;
-        PlayerCanDash = true;
         _canThrowGrapple = true;
         _reticleFreezePos = Vector2.Zero;
 
@@ -180,7 +181,7 @@ public partial class Player : CharacterBody2D, IHittable {
 
         if (IsOnFloor()) {
             _timeSinceLeftGround = 0;
-            PlayerCanDash = true;
+            DashesAvailable = MaxDashes;
         }
         else
             _timeSinceLeftGround += delta;
@@ -237,13 +238,15 @@ public partial class Player : CharacterBody2D, IHittable {
 
     public void UnlockAbility(string unlock) {
         Abilities[unlock] = true;
+        if (unlock is "Dash" or "DoubleDash")
+            MaxDashes += 1;
+        
         _worldStateManager.Save();
     }
 
     public bool CanDash() {
         if (!Abilities["Dash"]) return false;
-
-        return PlayerCanDash;
+        return DashesAvailable > 0;
     }
 
     public JumpType CanJump() {

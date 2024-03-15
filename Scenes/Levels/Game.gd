@@ -41,6 +41,12 @@ func load_game():
         $Player.Abilities = save_manager.get_value("player_abilities")
         $Player.MaxHealth = save_manager.get_value("player_max_health")
         
+        if $Player.Abilities["Dash"]:
+            $Player.MaxDashes = 1
+        if $Player.Abilities["DoubleDash"]:
+            $Player.MaxDashes = 2
+        $Player.DashesAvailable = $Player.MaxDashes
+        
         $WSM.WorldObjects = save_manager.get_value("world_objects")
         $WSM.CurrentCheckpointID = save_manager.get_value("current_checkpoint")
         $WSM.GlobalRespawnLocation = save_manager.get_value("global_respawn_location")
@@ -71,7 +77,6 @@ func save_game():
 
 func show_pause_menu():
     var instance = pause_menu.instantiate()
-    # instance.global_position = $Player/Camera2D.global_position
     $UI.add_child(instance)
 
 func get_room_name():
