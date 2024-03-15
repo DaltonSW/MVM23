@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqorgn5jg75oe"]
+[gd_scene load_steps=5 format=3 uid="uid://cqorgn5jg75oe"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_eerd2"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_m70c3"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_n6my1"]
+[ext_resource type="PackedScene" uid="uid://l1pht3bvo7gc" path="res://Scenes/Enemies/ConeWalker.tscn" id="4_dj0q4"]
 
 [node name="SkyscraperOne" type="Node2D"]
 
@@ -14,3 +15,6 @@ layer_0/tile_data = PackedInt32Array(2, 327680, 10, 65538, 327680, 10, 131074, 3
 [node name="RoomInstance" parent="." instance=ExtResource("2_m70c3")]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("3_n6my1")]
+
+[node name="ConeWalker" parent="." instance=ExtResource("4_dj0q4")]
+position = Vector2(470, 678)

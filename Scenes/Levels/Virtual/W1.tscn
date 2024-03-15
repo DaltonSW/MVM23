@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c82cew4ylcic4"]
+[gd_scene load_steps=8 format=3 uid="uid://c82cew4ylcic4"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_iwnpr"]
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="2_34urt"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cpn4gpvmfivah" path="res://Scenes/Levels/World Objects/Ability Unlock/ability_unlock.tscn" id="4_iap3a"]
 [ext_resource type="Texture2D" uid="uid://boi455e8i5ghv" path="res://Scenes/Abilities/key/key.png" id="5_4vvt8"]
 [ext_resource type="PackedScene" uid="uid://dr1jncv75nkx" path="res://Scenes/Levels/World Objects/Teleporter/teleporter.tscn" id="6_cwxmh"]
+[ext_resource type="PackedScene" uid="uid://bxmn2bkeaqomj" path="res://Scenes/Enemies/RandomFlyer.tscn" id="7_0aw3o"]
 
 [node name="W1" type="Node2D"]
 
@@ -29,3 +30,9 @@ texture = ExtResource("5_4vvt8")
 position = Vector2(63, 224)
 _sceneToLoad = "res://Scenes/Levels/Virtual/Map11.tscn"
 _teleportPosition = Vector2(1152, 272)
+
+[node name="RandomFlyer" parent="." instance=ExtResource("7_0aw3o")]
+position = Vector2(470, 119)
+
+[node name="RandomFlyer2" parent="." instance=ExtResource("7_0aw3o")]
+position = Vector2(162, 130)

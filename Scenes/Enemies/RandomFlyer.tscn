@@ -1,41 +1,27 @@
-[gd_scene load_steps=12 format=3 uid="uid://bxmn2bkeaqomj"]
+[gd_scene load_steps=10 format=3 uid="uid://bxmn2bkeaqomj"]
 
 [ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyer.cs" id="1_pb1ik"]
-[ext_resource type="Texture2D" uid="uid://c51o8uydec7qc" path="res://Scenes/Enemies/cone_fly.png" id="2_4dedk"]
 [ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyerBody.cs" id="2_mw4us"]
+[ext_resource type="Texture2D" uid="uid://c6n65dcxe8spr" path="res://Scenes/Enemies/mosquito.png" id="3_2gveo"]
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_c5c8c"]
 [ext_resource type="PackedScene" uid="uid://bp0sboaimndn7" path="res://Scenes/Utilities/Hurtbox.tscn" id="5_dw17x"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wjrom"]
-atlas = ExtResource("2_4dedk")
-region = Rect2(0, 0, 48, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_vn7jt"]
+atlas = ExtResource("3_2gveo")
+region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ts5qk"]
-atlas = ExtResource("2_4dedk")
-region = Rect2(0, 16, 48, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qhuna"]
-atlas = ExtResource("2_4dedk")
-region = Rect2(0, 32, 48, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8kqsq"]
-atlas = ExtResource("2_4dedk")
-region = Rect2(0, 48, 48, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_aantd"]
+atlas = ExtResource("3_2gveo")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_v4sfb"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_wjrom")
+"texture": SubResource("AtlasTexture_vn7jt")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ts5qk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qhuna")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8kqsq")
+"texture": SubResource("AtlasTexture_aantd")
 }],
 "loop": true,
 "name": &"default",
@@ -56,7 +42,7 @@ script = ExtResource("2_mw4us")
 sprite_frames = SubResource("SpriteFrames_v4sfb")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body"]
-polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
+polygon = PackedVector2Array(-7, -7, 6, -7, 6, 8, -7, 8)
 
 [node name="XDirectionManager" parent="Body" instance=ExtResource("3_c5c8c")]
 
@@ -64,14 +50,14 @@ polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
 Hurtee = NodePath("../..")
 
 [node name="CollisionPolygon2D" parent="Body/Hurtbox" index="0"]
-polygon = PackedVector2Array(-24, -4.55959, -24, 6.38342, 23, 6.38342, 4, -4.55959)
+polygon = PackedVector2Array(-7, -7.29534, -7, 6.38342, 6, 6.38342, 6, -7.29534)
 
 [node name="DashCollisionArea" type="Area2D" parent="Body"]
 collision_layer = 16
 collision_mask = 16
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body/DashCollisionArea"]
-polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
+polygon = PackedVector2Array(-7, -7, 6, -7, 6, 8, -7, 8)
 
 [node name="LineOfSight" type="Area2D" parent="Body"]
 

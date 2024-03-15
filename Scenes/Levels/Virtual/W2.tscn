@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ct1ihaba364pb"]
+[gd_scene load_steps=8 format=3 uid="uid://ct1ihaba364pb"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_pfolo"]
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="2_vitnp"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cpn4gpvmfivah" path="res://Scenes/Levels/World Objects/Ability Unlock/ability_unlock.tscn" id="4_s8opk"]
 [ext_resource type="Texture2D" uid="uid://boi455e8i5ghv" path="res://Scenes/Abilities/key/key.png" id="5_fusy2"]
 [ext_resource type="PackedScene" uid="uid://dr1jncv75nkx" path="res://Scenes/Levels/World Objects/Teleporter/teleporter.tscn" id="6_yv5r0"]
+[ext_resource type="PackedScene" uid="uid://bfkabr4b4tedi" path="res://Scenes/Enemies/ConeSniper.tscn" id="7_6665o"]
 
 [node name="W2" type="Node2D"]
 
@@ -29,3 +30,9 @@ texture = ExtResource("5_fusy2")
 position = Vector2(96, 288)
 _sceneToLoad = "res://Scenes/Levels/Virtual/Map09.tscn"
 _teleportPosition = Vector2(1568, 224)
+
+[node name="ConeSniper" parent="." instance=ExtResource("7_6665o")]
+position = Vector2(374, 229)
+
+[node name="ConeSniper2" parent="." instance=ExtResource("7_6665o")]
+position = Vector2(950, 242)

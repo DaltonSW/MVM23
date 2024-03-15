@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/Enemies/ConeSniper.cs" id="1_ioh8p"]
 [ext_resource type="PackedScene" uid="uid://p2gvd5ag5tu7" path="res://Scenes/Enemies/Utilities/ConeCultistShapes.tscn" id="2_cldff"]
-[ext_resource type="Texture2D" uid="uid://cfyypqwqfm4ha" path="res://Scenes/Enemies/rifle.png" id="3_xm5ao"]
+[ext_resource type="Texture2D" uid="uid://reetc5gpjn7d" path="res://Scenes/Enemies/rifle.png" id="3_xm5ao"]
 [ext_resource type="PackedScene" uid="uid://dnpp01rpw4mmx" path="res://Scenes/Utilities/XDirectionManager.tscn" id="3_y5b0e"]
 
 [node name="ConeSniper" type="CharacterBody2D" groups=["hurt_player_on_collide"]]
@@ -31,13 +31,12 @@ position = Vector2(15, 4)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BeamArea"]
 position = Vector2(15, 4)
-polygon = PackedVector2Array(-9, -9, 625, -9, 625, 3, -9, 3)
+polygon = PackedVector2Array(-9, -5, 625, -5, 625, -2, -9, -2)
 
 [node name="Beam" type="Polygon2D" parent="."]
-visible = false
-position = Vector2(15, 4)
+position = Vector2(15, 6)
 color = Color(0.929412, 0, 0.658824, 0.87451)
-polygon = PackedVector2Array(6, -5, 640, -5, 640, 7, 6, 7)
+polygon = PackedVector2Array(6, -3, 640, -3, 640, 0, 6, 0)
 
 [editable path="Shapes"]
 [editable path="Shapes/Hurtbox"]

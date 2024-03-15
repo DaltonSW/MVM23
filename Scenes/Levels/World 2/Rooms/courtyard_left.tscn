@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://cedso82xhckos"]
+[gd_scene load_steps=6 format=3 uid="uid://cedso82xhckos"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_eeht6"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_mrxk2"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_h07fo"]
+[ext_resource type="PackedScene" uid="uid://l1pht3bvo7gc" path="res://Scenes/Enemies/ConeWalker.tscn" id="4_v8hdg"]
+[ext_resource type="PackedScene" uid="uid://bxmn2bkeaqomj" path="res://Scenes/Enemies/RandomFlyer.tscn" id="5_crpnh"]
 
 [node name="CourtyardLeft" type="Node2D"]
 
@@ -14,3 +16,21 @@ layer_0/tile_data = PackedInt32Array(3932200, 131072, 8, 3866664, 131072, 7, 380
 [node name="RoomInstance" parent="." instance=ExtResource("2_mrxk2")]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("3_h07fo")]
+
+[node name="ConeWalker" parent="." instance=ExtResource("4_v8hdg")]
+position = Vector2(1620, 1053)
+
+[node name="ConeWalker2" parent="." instance=ExtResource("4_v8hdg")]
+position = Vector2(2406, 1028)
+
+[node name="ConeWalker3" parent="." instance=ExtResource("4_v8hdg")]
+position = Vector2(1717, 721)
+
+[node name="RandomFlyer" parent="." instance=ExtResource("5_crpnh")]
+position = Vector2(846, 555)
+
+[node name="RandomFlyer2" parent="." instance=ExtResource("5_crpnh")]
+position = Vector2(212, 160)
+
+[node name="RandomFlyer3" parent="." instance=ExtResource("5_crpnh")]
+position = Vector2(1137, 158)

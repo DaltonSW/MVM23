@@ -41,7 +41,7 @@
 [10,1,0]
 1,0,-1,1|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/entry_room.tscn
 [7,1,0]
--1,-1,1,0|ffd700,,,c38000,c38000||Scenes/Levels/World 1/Rooms/big_stairs.tscn
+-1,-1,0,0|ffd700,,,c38000,c38000||Scenes/Levels/World 1/Rooms/big_stairs.tscn
 [7,2,0]
 1,0,1,-1|ffd700,c38000,c38000,c38000,||Scenes/Levels/World 1/Rooms/big_stairs.tscn
 [8,1,0]
@@ -65,27 +65,27 @@
 [6,2,0]
 1,0,1,0|ffd700,c38000,c38000,c38000,c38000|1|Scenes/Levels/World 1/Rooms/stick_room.tscn
 [6,1,0]
-1,0,1,0|ffd700,c38000,c38000,c38000,c38000|0|Scenes/Levels/World 1/Rooms/stair_grapple_upgrade.tscn
+0,0,1,0|ffd700,c38000,c38000,c38000,c38000|0|Scenes/Levels/World 1/Rooms/stair_grapple_upgrade.tscn
 [5,1,0]
 1,-1,-1,0|ffd700,c38000,,,c38000||Scenes/Levels/World 1/Rooms/post_stick_room.tscn
 [4,1,0]
 -1,-1,1,0|ffd700,,,c38000,c38000||Scenes/Levels/World 1/Rooms/post_stick_room.tscn
 [4,2,0]
--1,0,1,-1|ffd700,,c38000,c38000,||Scenes/Levels/World 1/Rooms/post_stick_room.tscn
+-1,0,0,-1|ffd700,,c38000,c38000,||Scenes/Levels/World 1/Rooms/post_stick_room.tscn
 [5,2,0]
 1,0,-1,-1|ffd700,c38000,c38000,,||Scenes/Levels/World 1/Rooms/post_stick_room.tscn
 [2,2,0]
 -1,0,1,1|ffd700,,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/crossroads_hallway.tscn
 [3,2,0]
-1,1,-1,0|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/crossroads_hallway.tscn
+0,1,-1,0|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/crossroads_hallway.tscn
 [3,1,0]
 1,0,-1,0|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/pre_dash_hallway.tscn
 [2,1,0]
 -1,1,1,1|ffd700,,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/pre_dash_hallway.tscn
 [1,1,0]
-1,0,1,0|ffd700,c38000,c38000,c38000,c38000|1|Scenes/Levels/World 1/Rooms/dash_room.tscn
+1,1,1,0|ffd700,c38000,c38000,c38000,c38000|1|Scenes/Levels/World 1/Rooms/dash_room.tscn
 [1,2,0]
-1,-1,0,0|ffd700,c38000,,c38000,c38000||Scenes/Levels/World 1/Rooms/vertical_health_upgrade.tscn
+1,-1,0,1|ffd700,c38000,,c38000,c38000||Scenes/Levels/World 1/Rooms/vertical_health_upgrade.tscn
 [1,3,0]
 0,0,1,-1|ffd700,c38000,c38000,c38000,|0|Scenes/Levels/World 1/Rooms/vertical_health_upgrade.tscn
 [3,3,0]
