@@ -1839,6 +1839,26 @@ texture = ExtResource("1_h2hr4")
 23:5/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 23:5/0/physics_layer_0/angular_velocity = 0.0
 23:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+31:22/0 = 0
+31:22/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+31:22/0/physics_layer_0/angular_velocity = 0.0
+31:22/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5, -8, 5, -8, 5, 8, -5, 8)
+31:23/0 = 0
+31:23/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+31:23/0/physics_layer_0/angular_velocity = 0.0
+31:23/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5, -8, 5, -8, 5, 8, -5, 8)
+31:24/0 = 0
+31:24/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+31:24/0/physics_layer_0/angular_velocity = 0.0
+31:25/0 = 0
+31:25/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+31:25/0/physics_layer_0/angular_velocity = 0.0
+32:25/0 = 0
+32:25/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+32:25/0/physics_layer_0/angular_velocity = 0.0
+32:24/0 = 0
+32:24/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+32:24/0/physics_layer_0/angular_velocity = 0.0
 
 [resource]
 physics_layer_0/collision_layer = 3
