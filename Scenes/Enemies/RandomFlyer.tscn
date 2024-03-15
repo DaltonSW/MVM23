@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxmn2bkeaqomj"]
+[gd_scene load_steps=12 format=3 uid="uid://bxmn2bkeaqomj"]
 
 [ext_resource type="Script" path="res://Scenes/Enemies/RandomFlyer.cs" id="1_pb1ik"]
 [ext_resource type="Texture2D" uid="uid://c51o8uydec7qc" path="res://Scenes/Enemies/cone_fly.png" id="2_4dedk"]
@@ -42,6 +42,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_qkdas"]
+radius = 210.021
+
 [node name="RandomFlyer" type="Node2D"]
 script = ExtResource("1_pb1ik")
 
@@ -64,8 +67,15 @@ Hurtee = NodePath("../..")
 polygon = PackedVector2Array(-24, -4.55959, -24, 6.38342, 23, 6.38342, 4, -4.55959)
 
 [node name="DashCollisionArea" type="Area2D" parent="Body"]
+collision_layer = 16
+collision_mask = 16
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body/DashCollisionArea"]
 polygon = PackedVector2Array(-21, -2, 4, -2, 22, 8, -21, 8)
+
+[node name="LineOfSight" type="Area2D" parent="Body"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/LineOfSight"]
+shape = SubResource("CircleShape2D_qkdas")
 
 [editable path="Body/Hurtbox"]
