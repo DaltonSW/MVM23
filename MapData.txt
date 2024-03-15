@@ -58,38 +58,8 @@
 -1,-1,0,0|cba3ec,,,680eb2,680eb2||
 [12,-3,1]
 0,-1,-1,0|cba3ec,680eb2,,,680eb2|4|
-[12,-6,0]
--1,-1,0,0|00d5da,,,006469,006469||
-[12,-5,0]
--1,-1,0,-1|00d5da,,,006469,||
-[12,-4,0]
--1,-1,0,-1|00d5da,,,006469,||
 [12,-3,0]
--1,0,0,-1|00d5da,,006469,006469,|4|
-[13,-6,0]
--1,-1,-1,0|00d5da,,,,006469||
-[13,-5,0]
--1,-1,-1,-1|00d5da,,,,||
-[13,-4,0]
--1,-1,-1,-1|00d5da,,,,||
-[13,-3,0]
--1,0,-1,-1|00d5da,,006469,,||
-[14,-6,0]
--1,-1,-1,0|00d5da,,,,006469||
-[14,-5,0]
--1,-1,-1,-1|00d5da,,,,||
-[14,-4,0]
--1,-1,-1,-1|00d5da,,,,||
-[14,-3,0]
--1,0,-1,-1|00d5da,,006469,,||
-[15,-6,0]
-0,-1,-1,0|00d5da,006469,,,006469||
-[15,-5,0]
-0,-1,-1,-1|00d5da,006469,,,||
-[15,-4,0]
-0,-1,-1,-1|00d5da,006469,,,||
-[15,-3,0]
-0,0,-1,-1|00d5da,006469,006469,,||
+0,0,0,0|00d5da,006469,006469,006469,006469|4|Scenes/Levels/Virtual/W1.tscn
 [11,1,0]
 0,0,1,0|ffd700,c38000,c38000,c38000,c38000|0|Scenes/Levels/World 1/Rooms/upgrade_beside_entry.tscn
 [6,2,0]
@@ -173,7 +143,7 @@
 [29,-15,0]
 0,1,0,-1|7d7d7d,333333,333333,333333,||Scenes/Levels/Virtual/Map14.tscn
 [29,-14,0]
-0,0,-1,1|7d7d7d,333333,333333,,333333||Scenes/Levels/Virtual/Map13.tscn
+0,0,-1,1|7d7d7d,333333,333333,,333333|1|Scenes/Levels/Virtual/Map13.tscn
 [29,-7,0]
 1,0,1,0|7d7d7d,333333,333333,333333,333333||Scenes/Levels/Virtual/Map05.tscn
 [-5,2,0]
@@ -189,7 +159,7 @@
 [23,-14,0]
 -1,0,-1,0|7d7d7d,,333333,,333333||Scenes/Levels/Virtual/Map01.tscn
 [21,-14,0]
--1,0,0,0|7d7d7d,,333333,333333,333333||Scenes/Levels/Virtual/Map01.tscn
+-1,0,0,0|7d7d7d,,333333,333333,333333|4|Scenes/Levels/Virtual/Map01.tscn
 [22,-14,0]
 -1,0,-1,0|7d7d7d,,333333,,333333||Scenes/Levels/Virtual/Map01.tscn
 [31,-17,0]
@@ -229,7 +199,7 @@
 [26,-8,0]
 -1,-1,0,1|7d7d7d,,,333333,333333||Scenes/Levels/Virtual/Map04.tscn
 [26,-7,0]
--1,0,0,-1|7d7d7d,,333333,333333,||Scenes/Levels/Virtual/Map04.tscn
+-1,0,0,-1|7d7d7d,,333333,333333,|1|Scenes/Levels/Virtual/Map04.tscn
 [27,-8,0]
 -1,-1,-1,0|7d7d7d,,,,333333||Scenes/Levels/Virtual/Map04.tscn
 [27,-7,0]
@@ -405,7 +375,7 @@
 [6,-1,0]
 -1,-1,1,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/courtyard_right.tscn
 [6,0,0]
--1,0,1,-1|abded1,,4f819c,4f819c,||Scenes/Levels/World 2/Rooms/courtyard_right.tscn
+-1,0,1,-1|abded1,,4f819c,4f819c,|1|Scenes/Levels/World 2/Rooms/courtyard_right.tscn
 [7,-1,0]
 0,-1,-1,0|abded1,4f819c,,,4f819c|0|Scenes/Levels/World 2/Rooms/courtyard_right.tscn
 [7,0,0]
@@ -431,7 +401,7 @@
 [4,-4,0]
 0,0,1,-1|abded1,4f819c,4f819c,4f819c,||Scenes/Levels/World 2/Rooms/skyscraper_one_side_beams.tscn
 [1,-5,0]
-1,0,1,0|abded1,4f819c,4f819c,4f819c,4f819c|1|Scenes/Levels/World 2/Rooms/grapple_room.tscn
+1,0,1,0|abded1,4f819c,4f819c,4f819c,4f819c||Scenes/Levels/World 2/Rooms/grapple_room.tscn
 [-1,-6,0]
 -1,-1,0,0|abded1,,,4f819c,4f819c|0|Scenes/Levels/World 2/Rooms/large_gap_lower.tscn
 [-1,-5,0]
@@ -475,17 +445,17 @@
 [0,-8,0]
 -1,-1,-1,0|abded1,,,,4f819c||Scenes/Levels/World 2/Rooms/large_gap_upper.tscn
 [1,-8,0]
-1,-1,-1,0|abded1,4f819c,,,4f819c||Scenes/Levels/World 2/Rooms/large_gap_upper.tscn
+0,-1,-1,0|abded1,4f819c,,,4f819c||Scenes/Levels/World 2/Rooms/large_gap_upper.tscn
 [-1,-8,0]
 -1,-1,0,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/large_gap_upper.tscn
 [2,-7,0]
--1,1,1,0|cba3ec,,4f819c,4f819c,4f819c|1|Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn
+-1,1,1,0|cba3ec,,4f819c,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn
 [3,-7,0]
 0,0,-1,1|cba3ec,4f819c,4f819c,,4f819c|4|Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn
 [2,-9,0]
 -1,-1,1,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_above_lab.tscn
 [2,-8,0]
--1,0,1,-1|abded1,,4f819c,4f819c,||Scenes/Levels/World 2/Rooms/skyscraper_one_above_lab.tscn
+-1,0,0,-1|abded1,,4f819c,4f819c,||Scenes/Levels/World 2/Rooms/skyscraper_one_above_lab.tscn
 [3,-9,0]
 0,-1,-1,1|abded1,4f819c,,,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_above_lab.tscn
 [3,-8,0]
@@ -509,10 +479,22 @@
 [3,-12,0]
 0,1,0,-1|abded1,4f819c,4f819c,4f819c,||Scenes/Levels/World 2/Rooms/skyscraper_one_final_ascent.tscn
 [3,-14,0]
-0,1,0,0|abded1,4f819c,4f819c,4f819c,4f819c|1|Scenes/Levels/World 2/Rooms/skyscraper_one_roof.tscn
+1,1,0,0|abded1,4f819c,4f819c,4f819c,4f819c|5|Scenes/Levels/World 2/Rooms/skyscraper_one_roof.tscn
 [2,-11,0]
 -1,-1,0,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_upper.tscn
 [-2,2,0]
 0,0,1,1|959595,363636,363636,363636,363636||Scenes/Levels/World 1/Rooms/dungeon_lower_one.tscn
 [-5,1,0]
-1,-1,0,0|959595,363636,,363636,363636|1|Scenes/Levels/World 1/Rooms/dungeon_tall.tscn
+1,-1,0,0|959595,363636,,363636,363636||Scenes/Levels/World 1/Rooms/dungeon_tall.tscn
+[4,-14,0]
+0,0,1,0|abded1,4f819c,4f819c,4f819c,4f819c|1|Scenes/Levels/World 2/Rooms/treasure_room.tscn
+[-4,-2,0]
+-1,0,0,0|abded1,,4f819c,4f819c,4f819c|4|Scenes/Levels/Virtual/W2.tscn
+[-3,-2,0]
+-1,0,-1,0|abded1,,4f819c,,4f819c||Scenes/Levels/Virtual/W2.tscn
+[-2,-2,0]
+-1,0,-1,0|abded1,,4f819c,,4f819c||Scenes/Levels/Virtual/W2.tscn
+[-1,-2,0]
+-1,0,-1,0|abded1,,4f819c,,4f819c||Scenes/Levels/Virtual/W2.tscn
+[0,-2,0]
+0,0,-1,0|abded1,4f819c,4f819c,,4f819c|1|Scenes/Levels/Virtual/W2.tscn
