@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://calvd3fseh7l4"]
+
+[ext_resource type="Script" path="res://Scenes/Levels/World Objects/Health Upgrade/HealthUpgrade.cs" id="1_qt51s"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0164"]
+radius = 15.0333
+
+[node name="HealthUpgrade" type="Area2D"]
+script = ExtResource("1_qt51s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_q0164")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
