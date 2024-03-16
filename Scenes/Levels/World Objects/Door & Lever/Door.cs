@@ -2,7 +2,7 @@ using Godot;
 using System;
 using MVM23;
 
-public partial class Door : Node2D {
+public partial class Door : Area2D {
     [Export] public string ObjectID;
 
     private WorldStateManager _worldStateManager;
