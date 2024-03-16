@@ -1,0 +1,9 @@
+---
+description: Grapple upgrade
+dialogues: 
+    - name: 
+      paragraphs: 
+        - You got the Grapple ability!
+        - You can push Shift to grapple in the direction of your mouse.
+        - Touching any surface will cancel the grapple, so be mindful of your momentum!
+        - You can grapple as many times as you want before hitting the ground.
