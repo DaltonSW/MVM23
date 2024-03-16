@@ -98,8 +98,8 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
     
     public void QueueDeath()
     {
-        _worldStateManager.SetObjectAsActivated(DoorMapping[_difficulty].Item1);
-        _worldStateManager.SetObjectAsActivated(DoorMapping[_difficulty].Item2);
+        _worldStateManager?.SetObjectAsActivated(DoorMapping[_difficulty].Item1);
+        _worldStateManager?.SetObjectAsActivated(DoorMapping[_difficulty].Item2);
         _entranceDoor.QueueFree();
         _exitDoor.QueueFree();
         SpawnTextbox(DialogueMapping[_difficulty].Item2);
