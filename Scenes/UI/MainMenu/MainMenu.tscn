@@ -1,14 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://bifuw6ucq8mqh"]
+[gd_scene load_steps=11 format=3 uid="uid://bifuw6ucq8mqh"]
 
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu/MainMenu.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://bmuap75xp2m5w" path="res://Scenes/UI/MainMenu/Title Screen No Button.png" id="2_ppush"]
-[ext_resource type="FontFile" uid="uid://d3120b42atyy8" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
-[ext_resource type="AudioStream" uid="uid://boktq1gipbnk7" path="res://Assets/Music/Cult_Title_Screen.wav" id="3_hh26o"]
-[ext_resource type="Texture2D" uid="uid://dcl66hdq63b7u" path="res://Scenes/UI/MainMenu/Buttons/PlayGame.png" id="4_7dcyt"]
-[ext_resource type="Texture2D" uid="uid://b6cjvdii3n6b6" path="res://Scenes/UI/MainMenu/Buttons/LoadGameDisabled.png" id="4_gival"]
-[ext_resource type="Texture2D" uid="uid://crjiek4eruaxl" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
-[ext_resource type="Texture2D" uid="uid://c52yrln04mxrk" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
-[ext_resource type="Texture2D" uid="uid://bbeytsgrwcgp5" path="res://Scenes/UI/MainMenu/Credits.png" id="9_2j3nf"]
+[ext_resource type="Texture2D" uid="uid://dkrh6ng2ynrbu" path="res://Scenes/UI/MainMenu/Title Screen No Button.png" id="2_ppush"]
+[ext_resource type="FontFile" uid="uid://f50ypqba7ast" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
+[ext_resource type="AudioStream" uid="uid://j5e354m8qay1" path="res://Assets/Music/Cult_Title_Screen.wav" id="3_hh26o"]
+[ext_resource type="Texture2D" uid="uid://dh2ygep808gc2" path="res://Scenes/UI/MainMenu/Buttons/NewGame.png" id="4_7sv3k"]
+[ext_resource type="Texture2D" uid="uid://dhuf2omtq7xhq" path="res://Scenes/UI/MainMenu/Buttons/LoadGameDisabled.png" id="4_gival"]
+[ext_resource type="Texture2D" uid="uid://buduvm4a86jr" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
+[ext_resource type="Texture2D" uid="uid://bgmtelth7gron" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
+[ext_resource type="Texture2D" uid="uid://clemiyeiue2pa" path="res://Scenes/UI/MainMenu/Credits.png" id="9_2j3nf"]
+[ext_resource type="Script" path="res://Scenes/UI/MainMenu/file_manager.gd" id="11_mtcpa"]
 
 [node name="Menu" type="Control"]
 process_mode = 3
@@ -50,12 +51,11 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("3_38g6u")
 theme_override_font_sizes/font_size = 24
-icon = ExtResource("4_7dcyt")
+icon = ExtResource("4_7sv3k")
 flat = true
 icon_alignment = 1
 
 [node name="LoadGameButton" type="Button" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 icon = ExtResource("4_gival")
 flat = true
@@ -82,6 +82,9 @@ visible = false
 position = Vector2(317, 184)
 scale = Vector2(1.00078, 1)
 texture = ExtResource("9_2j3nf")
+
+[node name="FileManager" type="Node" parent="."]
+script = ExtResource("11_mtcpa")
 
 [connection signal="pressed" from="HBoxContainer/NewGameButton" to="." method="_on_NewGameButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/LoadGameButton" to="." method="_on_LoadGameButton_pressed"]

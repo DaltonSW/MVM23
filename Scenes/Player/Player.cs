@@ -272,7 +272,6 @@ public partial class Player : CharacterBody2D, IHittable {
         
         _worldStateManager.SetRespawnLocation(GlobalPosition);
         _worldStateManager.Save();
-        _worldStateManager.SetRespawnLocation(GlobalPosition);
     }
 
     public bool CanDash() {
