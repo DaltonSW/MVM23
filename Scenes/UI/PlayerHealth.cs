@@ -27,7 +27,7 @@ public partial class PlayerHealth : CanvasLayer {
     }
 
     public override void _Process(double delta) {
-        var lastHeart = Mathf.Floor(_player.CurrentHealth);
+        var lastHeart = Mathf.Floor(_player.CurrentHealth); 
         foreach (var node in _hearts.GetChildren()) {
             var heart = (Sprite2D)node;
             var index = heart.GetIndex(); // What heart after the first it is
@@ -35,13 +35,9 @@ public partial class PlayerHealth : CanvasLayer {
             var xPos = (index % HeartRowSize) * HeartPixelOffset + HeartPixelOffset / 2;
             var yPos = (index / HeartRowSize) * HeartPixelOffset + HeartPixelOffset / 2;
             heart.Position = new Vector2(xPos, yPos);
+            
             if (index > lastHeart)
-                heart.Frame = 0;
-            else if (Math.Abs(index - lastHeart) < 0.001)
-                heart.Frame = (int)((_player.CurrentHealth - lastHeart) * 2);
-            else {
-                heart.Frame = 2;
-            }
+                heart.Visible = false;
         }
     }
 
@@ -50,5 +46,6 @@ public partial class PlayerHealth : CanvasLayer {
         newHeart.Texture = _baseHeart.Texture;
         newHeart.Hframes = _baseHeart.Hframes;
         _hearts.AddChild(newHeart);
+        newHeart.Visible = true;
     }
 }
