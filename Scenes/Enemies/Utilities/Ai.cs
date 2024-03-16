@@ -4,6 +4,8 @@ using System.Linq;
 
 public interface IAi
 {
+    public const float DISTANCE_PLAYER_MIGHT_BE_ON_TOP = 30f;
+
     void _PhysicsProcess(double delta) {}
     XDirection NextXDirection(XDirection current) => current;
 

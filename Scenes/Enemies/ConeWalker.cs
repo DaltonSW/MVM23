@@ -120,9 +120,11 @@ public class Chase : IAi
         _self = self;
         _target = target;
     }
-    
+
     public XDirection NextXDirection(XDirection current) =>
-        _self.XDirectionTo(_target);
+        _self.GlobalPosition.DistanceTo(_target.GlobalPosition) < IAi.DISTANCE_PLAYER_MIGHT_BE_ON_TOP
+         ? current
+         : _self.XDirectionTo(_target);
 
     public float FootSpeed() => 6000;
 }

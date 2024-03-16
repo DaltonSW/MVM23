@@ -136,7 +136,8 @@ public partial class RandomFlyer : Node2D, IHittable
             }
             case State.PURSUING: {
                 var movement = Vector2s.FromPolar(50f * (float)delta, _body.GetAngleToNode(_target));
-                _body.XDirMan.Direction = movement.XDirectionFromOrigin();
+                if (_target.GlobalPosition.DistanceTo(_body.GlobalPosition) > IAi.DISTANCE_PLAYER_MIGHT_BE_ON_TOP)
+                    _body.XDirMan.Direction = movement.XDirectionFromOrigin();
                 _body.MoveAndCollide(movement);
 
                 if (_body.GlobalPosition.DistanceTo(_target.GlobalPosition) < 75 && _attackCooldownElapsed > ATTACK_COOLDOWN_TIME)
@@ -159,7 +160,8 @@ public partial class RandomFlyer : Node2D, IHittable
             case State.READYING_ATTACK: {
                 _readyingAttackTimeElapsed += delta;
                 var movement = Vector2s.FromPolar(-5f * (float)delta, _body.GetAngleToNode(_target));
-                _body.XDirMan.Direction = movement.XDirectionFromOrigin();
+                if (_target.GlobalPosition.DistanceTo(_body.GlobalPosition) > IAi.DISTANCE_PLAYER_MIGHT_BE_ON_TOP)
+                    _body.XDirMan.Direction = movement.XDirectionFromOrigin();
                 _body.MoveAndCollide(movement);
 
                 if (_readyingAttackTimeElapsed >= READYING_ATTACK_TIME)
@@ -184,7 +186,8 @@ public partial class RandomFlyer : Node2D, IHittable
             case State.ATTACKING: {
                 _attackTimeElapsed += delta; 
                 var movement = Vector2s.FromPolar(150f * (float)delta, _attackAngle.Radians);
-                _body.XDirMan.Direction = movement.XDirectionFromOrigin();
+                if (_target.GlobalPosition.DistanceTo(_body.GlobalPosition) > IAi.DISTANCE_PLAYER_MIGHT_BE_ON_TOP)
+                    _body.XDirMan.Direction = movement.XDirectionFromOrigin();
                 var collision = _body.MoveAndCollide(movement);
                 
                 if (collision is not null || _attackTimeElapsed > ATTACK_TIME)
