@@ -271,6 +271,7 @@ public partial class Player : CharacterBody2D, IHittable {
             MaxDashes = 2;
         
         _worldStateManager.Save();
+        _worldStateManager.SetRespawnLocation(GlobalPosition);
     }
 
     public bool CanDash() {
