@@ -27,6 +27,14 @@ public partial class WorldStateManager : Node {
             { "World1/Door/BigRoomBottomLeft", false },
             { "World1/Door/BigRoomTopRight", false },
             
+            // Boss Doors
+            { "Boss1Entrance", false },
+            { "Boss1Exit", false },
+            { "Boss2Entrance", false },
+            { "Boss2Exit", false },
+            { "Boss3Entrance", false },
+            { "Boss3Exit", false },
+            
             // Key Doors
             { "DoorToWorldTwo", false },
             { "WorldTwoBossDoor", false },

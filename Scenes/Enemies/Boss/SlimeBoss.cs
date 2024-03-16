@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 namespace MVM23;
 
@@ -18,12 +19,23 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         Hard
     }
 
+    private Door _entranceDoor;
+    private Door _exitDoor;
+    
+    private readonly static Dictionary<Difficulty, (string, string)> DoorMapping = new()
+    {
+        {Difficulty.Easy, ("Boss1Entrance", "Boss1Exit")},
+        {Difficulty.Medium, ("Boss2Entrance", "Boss2Exit")},
+        {Difficulty.Hard, ("Boss3Entrance", "Boss3Exit")}
+    };
+    
     [Export] private Difficulty _difficulty = Difficulty.Easy;
 
     private Random _random;
 
     private AnimatedSprite2D _sprite;
     private HitManager _hitManager;
+    private WorldStateManager _worldStateManager;
     
     // Health properties
     [Export] private int _maxHealth = 5;
@@ -50,6 +62,7 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
     public override void _Ready() {
         _state = State.Idle;
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
+        _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
         
         _projectileScene = GD.Load<PackedScene>("res://Scenes/Enemies/Boss/boss_projectile.tscn");
 
@@ -62,6 +75,9 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         _completedIdleLoops = 0;
         _sprite.Play("idle");
         _canFlip = true;
+        
+        _entranceDoor = GetNode<Door>($"../{DoorMapping[_difficulty].Item1}");
+        _exitDoor = GetNode<Door>($"../{DoorMapping[_difficulty].Item2}");
     }
     
     public void TakeHit(Vector2 initialKnockbackVelocity)
@@ -71,6 +87,10 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
     
     public void QueueDeath()
     {
+        _worldStateManager.SetObjectAsActivated(DoorMapping[_difficulty].Item1);
+        _worldStateManager.SetObjectAsActivated(DoorMapping[_difficulty].Item2);
+        _entranceDoor.QueueFree();
+        _exitDoor.QueueFree();
         QueueFree();
     }
 

@@ -20,23 +20,23 @@ animation = &"idle"
 position = Vector2(0, 6)
 shape = SubResource("CapsuleShape2D_ontgf")
 
-[node name="spawn1" type="Marker2D" parent="." groups=["spawns"]]
+[node name="spawn1" type="Marker2D" parent="." groups=["horizontal", "spawns"]]
 position = Vector2(-60, 0)
 rotation = -3.14159
 
-[node name="spawn2" type="Marker2D" parent="." groups=["spawns"]]
+[node name="spawn2" type="Marker2D" parent="." groups=["diagonal", "spawns"]]
 position = Vector2(-45, -30)
 rotation = -2.35619
 
-[node name="spawn3" type="Marker2D" parent="." groups=["spawns"]]
+[node name="spawn3" type="Marker2D" parent="." groups=["spawns", "vertical"]]
 position = Vector2(0, -45)
 rotation = -1.5708
 
-[node name="spawn4" type="Marker2D" parent="." groups=["spawns"]]
+[node name="spawn4" type="Marker2D" parent="." groups=["diagonal", "spawns"]]
 position = Vector2(45, -30)
 rotation = -0.785398
 
-[node name="spawn5" type="Marker2D" parent="." groups=["spawns"]]
+[node name="spawn5" type="Marker2D" parent="." groups=["horizontal", "spawns"]]
 position = Vector2(60, 0)
 
 [node name="DashCollisionArea" type="Area2D" parent="."]
