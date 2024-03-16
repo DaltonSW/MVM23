@@ -63,13 +63,16 @@ public partial class Textbox : CanvasLayer {
 
     [Export] public string DialogueID = "sample";
 
+    private GodotObject _game;
+
+    
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         ProcessMode = ProcessModeEnum.Always;
 
         LoadConversation();
-        ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
+        // ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
         _textField = GetNode<TextField>("ParentBox/Background/InnerBox/TextField");
         _textField.TextFinishedPrinting += WhenTextFinished; // Attach signal listener 
@@ -83,6 +86,15 @@ public partial class Textbox : CanvasLayer {
         _endLabel.Visible = false;
         _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
         _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
+
+        _game = GetNode<GodotObject>("/root/Game");
+        SetFont(_game.Call("get_font").As<FontFile>());
+    }
+
+    public void SetFont(FontFile font) {
+        _nameLabel.LabelSettings.Font = font;
+        ThemeConsts.RegularText = font;
+        _endLabel.LabelSettings.Font = font;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

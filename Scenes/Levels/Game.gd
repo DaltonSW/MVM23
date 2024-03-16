@@ -3,6 +3,7 @@ extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 class_name Game
 
 var pause_menu = preload("res://Scenes/UI/PauseMenu/PauseMenu.tscn")
+var main_font = preload("res://Assets/Fonts/EASVHS.ttf")
 
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 const SAVE_PATH = "user://CultOfTheClosedCircuit.sav"
@@ -30,6 +31,9 @@ func _process(_delta):
 func init_room():
     MetSys.get_current_room_instance().adjust_camera_limits($Player/Camera2D)
     play_world_music()
+
+func get_font():
+    return main_font
 
 func play_world_music():
     var current_room_name = MetSys.get_current_room_name()
