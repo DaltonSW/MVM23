@@ -39,7 +39,8 @@ public partial class MainMenu : Control {
     }
     
     private void _on_LoadGameButton_pressed() {
-        GetTree().ChangeSceneToFile("res://Scenes/Levels/Game.tscn");
+        if (_fileManager.Call("does_save_file_exist").As<bool>())
+            GetTree().ChangeSceneToFile("res://Scenes/Levels/Game.tscn");
     }
 
     private void _on_QuitButton_pressed() {
