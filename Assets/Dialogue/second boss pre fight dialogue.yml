@@ -1,0 +1,43 @@
+dialogues: 
+    - name: Second Boss
+      paragraphs: 
+        - I heard what happened in the catacombs. You discovered something you shouldn’t have. 
+        - We can’t allow that.
+       
+    - name: You
+      paragraphs:
+        - You’re creating weapons and taking advantage of god.
+
+    - name: Second Boss
+      paragraphs:
+        - Is that what the weapon told you? 
+
+    - name: You
+      paragraphs:
+        - Not a weapon. He was a person. 
+
+   - name: 
+      paragraphs:
+        - A person has a brain and thinks for themselves. The exquisite weapon you destroyed had found a new higher calling. 
+        - You merely discovered our weapon at the last stage of transformation. Ramblings of a deranged being at the end of its life cycle. 
+
+  - name: You
+      paragraphs:
+        - That’s not what he would have wanted.
+        - You’re making a mockery of all that we built.
+
+  - name: 
+      paragraphs:
+        - You built? 
+        - What did you build, little recruit?
+        - You worked with your friend in the catacombs. Your callings… are the same.
+        - You were on Team Integrity. You’re the missing member.  
+        - We’ve waited a long.
+        - ...
+        - ...
+  
+  - name: Different voice
+      paragraphs:
+        - You shouldn’t be here. This is a restricted zone.
+        - Wait. You’re the rat from the catacombs. And you’re the missing member of Team Integrity? 
+        - Resist all you want. You will not survive this. 
