@@ -80,6 +80,8 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
     public override void _PhysicsProcess(double delta) {
         var velocity = Velocity;
 
+        _hitManager._PhysicsProcess(delta);
+
         switch (_state) {
             case State.Idle:
                 IdleState();
@@ -105,6 +107,7 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         
         var collision = MoveAndCollide(Velocity * (float)delta);
         if (collision == null) return;
+        EnemyUtils.HitCollideeIfApplicable(this, collision, 200f);
         var normal = collision.GetNormal();
         
         if (normal == Vector2.Up)
