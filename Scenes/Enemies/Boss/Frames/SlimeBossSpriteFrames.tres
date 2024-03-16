@@ -1,9 +1,9 @@
 [gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://o7ljpa5p4sqs"]
 
-[ext_resource type="Texture2D" uid="uid://cmji50pyma77w" path="res://Scenes/Enemies/Boss/Frames/aniDead.png" id="1_81urj"]
-[ext_resource type="Texture2D" uid="uid://bq2cpbg7c1vyi" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniIdle.png" id="2_j1bh5"]
-[ext_resource type="Texture2D" uid="uid://cysi2nre4ssqw" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniJump.png" id="3_sj2gb"]
-[ext_resource type="Texture2D" uid="uid://bopikagop77of" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniSquish.png" id="4_2oxhb"]
+[ext_resource type="Texture2D" uid="uid://bcatrnskkajla" path="res://Scenes/Enemies/Boss/Frames/aniDead.png" id="1_81urj"]
+[ext_resource type="Texture2D" uid="uid://c71w3au5aqwdx" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniIdle.png" id="2_j1bh5"]
+[ext_resource type="Texture2D" uid="uid://cxo4t85p7k2iw" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniJump.png" id="3_sj2gb"]
+[ext_resource type="Texture2D" uid="uid://0lcti3o71bpd" path="res://Scenes/Enemies/Boss/Frames/Boss1/aniSquish.png" id="4_2oxhb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_frmqx"]
 atlas = ExtResource("1_81urj")
