@@ -5,7 +5,7 @@ class_name Game
 var pause_menu = preload("res://Scenes/UI/PauseMenu/PauseMenu.tscn")
 
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
-const SAVE_PATH = "user://example_save_data.sav"
+const SAVE_PATH = "user://CultOfTheClosedCircuit.sav"
 
 @export var starting_map: String
 

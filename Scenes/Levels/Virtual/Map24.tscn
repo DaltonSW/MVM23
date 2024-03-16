@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://doa5pw758vfh5"]
+[gd_scene load_steps=6 format=3 uid="uid://doa5pw758vfh5"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_6dmbi"]
 [ext_resource type="PackedScene" uid="uid://sxgx7tpwoibv" path="res://Scenes/Levels/Virtual/City3Background.tscn" id="1_o1s5t"]
 [ext_resource type="TileSet" uid="uid://djy0lkc0yngwk" path="res://Scenes/Levels/Virtual/tileset.tres" id="2_svosg"]
 [ext_resource type="PackedScene" uid="uid://d4c3b4l58cefj" path="res://Scenes/Enemies/Boss/slime_boss.tscn" id="4_iawlx"]
+[ext_resource type="PackedScene" uid="uid://bp2m8h76moghn" path="res://Scenes/Levels/World Objects/Door & Lever/door.tscn" id="5_iejvo"]
 
 [node name="Map24" type="Node2D"]
 
@@ -19,3 +20,9 @@ layer_0/tile_data = PackedInt32Array(41, 131072, 10, -65495, 131072, 8, 40, 6553
 [node name="SlimeBoss" parent="." instance=ExtResource("4_iawlx")]
 position = Vector2(896, 1061)
 _difficulty = 2
+
+[node name="Boss3Entrance" parent="." instance=ExtResource("5_iejvo")]
+position = Vector2(703, -13)
+rotation = 1.5708
+scale = Vector2(3, 3)
+ObjectID = "Boss3Entrance"
