@@ -72,7 +72,7 @@ public partial class Textbox : CanvasLayer {
         ProcessMode = ProcessModeEnum.Always;
 
         LoadConversation();
-        // ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
+        ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
         _textField = GetNode<TextField>("ParentBox/Background/InnerBox/TextField");
         _textField.TextFinishedPrinting += WhenTextFinished; // Attach signal listener 

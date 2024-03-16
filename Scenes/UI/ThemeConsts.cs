@@ -18,10 +18,10 @@ public class ThemeConsts {
         RegularTextSize = 20;
         DefaultDrawMode = TextField.DrawModes.CharByChar;
 
-        EASVHS = new FontFile();
-        EASVHS.LoadDynamicFont("res://Assets/Fonts/easvhs.ttf");
+        // EASVHS = new FontFile();
+        // EASVHS.LoadDynamicFont("res://Assets/Fonts/easvhs.ttf");
 
-        RegularText = EASVHS;
-        BoldText = EASVHS;
+        // RegularText = EASVHS;
+        // BoldText = EASVHS;
     }
 }
