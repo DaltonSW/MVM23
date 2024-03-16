@@ -26,3 +26,9 @@ position = Vector2(703, -13)
 rotation = 1.5708
 scale = Vector2(3, 3)
 ObjectID = "Boss3Entrance"
+
+[node name="Boss3Exit" parent="." instance=ExtResource("5_iejvo")]
+position = Vector2(703, -13)
+rotation = 1.5708
+scale = Vector2(3, 3)
+ObjectID = "Boss3Exit"
