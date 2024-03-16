@@ -20,6 +20,7 @@ layer_0/tile_data = PackedInt32Array(1179648, 65536, 15, 1179649, 65536, 15, 117
 
 [node name="AbilityUnlock" parent="." instance=ExtResource("4_5n5ax")]
 position = Vector2(247, 211)
+_myUnlock = "DoubleDash"
 
 [node name="Sprite2D" type="Sprite2D" parent="AbilityUnlock"]
 texture = ExtResource("5_syyrr")
