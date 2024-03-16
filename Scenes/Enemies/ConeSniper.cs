@@ -221,7 +221,10 @@ public class FireAtWill : IAi
 
     public XDirection NextXDirection(XDirection current) =>
         _state switch {
-            ShootingState.READYING => _self.XDirectionTo(_target),
+            ShootingState.READYING => 
+                _self.GlobalPosition.DistanceTo(_target.GlobalPosition) < IAi.DISTANCE_PLAYER_MIGHT_BE_ON_TOP
+                 ? current
+                 : _self.XDirectionTo(_target),
             _ => current,
         };
     public float FootSpeed() => 0;
