@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/UI/textbox/TextField.cs" id="1_jxaen"]
 [ext_resource type="Script" path="res://Scenes/UI/textbox/Textbox.cs" id="1_lb83q"]
+[ext_resource type="FontFile" uid="uid://f50ypqba7ast" path="res://Assets/Fonts/EASVHS.ttf" id="3_d04rh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mg3so"]
 bg_color = Color(0, 0, 0, 1)
@@ -19,18 +20,11 @@ corner_radius_bottom_left = 10
 bg_color = Color(0.6, 0.6, 0.6, 0.2)
 draw_center = false
 
-[sub_resource type="FontFile" id="FontFile_5ed8p"]
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+[sub_resource type="LabelSettings" id="LabelSettings_2gnay"]
+font = ExtResource("3_d04rh")
 
-[sub_resource type="LabelSettings" id="LabelSettings_lnvqc"]
-font = SubResource("FontFile_5ed8p")
-
-[sub_resource type="LabelSettings" id="LabelSettings_c3f8c"]
+[sub_resource type="LabelSettings" id="LabelSettings_jxp3i"]
+font = ExtResource("3_d04rh")
 
 [node name="Textbox" type="CanvasLayer"]
 script = ExtResource("1_lb83q")
@@ -77,7 +71,7 @@ offset_top = 107.0
 offset_right = 607.0
 offset_bottom = 130.0
 text = "[ E ]"
-label_settings = SubResource("LabelSettings_lnvqc")
+label_settings = SubResource("LabelSettings_2gnay")
 
 [node name="SpeakerName" type="Label" parent="ParentBox/Background"]
 texture_filter = 1
@@ -88,5 +82,5 @@ offset_right = 154.0
 offset_bottom = 35.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "skdjflkdsjflkdsjf"
-label_settings = SubResource("LabelSettings_c3f8c")
+text = "Speaker Name"
+label_settings = SubResource("LabelSettings_jxp3i")
