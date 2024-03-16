@@ -1,0 +1,8 @@
+---
+description: Dash upgrade
+dialogues: 
+    - name: 
+      paragraphs: 
+        - You got the Dash ability!
+        - Click RMB to dash in the direction currently held by WASD.
+        - Dashing through enemies will deal damage to them.
