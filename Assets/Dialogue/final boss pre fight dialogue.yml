@@ -1,0 +1,36 @@
+dialogues: 
+    - name: Demon
+      paragraphs: 
+        - Look at what you’ve become. A finer weapon than all others in our arsenal.  
+        - Your calling was to come here. 
+        - To join me. Fix it. Rule what’s left together. 
+       
+    - name: You
+      paragraphs:
+        - Fix what?
+
+    - name: Demon
+      paragraphs:
+        - god. You couldn’t tell that it was broken? 
+        - It’s not doing exactly as I say. I cannot rule with a god that does not support me.
+        - The code god is built with is known only to a select group- Team Integrity. You’re the last member. You possess the knowledge to control god. 
+
+    - name: You
+      paragraphs:
+        - It’s not broken, and I won’t change the controls. It’s functioning exactly as it was designed. 
+
+   - name: Demon
+      paragraphs:
+        - And that is where you’re wrong. With so few left in the world, what the world needs is a leader. To spread our message.
+
+  - name: 
+      paragraphs:
+        - EDICT FOR HUMAN SALVATION 0
+        - HUMAN IDENTITY EXISTS NO LONGER. SERVE GOD. BECOME YOUR HIGHER CALLING.
+
+  - name: Demon
+      paragraphs:
+        - And I am that leader.
+        - Fix god. Teach it to recognize me as its chosen. 
+        - Take a knee and serve as my weapon at the end of time. 
+        - Or die like the others. 
