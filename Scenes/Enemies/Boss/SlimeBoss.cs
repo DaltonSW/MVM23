@@ -10,7 +10,8 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         Idle,
         Jumping,
         JumpSquat,
-        Death
+        Death,
+        Dialogue
     }
 
     private enum Difficulty {
@@ -27,6 +28,13 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         {Difficulty.Easy, ("Boss1Entrance", "Boss1Exit")},
         {Difficulty.Medium, ("Boss2Entrance", "Boss2Exit")},
         {Difficulty.Hard, ("Boss3Entrance", "Boss3Exit")}
+    };
+
+    private readonly static Dictionary<Difficulty, (string, string)> DialogueMapping = new()
+    {
+        {Difficulty.Easy, ("Boss1PreFight", "Boss1PostFight")},
+        {Difficulty.Medium, ("Boss2PreFight", "Boss2PostFight")},
+        {Difficulty.Hard, ("Boss3PreFight", "Boss3PostFight")}
     };
     
     [Export] private Difficulty _difficulty = Difficulty.Easy;
@@ -58,13 +66,15 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
     private bool _canFlip;
 
     private PackedScene _projectileScene;
+    private PackedScene _textboxScene;
 
     public override void _Ready() {
-        _state = State.Idle;
+        _state = State.Dialogue;
         _sprite = GetNode<AnimatedSprite2D>("Sprite");
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
         
         _projectileScene = GD.Load<PackedScene>("res://Scenes/Enemies/Boss/boss_projectile.tscn");
+        _textboxScene = ResourceLoader.Load<PackedScene>("res://Scenes/UI/textbox/textbox.tscn");
 
         _hitManager = new HitManager(this, _maxHealth + _maxHealth * (int)_difficulty, _sprite);
 
@@ -78,6 +88,7 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         
         _entranceDoor = GetNode<Door>($"../{DoorMapping[_difficulty].Item1}");
         _exitDoor = GetNode<Door>($"../{DoorMapping[_difficulty].Item2}");
+        
     }
     
     public void TakeHit(Vector2 initialKnockbackVelocity)
@@ -91,6 +102,7 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         _worldStateManager.SetObjectAsActivated(DoorMapping[_difficulty].Item2);
         _entranceDoor.QueueFree();
         _exitDoor.QueueFree();
+        SpawnTextbox(DialogueMapping[_difficulty].Item2);
         QueueFree();
     }
 
@@ -103,6 +115,10 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
         _hitManager._PhysicsProcess(delta);
 
         switch (_state) {
+            case State.Dialogue:
+                SpawnTextbox(DialogueMapping[_difficulty].Item1);
+                _state = State.Idle;
+                break;
             case State.Idle:
                 IdleState();
                 break;
@@ -212,5 +228,11 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
             GetParent().AddChild(projectile);
         }
     }
-
+    
+    private void SpawnTextbox(string dialogue) {
+        var textbox = _textboxScene.Instantiate<Textbox>();
+        textbox.DialogueID = dialogue;
+        GetParent().AddChild(textbox);
+        GetTree().Paused = true;
+    }
 }

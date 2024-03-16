@@ -9,6 +9,7 @@ radius = 7.0
 height = 38.0
 
 [node name="SlimeBoss" type="CharacterBody2D" groups=["hurt_player_on_collide"]]
+process_mode = 1
 collision_layer = 4
 script = ExtResource("1_l5k8e")
 
