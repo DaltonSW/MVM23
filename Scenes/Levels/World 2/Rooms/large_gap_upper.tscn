@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://bif21m0xc0o5c"]
+[gd_scene load_steps=7 format=3 uid="uid://bif21m0xc0o5c"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_j0ikw"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_hbkot"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_xb1ek"]
 [ext_resource type="PackedScene" uid="uid://bfkabr4b4tedi" path="res://Scenes/Enemies/ConeSniper.tscn" id="4_n0q06"]
+[ext_resource type="PackedScene" uid="uid://db88ko1qw0fn" path="res://Scenes/Levels/World Objects/Pits/pit.tscn" id="5_h5yug"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_37lay"]
+size = Vector2(1945, 129)
 
 [node name="LargeGapUpper" type="Node2D"]
 
@@ -18,3 +22,15 @@ layer_0/tile_data = PackedInt32Array(2424832, 393216, 7, 2424833, 0, 15, 2424834
 
 [node name="ConeSniper" parent="." instance=ExtResource("4_n0q06")]
 position = Vector2(844, 334)
+
+[node name="Pit" parent="." instance=ExtResource("5_h5yug")]
+position = Vector2(907, 673)
+AssociatedRespawn = "1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pit"]
+position = Vector2(57.5, 36.5)
+shape = SubResource("RectangleShape2D_37lay")
+
+[node name="Respawns" type="Node" parent="."]
+
+[node name="1" type="Marker2D" parent="Respawns"]
