@@ -270,8 +270,8 @@ public partial class Player : CharacterBody2D, IHittable {
         if (unlock is "DoubleDash")
             MaxDashes = 2;
         
-        _worldStateManager.Save();
         _worldStateManager.SetRespawnLocation(GlobalPosition);
+        _worldStateManager.Save();
     }
 
     public bool CanDash() {
