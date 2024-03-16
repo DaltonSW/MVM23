@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://db88ko1qw0fn" path="res://Scenes/Levels/World Objects/Pits/pit.tscn" id="5_0rf3i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rxf3o"]
-size = Vector2(1299, 88)
+size = Vector2(1956, 88)
 
 [node name="SkyscraperTwoLower" type="Node2D"]
 
@@ -26,12 +26,12 @@ position = Vector2(208, 61)
 [node name="Respawns" type="Node" parent="."]
 
 [node name="1" type="Marker2D" parent="Respawns"]
-position = Vector2(1231, 145)
+position = Vector2(1880, 231)
 
 [node name="Pit" parent="." instance=ExtResource("5_0rf3i")]
 position = Vector2(865, 339)
 AssociatedRespawn = "1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pit"]
-position = Vector2(-221.5, 19)
+position = Vector2(107, 19)
 shape = SubResource("RectangleShape2D_rxf3o")
