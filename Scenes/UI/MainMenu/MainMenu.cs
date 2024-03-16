@@ -10,6 +10,7 @@ public partial class MainMenu : Control {
 
     public override void _Ready() {
         _creditsSprite = GetNode<Sprite2D>("Credits");
+        
         _newGameButton = GetNode<Button>("HBoxContainer/NewGameButton");
         _loadGameButton = GetNode<Button>("HBoxContainer/LoadGameButton");
         _creditsButton = GetNode<Button>("HBoxContainer/CreditsButton");
@@ -19,11 +20,6 @@ public partial class MainMenu : Control {
     public override void _Process(double delta) {
         if (!_creditsSprite.Visible ||
             (!Input.IsActionJustPressed("pause") && !Input.IsActionJustPressed("close_menu"))) return;
-        _creditsSprite.Visible = false;
-        _newGameButton.Disabled = false;
-        _loadGameButton.Disabled = false;
-        _creditsButton.Disabled = false;
-        _quitButton.Disabled = false;
     }
 
     private void _on_NewGameButton_pressed() {
