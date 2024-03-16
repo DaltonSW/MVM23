@@ -115,6 +115,10 @@ public partial class WorldStateManager : Node {
         return checkpointID == CurrentCheckpointID;
     }
 
+    public void SetRespawnLocation(Vector2 respawnLocation) {
+        GlobalRespawnLocation = respawnLocation;
+    }
+
     public void Save() {
         _game.Call("save_game");
         _currentRoom = _game.Call("get_room_name").AsString();
