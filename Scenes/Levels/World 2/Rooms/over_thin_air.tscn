@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://ci7231fqwukm"]
+[gd_scene load_steps=8 format=3 uid="uid://ci7231fqwukm"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_r2g7b"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_o4q23"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_avhlx"]
 [ext_resource type="PackedScene" uid="uid://bfkabr4b4tedi" path="res://Scenes/Enemies/ConeSniper.tscn" id="4_0x2i8"]
 [ext_resource type="PackedScene" uid="uid://calvd3fseh7l4" path="res://Scenes/Levels/World Objects/Health Upgrade/health_upgrade.tscn" id="5_vui15"]
+[ext_resource type="PackedScene" uid="uid://db88ko1qw0fn" path="res://Scenes/Levels/World Objects/Pits/pit.tscn" id="6_p3utr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nqvxd"]
+size = Vector2(1280, 30)
 
 [node name="OverThinAir" type="Node2D"]
 
@@ -23,3 +27,16 @@ position = Vector2(1205, 261)
 [node name="HealthUpgrade" parent="." instance=ExtResource("5_vui15")]
 position = Vector2(222, 204)
 HealthUpgradeID = "Health11"
+
+[node name="Respawns" type="Node" parent="."]
+
+[node name="1" type="Marker2D" parent="Respawns"]
+position = Vector2(1221, 675)
+
+[node name="Pit" parent="." instance=ExtResource("6_p3utr")]
+position = Vector2(625, 737)
+AssociatedRespawn = "1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pit"]
+position = Vector2(14, -5)
+shape = SubResource("RectangleShape2D_nqvxd")

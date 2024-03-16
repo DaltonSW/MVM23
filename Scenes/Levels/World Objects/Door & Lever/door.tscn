@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3q3xf"]
 size = Vector2(8, 24)
 
-[node name="Door" type="Area2D"]
+[node name="Door" type="CharacterBody2D"]
 script = ExtResource("1_arfuk")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

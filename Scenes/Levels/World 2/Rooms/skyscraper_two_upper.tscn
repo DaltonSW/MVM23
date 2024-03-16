@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cn4lsp08plcod"]
+[gd_scene load_steps=6 format=3 uid="uid://cn4lsp08plcod"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_7qhcx"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_qagp4"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_fk5fi"]
+[ext_resource type="PackedScene" uid="uid://db88ko1qw0fn" path="res://Scenes/Levels/World Objects/Pits/pit.tscn" id="4_rcc5u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7orst"]
+size = Vector2(877, 89)
 
 [node name="SkyscraperTwoUpper" type="Node2D"]
 
@@ -14,3 +18,16 @@ layer_0/tile_data = PackedInt32Array(2949213, 393216, 6, 2949214, 458752, 6, 294
 [node name="RoomInstance" parent="." instance=ExtResource("2_qagp4")]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("3_fk5fi")]
+
+[node name="Pit" parent="." instance=ExtResource("4_rcc5u")]
+position = Vector2(1052, 734)
+AssociatedRespawn = "1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pit"]
+position = Vector2(4.5, 39.5)
+shape = SubResource("RectangleShape2D_7orst")
+
+[node name="Respawns" type="Node" parent="."]
+
+[node name="1" type="Marker2D" parent="Respawns"]
+position = Vector2(575, 692)

@@ -5,7 +5,7 @@ namespace MVM23;
 
 public partial class WorldStateManager : Node {
 
-    public Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
+    [Export] public Godot.Collections.Dictionary<string, bool> WorldObjects { get; set; }
     
     public string CurrentCheckpointID;
     public Vector2 GlobalRespawnLocation;
