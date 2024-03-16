@@ -264,8 +264,11 @@ public partial class Player : CharacterBody2D, IHittable {
 
     public void UnlockAbility(string unlock) {
         Abilities[unlock] = true;
-        if (unlock is "Dash" or "DoubleDash")
-            MaxDashes += 1;
+        if (unlock is "Dash")
+            MaxDashes = 1;
+
+        if (unlock is "DoubleDash")
+            MaxDashes = 2;
         
         _worldStateManager.Save();
     }
