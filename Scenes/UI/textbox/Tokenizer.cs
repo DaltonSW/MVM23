@@ -26,8 +26,20 @@ public static class Tokenizer
             StringSize = GetTokenStringSize();
         }
         
-        private Color GetColor()
-        {
+        private Color GetColor() {
+            if (IsFlagSet(Flags, TokenFlags.TeamIntegrity))
+                return Color.Color8(120, 255, 254);
+            
+            if (IsFlagSet(Flags, TokenFlags.System))
+                return Color.Color8(17, 255, 25);
+            
+            if (IsFlagSet(Flags, TokenFlags.GOD))
+                return Color.Color8(255, 174, 244);
+            
+            if (IsFlagSet(Flags, TokenFlags.Demon))
+                return Color.Color8(184, 17, 25);
+            
+            
             var color = new Color(Colors.Black);
             if (IsFlagSet(Flags, TokenFlags.Red))
             {
@@ -68,25 +80,17 @@ public static class Tokenizer
 
         private FontFile GetFont()
         {
-            if (IsFlagSet(TokenFlags.Code, Flags))
-            {
+            if (IsFlagSet(TokenFlags.Demon, Flags) || IsFlagSet(TokenFlags.System, Flags))
                 return ThemeConsts.CodeText;
-            }
             
             if (IsFlagSet(TokenFlags.Bold, Flags) && IsFlagSet(TokenFlags.Italic, Flags))
-            {
                 return ThemeConsts.BoldItalicText;
-            }
             
             if (IsFlagSet(TokenFlags.Bold, Flags))
-            {
                 return ThemeConsts.BoldText;
-            }
             
             if (IsFlagSet(TokenFlags.Italic, Flags))
-            {
                 return ThemeConsts.ItalicText;
-            }
             
             return ThemeConsts.RegularText;
         }
@@ -120,7 +124,7 @@ public static class Tokenizer
         GOD = 256,
         Demon = 512,
         TeamIntegrity = 1024,
-        Ability = 2048,
+        System = 2048,
         
         ClearFlag = int.MaxValue
     }
@@ -176,7 +180,7 @@ public static class Tokenizer
                     "[italic]" => TokenFlags.Italic,
                     "[i]" => TokenFlags.Italic,
                     
-                    "[ability]" => TokenFlags.Ability,
+                    "[system]" => TokenFlags.System,
                     "[demon]" => TokenFlags.Demon,
                     "[god]" => TokenFlags.GOD,
                     "[ti]" => TokenFlags.TeamIntegrity,
