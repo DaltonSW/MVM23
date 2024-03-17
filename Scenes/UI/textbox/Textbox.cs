@@ -87,14 +87,13 @@ public partial class Textbox : CanvasLayer {
         // _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
         // _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
-        // _game = GetNode<GodotObject>("/root/Game");
-        // SetFont(_game.Call("get_font").As<FontFile>());
+        _game = GetNode<GodotObject>("/root/Game");
+        SetFonts();
     }
 
-    public void SetFont(FontFile font) {
-        _nameLabel.LabelSettings.Font = font;
-        ThemeConsts.RegularText = font;
-        _endLabel.LabelSettings.Font = font;
+    public void SetFonts() {
+        ThemeConsts.RegularText = _game.Call("get_main_font").As<FontFile>();
+        ThemeConsts.CodeText = _game.Call("get_code_font").As<FontFile>();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
