@@ -5,7 +5,7 @@ using MVM23;
 
 public partial class AbilityUnlock : Area2D
 {
-    [Export(PropertyHint.Enum, "Stick,Dash,SuperJump,Grapple,DoubleDash,DashOnKill,KeyToWorldTwo,WorldTwoBossKey,WorldThreeKeyOne,WorldThreeKeyTwo")] 
+    [Export(PropertyHint.Enum, "Stick,Dash,SuperJump,Grapple,DoubleDash,DashOnKill,KeyToWorldTwo,WorldTwoBossKey,WorldThreeKeyOne,WorldThreeKeyTwo,TeleporterTutorial")] 
     private string _myUnlock;
 
     private List<string> _tutorial = new()
@@ -14,7 +14,12 @@ public partial class AbilityUnlock : Area2D
         "Dash",
         "SuperJump",
         "Grapple",
-        "DoubleDash"
+        "DoubleDash",
+        "TeleporterTutorial",
+        "KeyToWorldTwo",
+        "WorldTwoBossKey",
+        "WorldThreeKeyOne",
+        "WorldThreeKeyTwo"
     };
 
     private Player _player;

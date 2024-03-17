@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://btjwofj6umq7t"]
+[gd_scene load_steps=18 format=3 uid="uid://btjwofj6umq7t"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/Game.gd" id="1_p8v4f"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_0dx4k"]
@@ -16,6 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://bb0lo02l4v3o4" path="res://Assets/Music/W3.wav" id="10_21kqa"]
 [ext_resource type="AudioStream" uid="uid://xxhynvag16h6" path="res://Assets/Music/W3_Boss.wav" id="11_1cp51"]
 [ext_resource type="AudioStream" uid="uid://botb77vh04vbx" path="res://Assets/Music/W3_Pause.wav" id="12_g3ntp"]
+[ext_resource type="AudioStream" uid="uid://cgmrn0pvya8b4" path="res://Assets/SFX/GetAbility.wav" id="17_mggss"]
 
 [node name="Game" type="Node2D"]
 process_mode = 3
@@ -24,7 +25,7 @@ starting_map = "res://Scenes/Levels/World 1/Rooms/entry_room.tscn"
 
 [node name="Player" parent="." instance=ExtResource("2_0dx4k")]
 process_mode = 1
-position = Vector2(91, 164)
+position = Vector2(760, 130)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
@@ -37,4 +38,4 @@ script = ExtResource("5_dx1hd")
 
 [node name="AudioManager" parent="." instance=ExtResource("4_2clki")]
 music = Array[Resource]([ExtResource("5_76ht3"), ExtResource("6_qpwqm"), ExtResource("7_b3608"), ExtResource("8_gragd"), ExtResource("9_jru5l"), ExtResource("10_21kqa"), ExtResource("11_1cp51"), ExtResource("12_g3ntp")])
-effects = Array[Resource]([ExtResource("5_7642v"), ExtResource("6_8pi7v"), ExtResource("7_f1mkb")])
+effects = Array[Resource]([ExtResource("5_7642v"), ExtResource("6_8pi7v"), ExtResource("7_f1mkb"), ExtResource("17_mggss")])

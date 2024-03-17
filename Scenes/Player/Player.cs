@@ -272,6 +272,8 @@ public partial class Player : CharacterBody2D, IHittable {
         
         _worldStateManager.SetRespawnLocation(GlobalPosition);
         _worldStateManager.Save();
+        
+        PlaySound("GetAbility");
     }
 
     public bool CanDash() {
