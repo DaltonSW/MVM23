@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_0dx4k"]
 [ext_resource type="PackedScene" uid="uid://d0r1wadg5l20h" path="res://Scenes/UI/PlayerHealth.tscn" id="3_asmql"]
 [ext_resource type="PackedScene" uid="uid://b2yrjlexgqqvi" path="res://addons/audio-manager/AudioManager.tscn" id="4_2clki"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/Minimap/Minimap.tscn" id="4_6haxt"]
+[ext_resource type="PackedScene" uid="uid://cqc52askv1u2v" path="res://Scenes/UI/Minimap/Minimap.tscn" id="4_6haxt"]
 [ext_resource type="AudioStream" uid="uid://bkp1es040miwo" path="res://Assets/Music/W1.wav" id="5_76ht3"]
 [ext_resource type="AudioStream" uid="uid://dlupsnh7orfyy" path="res://Assets/SFX/Dash.wav" id="5_7642v"]
 [ext_resource type="Script" path="res://Scenes/Utilities/WorldStateManager.cs" id="5_dx1hd"]
