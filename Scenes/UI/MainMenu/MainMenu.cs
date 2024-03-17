@@ -7,6 +7,7 @@ public partial class MainMenu : Control {
     private Button _loadGameButton;
     private Button _creditsButton;
     private Button _quitButton;
+    private Button _closeCreditsButton;
 
     private GodotObject _fileManager;
     
@@ -19,6 +20,7 @@ public partial class MainMenu : Control {
         _loadGameButton = GetNode<Button>("HBoxContainer/LoadGameButton");
         _creditsButton = GetNode<Button>("HBoxContainer/CreditsButton");
         _quitButton = GetNode<Button>("HBoxContainer/QuitButton");
+        _closeCreditsButton = GetNode<Button>("CloseCreditsButton");
 
         if (_fileManager.Call("does_save_file_exist").As<bool>())
             _loadGameButton.Icon = _fileManager.Call("get_save_available_texture").As<Texture2D>();
@@ -53,5 +55,21 @@ public partial class MainMenu : Control {
         _loadGameButton.Disabled = true;
         _creditsButton.Disabled = true;
         _quitButton.Disabled = true;
+        _closeCreditsButton.Disabled = false;
+        _closeCreditsButton.Visible = true;
+    }
+    
+    private void _on_close_credits_button_pressed()
+    {
+        _creditsSprite.Visible = false;
+        _newGameButton.Disabled = false;
+        _loadGameButton.Disabled = false;
+        _creditsButton.Disabled = false;
+        _quitButton.Disabled = false;
+        _closeCreditsButton.Disabled = true;
+        _closeCreditsButton.Visible = false;
     }
 }
+
+
+
