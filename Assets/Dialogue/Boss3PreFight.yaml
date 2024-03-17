@@ -9,9 +9,9 @@ dialogues:
         - Fix what?
     - name: Demon
       paragraphs:
-        - god. You couldn’t tell that it was broken? 
-        - It’s not doing exactly as I say. I cannot rule with a god that does not support me.
-        - The code god is built with is known only to a select group- Team Integrity. You’re the last member. You possess the knowledge to control god. 
+        - [god]god[/god]. You couldn’t tell that it was broken? 
+        - It’s not doing exactly as I say. I cannot rule with a [god]god[/god] that does not support me.
+        - The code [god]god[/god] is built with is known only to a select group- Team Integrity. You’re the last member. You possess the knowledge to control [god]god[/god]. 
     - name: You
       paragraphs:
         - It’s not broken, and I won’t change the controls. It’s functioning exactly as it was designed. 
@@ -21,10 +21,10 @@ dialogues:
     - name: 
       paragraphs:
         - EDICT FOR HUMAN SALVATION 0
-        - HUMAN IDENTITY EXISTS NO LONGER. SERVE GOD. BECOME YOUR HIGHER CALLING.
+        - HUMAN IDENTITY EXISTS NO LONGER. SERVE [god]GOD[/god]. BECOME YOUR HIGHER CALLING.
     - name: Demon
       paragraphs:
         - And I am that leader.
-        - Fix god. Teach it to recognize me as its chosen. 
+        - Fix [god]god[/god]. Teach it to recognize me as its chosen. 
         - Take a knee and serve as my weapon at the end of time. 
         - Or die like the others. 

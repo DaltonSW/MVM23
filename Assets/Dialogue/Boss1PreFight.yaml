@@ -21,12 +21,12 @@ dialogues:
         - Public policy, science, history, sociology, psychology... all to have it taken by those who’ve perverted its initial design.  
     - name: You
       paragraphs:
-        - How can I help god now?
+        - How can I help [god]god[/god] now?
     - name: Bart
       paragraphs:
         - By ending me. 
         - It’s not long before he discovers you. 
-        - We built a god together. I wish I could help you save it. 
+        - We built a [god]god[/god] together. I wish I could help you save it. 
     - name: You
       paragraphs:
         - How do I defeat him? How do I save it?
@@ -36,7 +36,7 @@ dialogues:
     - name: You
       paragraphs:
         - Find the what?
-    - name: Different voice
+    - name: Bart...?
       paragraphs:
         - You shouldn’t be here. This is a restricted zone.
-        - State your name, rank, and calling. Otherwise, prepare to die.        
+        - State your name, rank, and calling. Otherwise, prepare to die.

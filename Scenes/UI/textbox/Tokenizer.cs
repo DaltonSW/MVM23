@@ -118,8 +118,9 @@ public static class Tokenizer
         Code = 128,
         
         GOD = 256,
-        Ability = 512,
+        Demon = 512,
         TeamIntegrity = 1024,
+        Ability = 2048,
         
         ClearFlag = int.MaxValue
     }
@@ -176,6 +177,7 @@ public static class Tokenizer
                     "[i]" => TokenFlags.Italic,
                     
                     "[ability]" => TokenFlags.Ability,
+                    "[demon]" => TokenFlags.Demon,
                     "[god]" => TokenFlags.GOD,
                     "[ti]" => TokenFlags.TeamIntegrity,
                     
