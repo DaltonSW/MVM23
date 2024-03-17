@@ -74,21 +74,21 @@ public partial class Textbox : CanvasLayer {
         LoadConversation();
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
-        _textField = GetNode<TextField>("ParentBox/Background/InnerBox/TextField");
+        _textField = GetNode<TextField>("MainBox/Background/InnerBox/TextField");
         _textField.TextFinishedPrinting += WhenTextFinished; // Attach signal listener 
 
-        _nameLabel = GetNode<Label>("ParentBox/Background/SpeakerName");
+        _nameLabel = GetNode<Label>("NameBox/Background/SpeakerName");
         _nameLabel.Visible = false;
-        _nameLabel.LabelSettings.Font = ThemeConsts.BoldText;
-        _nameLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
+        // _nameLabel.LabelSettings.Font = ThemeConsts.BoldText;
+        // _nameLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
-        _endLabel = GetNode<Label>("ParentBox/Background/EndLabel");
+        _endLabel = GetNode<Label>("MainBox/Background/EndLabel");
         _endLabel.Visible = false;
-        _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
-        _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
+        // _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
+        // _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
-        _game = GetNode<GodotObject>("/root/Game");
-        SetFont(_game.Call("get_font").As<FontFile>());
+        // _game = GetNode<GodotObject>("/root/Game");
+        // SetFont(_game.Call("get_font").As<FontFile>());
     }
 
     public void SetFont(FontFile font) {
