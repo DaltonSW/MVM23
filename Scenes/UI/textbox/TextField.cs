@@ -20,7 +20,7 @@ public partial class TextField : Panel {
     private Font _font;
 
     private bool _textRemaining;
-    private const float AlphaIncrement = 0.15F;
+    private const float AlphaIncrement = 0.2F;
     private int _curCharIndex;
     private float _curAlpha;
     private float _curLinePos;

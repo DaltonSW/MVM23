@@ -4,6 +4,7 @@ namespace MVM23.Scripts;
 
 public class ThemeConsts {
     private static FontFile EASVHS { get; set; }
+    private static FontFile TestFont { get; set; }
 
     public static int RegularTextSize { get; private set; }
     public static FontFile RegularText { get; set; }
@@ -15,13 +16,16 @@ public class ThemeConsts {
     public static TextField.DrawModes DefaultDrawMode { get; private set; }
 
     public static void Initialize() {
-        RegularTextSize = 20;
+        RegularTextSize = 14;
         DefaultDrawMode = TextField.DrawModes.CharByChar;
 
-        // EASVHS = new FontFile();
-        // EASVHS.LoadDynamicFont("res://Assets/Fonts/easvhs.ttf");
+        EASVHS = new FontFile();
+        EASVHS.LoadDynamicFont("res://Assets/Fonts/easvhs.ttf");
 
-        // RegularText = EASVHS;
-        // BoldText = EASVHS;
+        TestFont = new FontFile();
+        TestFont.LoadDynamicFont("res://Assets/Fonts/Dogica.otf");
+
+        RegularText = EASVHS;
+        BoldText = RegularText;
     }
 }
