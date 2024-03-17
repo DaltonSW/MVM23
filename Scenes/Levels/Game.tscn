@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://btjwofj6umq7t"]
+[gd_scene load_steps=19 format=3 uid="uid://btjwofj6umq7t"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/Game.gd" id="1_p8v4f"]
 [ext_resource type="PackedScene" uid="uid://co3marnlrukwe" path="res://Scenes/Player/player.tscn" id="2_0dx4k"]
 [ext_resource type="PackedScene" uid="uid://d0r1wadg5l20h" path="res://Scenes/UI/PlayerHealth.tscn" id="3_asmql"]
 [ext_resource type="PackedScene" uid="uid://b2yrjlexgqqvi" path="res://addons/audio-manager/AudioManager.tscn" id="4_2clki"]
+[ext_resource type="PackedScene" uid="uid://cqc52askv1u2v" path="res://Scenes/UI/Minimap/Minimap.tscn" id="4_6haxt"]
 [ext_resource type="AudioStream" uid="uid://bkp1es040miwo" path="res://Assets/Music/W1.wav" id="5_76ht3"]
 [ext_resource type="AudioStream" uid="uid://dlupsnh7orfyy" path="res://Assets/SFX/Dash.wav" id="5_7642v"]
 [ext_resource type="Script" path="res://Scenes/Utilities/WorldStateManager.cs" id="5_dx1hd"]
@@ -32,6 +33,45 @@ position = Vector2(760, 130)
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PlayerHealth" parent="UI" instance=ExtResource("3_asmql")]
+
+[node name="Node2D" type="Node2D" parent="UI"]
+
+[node name="Minimap Background" type="ColorRect" parent="UI/Node2D"]
+offset_left = 562.0
+offset_right = 640.0
+offset_bottom = 78.0
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="Border Left" type="ColorRect" parent="UI/Node2D"]
+offset_left = 562.0
+offset_right = 565.0
+offset_bottom = 78.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Border Right" type="ColorRect" parent="UI/Node2D"]
+offset_left = 637.0
+offset_right = 640.0
+offset_bottom = 78.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Border Top" type="ColorRect" parent="UI/Node2D"]
+offset_left = 562.0
+offset_right = 640.0
+offset_bottom = 3.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Border Top2" type="ColorRect" parent="UI/Node2D"]
+offset_left = 563.0
+offset_top = 75.0
+offset_right = 640.0
+offset_bottom = 78.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Minimap" parent="UI" instance=ExtResource("4_6haxt")]
+offset_left = 565.0
+offset_top = 3.0
+offset_right = 637.0
+offset_bottom = 75.0
 
 [node name="WSM" type="Node" parent="."]
 script = ExtResource("5_dx1hd")

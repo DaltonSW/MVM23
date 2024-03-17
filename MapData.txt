@@ -1,7 +1,7 @@
 [8,-1,0]
 -1,-1,0,-1|cba3ec,,,680eb2,||
 [8,0,0]
--1,0,1,-1|cba3ec,,680eb2,680eb2,||
+-1,0,0,-1|cba3ec,,680eb2,680eb2,||
 [9,-1,0]
 -1,-1,-1,-1|cba3ec,,,,|2|
 [9,0,0]
@@ -39,7 +39,7 @@
 [9,1,0]
 -1,0,1,0|ffd700,,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/entry_room.tscn
 [10,1,0]
-1,0,-1,1|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/entry_room.tscn
+1,0,-1,0|ffd700,c38000,c38000,,c38000||Scenes/Levels/World 1/Rooms/entry_room.tscn
 [7,1,0]
 -1,-1,0,0|ffd700,,,c38000,c38000||Scenes/Levels/World 1/Rooms/big_stairs.tscn
 [7,2,0]
@@ -379,7 +379,7 @@
 [7,-1,0]
 0,-1,-1,0|abded1,4f819c,,,4f819c|0|Scenes/Levels/World 2/Rooms/courtyard_right.tscn
 [7,0,0]
-1,0,-1,-1|abded1,4f819c,4f819c,,||Scenes/Levels/World 2/Rooms/courtyard_right.tscn
+0,0,-1,-1|abded1,4f819c,4f819c,,||Scenes/Levels/World 2/Rooms/courtyard_right.tscn
 [2,-4,0]
 -1,-1,0,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one.tscn
 [2,-3,0]
