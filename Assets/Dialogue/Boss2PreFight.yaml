@@ -1,34 +1,34 @@
 dialogues: 
     - name: Cult Leader
       paragraphs: 
-        - I heard what happened in the catacombs. You discovered something you shouldn’t have. 
-        - We can’t allow that.
+        - "I heard what happened in the catacombs. You discovered something you shouldn’t have." 
+        - "We can’t allow that."
     - name: You
       paragraphs:
         - "You’re creating weapons and taking advantage of [god]god[/god]."
     - name: Cult Leader
       paragraphs:
-        - Is that what the weapon told you? 
+        - "Is that what the weapon told you?"
     - name: You
       paragraphs:
-        - Not a weapon. He was a person. 
+        - "Not a weapon. He was a person."
     - name: Cult Leader
       paragraphs:
-        - A person has a brain and thinks for themselves. The exquisite weapon you destroyed had found a new higher calling. 
-        - You merely discovered our weapon at the last stage of transformation. Ramblings of a deranged being at the end of its life cycle. 
+        - "A person has a brain and thinks for themselves. The exquisite weapon you destroyed had found a new higher calling."
+        - "You merely discovered our weapon at the last stage of transformation. Ramblings of a deranged being at the end of its life cycle."
     - name: You
       paragraphs:
-        - That’s not what he would have wanted.
-        - You’re making a mockery of all that we built.
+        - "That’s not what he would have wanted."
+        - "You’re making a mockery of all that we built."
     - name: Cult Leader
       paragraphs:
-        - You built? 
-        - What did you build, little recruit?
-        - You worked with your friend in the catacombs. Your callings… are the same.
-        - "You were on [ti]Team Integrity[/ti]. You’re the missing member."
-        - We’ve waited a long.
-        - ...
-        - ...
+        - "You built?"
+        - "What did you build, little recruit?"
+        - "You worked with your friend in the catacombs. Your callings… are the same."
+        - "... You were on [ti]Team Integrity[/ti]. You’re the missing member."
+        - "We’ve waited a long time for you."
+        - "..."
+        - "..."
     - name: Cult Leader...?
       paragraphs:
         - "[demon]You shouldn’t be here. This is a restricted zone.[/demon]"

@@ -2,4 +2,4 @@
 dialogues: 
     - name: Bart
       paragraphs: 
-        - "He’s gone. Run to the surface. Save [god]god[/god] before he can do more damage."
+        - "He’s gone. Run to the surface. Save [god]god [/god]before he can do more damage."

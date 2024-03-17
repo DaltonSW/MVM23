@@ -6,15 +6,15 @@ dialogues:
         - "[demon]To join me. Fix it. Rule what’s left together.[/demon]"
     - name: You
       paragraphs:
-        - Fix what?
+        - "Fix what?"
     - name: Demon
       paragraphs:
         - "[demon][god]god[/god]. You couldn’t tell that it was broken?[/demon]"
-        - "[demon]It’s not doing exactly as I say. I cannot rule with a [god]god[/god] that does not support me.[/demon]"
-        - "[demon]The code [god]god[/god] is built with is known only to a select group- Team Integrity. You’re the last member. You possess the knowledge to control [god]god[/god].[/demon]"
+        - "[demon]It’s not doing exactly as I say. I cannot rule with a [god]god [/god]that does not support me.[/demon]"
+        - "[demon]The code [god]god [/god]is built with is known only to a select group- Team Integrity. You’re the last member. You possess the knowledge to control [god]god[/god].[/demon]"
     - name: You
       paragraphs:
-        - It’s not broken, and I won’t change the controls. It’s functioning exactly as it was designed. 
+        - "It’s not broken, and I won’t change the controls. It’s functioning exactly as it was designed." 
     - name: Demon
       paragraphs:
         - "[demon]And that is where you’re wrong. With so few left in the world, what the world needs is a leader. To spread our message.[/demon]"
