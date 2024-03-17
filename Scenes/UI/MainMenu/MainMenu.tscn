@@ -1,14 +1,14 @@
 [gd_scene load_steps=11 format=3 uid="uid://bifuw6ucq8mqh"]
 
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu/MainMenu.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://dkrh6ng2ynrbu" path="res://Scenes/UI/MainMenu/Title Screen No Button.png" id="2_ppush"]
-[ext_resource type="FontFile" uid="uid://f50ypqba7ast" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
-[ext_resource type="AudioStream" uid="uid://j5e354m8qay1" path="res://Assets/Music/Cult_Title_Screen.wav" id="3_hh26o"]
-[ext_resource type="Texture2D" uid="uid://dh2ygep808gc2" path="res://Scenes/UI/MainMenu/Buttons/NewGame.png" id="4_7sv3k"]
-[ext_resource type="Texture2D" uid="uid://dhuf2omtq7xhq" path="res://Scenes/UI/MainMenu/Buttons/LoadGameDisabled.png" id="4_gival"]
-[ext_resource type="Texture2D" uid="uid://buduvm4a86jr" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
-[ext_resource type="Texture2D" uid="uid://bgmtelth7gron" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
-[ext_resource type="Texture2D" uid="uid://clemiyeiue2pa" path="res://Scenes/UI/MainMenu/Credits.png" id="9_2j3nf"]
+[ext_resource type="Texture2D" uid="uid://bxvn4ycdpuvum" path="res://Scenes/UI/MainMenu/Title Screen No Button.png" id="2_ppush"]
+[ext_resource type="FontFile" uid="uid://bvc4q5lvtned7" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
+[ext_resource type="AudioStream" uid="uid://bdhamhsksvsos" path="res://Assets/Music/Cult_Title_Screen.wav" id="3_hh26o"]
+[ext_resource type="Texture2D" uid="uid://mn4dqswtqonw" path="res://Scenes/UI/MainMenu/Buttons/NewGame.png" id="4_7sv3k"]
+[ext_resource type="Texture2D" uid="uid://bbg3fmilvx3r2" path="res://Scenes/UI/MainMenu/Buttons/LoadGameDisabled.png" id="4_gival"]
+[ext_resource type="Texture2D" uid="uid://c85qc2sxhkuax" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
+[ext_resource type="Texture2D" uid="uid://c0cl5b0sgvjsd" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
+[ext_resource type="Texture2D" uid="uid://c7sd2dmbhwev6" path="res://Scenes/UI/MainMenu/Credits.png" id="9_2j3nf"]
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu/file_manager.gd" id="11_mtcpa"]
 
 [node name="Menu" type="Control"]
@@ -33,16 +33,10 @@ texture = ExtResource("2_ppush")
 
 [node name="HBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -175.0
-offset_top = -212.0
-offset_right = -27.0
-grow_horizontal = 0
-grow_vertical = 0
+offset_left = 427.0
+offset_top = 162.0
+offset_right = 638.0
+offset_bottom = 364.0
 alignment = 1
 
 [node name="NewGameButton" type="Button" parent="HBoxContainer"]
