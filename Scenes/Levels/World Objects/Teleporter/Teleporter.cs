@@ -17,7 +17,7 @@ public partial class Teleporter : Area2D
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
-        _player = GetNode<Player>("../Player");
+        _player = GetNode<Player>("/root/Game/Player");
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
         //_game = GetNode<GodotObject>("/root/Game");
         _indicator = GetNode<AnimatedSprite2D>("Indicator");
