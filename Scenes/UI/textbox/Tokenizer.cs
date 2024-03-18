@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Godot;
 
@@ -15,6 +16,7 @@ public static class Tokenizer
         public int FontSize { get; set; }
         public FontFile Font { get; set; }
         public float StringSize { get; set; }
+        public bool IsPunctuation { get; }
 
         public Token(string text, TokenFlags flags)
         {
@@ -24,20 +26,25 @@ public static class Tokenizer
             FontSize = GetFontSize();
             Font = GetFont();
             StringSize = GetTokenStringSize();
+            IsPunctuation = text is "?" or "!" or "." or "," or "-";
+        }
+
+        public void UpdateStringSize() {
+            StringSize = GetTokenStringSize();
         }
         
         private Color GetColor() {
             if (IsFlagSet(Flags, TokenFlags.TeamIntegrity))
-                return Color.Color8(120, 255, 254);
+                return ThemeConsts.TeamIntegrityColor;
             
             if (IsFlagSet(Flags, TokenFlags.System))
-                return Color.Color8(17, 255, 25);
+                return ThemeConsts.SystemColor;
             
             if (IsFlagSet(Flags, TokenFlags.GOD))
-                return Color.Color8(255, 174, 244);
+                return ThemeConsts.GODColor;
             
             if (IsFlagSet(Flags, TokenFlags.Demon))
-                return Color.Color8(184, 17, 25);
+                return ThemeConsts.DemonColor;
             
             
             var color = new Color(Colors.Black);
@@ -151,7 +158,8 @@ public static class Tokenizer
         var step1Tokens = Regex.Split(text, @"(\[\/?[^\]]+\])");
 
         // Pattern to handle words, punctuation marks separately, and ensure spaces are included correctly
-        const string pattern = @"([\w+']+[\s]?)|([.,?!]\s?)";
+        //const string pattern = @"(['\w+]+[\s]?)|([.,?!]\s?)";
+        const string pattern = @"\[[^\]]+\]|[\w’]+|[.,!?\-]";
 
         var tokens = new List<Token>();
         foreach (var token in step1Tokens)

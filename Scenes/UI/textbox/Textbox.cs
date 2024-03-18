@@ -122,6 +122,20 @@ public partial class Textbox : CanvasLayer {
                 }
                 _textField.DrawParagraph(_curParagraph, ThemeConsts.DefaultDrawMode);
                 _nameLabel.Text = _currentDialogue.Name;
+                switch (_nameLabel.Text) {
+                    case "Demon":
+                        _nameLabel.LabelSettings.Font = ThemeConsts.CodeText;
+                        _nameLabel.LabelSettings.FontColor = ThemeConsts.DemonColor;
+                        break;
+                    case "The System":
+                        _nameLabel.LabelSettings.Font = ThemeConsts.CodeText;
+                        _nameLabel.LabelSettings.FontColor = ThemeConsts.SystemColor;
+                        break;
+                    default:
+                        _nameLabel.LabelSettings.Font = ThemeConsts.RegularText;
+                        _nameLabel.LabelSettings.FontColor = Colors.White;
+                        break;
+                }
                 _nameLabel.Visible = true;
                 ChangeState(TextboxState.Printing);
                 return;
