@@ -59,7 +59,7 @@ public partial class MainMenu : Control {
     {
         _creditsSprite.Visible = false;
         _newGameButton.Disabled = false;
-        _loadGameButton.Disabled = false;
+        _loadGameButton.Disabled = !_fileManager.Call("does_save_file_exist").As<bool>();
         _creditsButton.Disabled = false;
         _quitButton.Disabled = false;
         _closeCreditsButton.Disabled = true;
