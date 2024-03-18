@@ -1,12 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://bifuw6ucq8mqh"]
+[gd_scene load_steps=8 format=3 uid="uid://d0hgtujhxvhto"]
 
 [ext_resource type="Script" path="res://Scenes/UI/PauseMenu/PauseMenu.cs" id="1_vjwev"]
-[ext_resource type="Texture2D" uid="uid://bittawguxbear" path="res://Scenes/UI/PauseMenu/PauseMenu.png" id="2_4puf1"]
-[ext_resource type="FontFile" uid="uid://d3120b42atyy8" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
-[ext_resource type="Texture2D" uid="uid://dr776y8logfg4" path="res://Scenes/UI/PauseMenu/Buttons/Resume.png" id="4_hxch4"]
-[ext_resource type="Texture2D" uid="uid://u36mocfuuj0m" path="res://Scenes/UI/PauseMenu/Buttons/LoadSave.png" id="5_pse8o"]
-[ext_resource type="Texture2D" uid="uid://8qyr65bg4inw" path="res://Scenes/UI/PauseMenu/Buttons/MainMenu.png" id="6_5snvj"]
-[ext_resource type="Texture2D" uid="uid://c52yrln04mxrk" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
+[ext_resource type="Texture2D" uid="uid://cjsjxjjk1bvtx" path="res://Scenes/UI/PauseMenu/PauseMenu.png" id="2_4puf1"]
+[ext_resource type="FontFile" uid="uid://bvc4q5lvtned7" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
+[ext_resource type="Texture2D" uid="uid://q6n1dop1nfct" path="res://Scenes/UI/PauseMenu/Buttons/Resume.png" id="4_hxch4"]
+[ext_resource type="Texture2D" uid="uid://cnuoxm2setitc" path="res://Scenes/UI/PauseMenu/Buttons/LoadSave.png" id="5_pse8o"]
+[ext_resource type="Texture2D" uid="uid://dqpy4gc756n8r" path="res://Scenes/UI/PauseMenu/Buttons/MainMenu.png" id="6_5snvj"]
+[ext_resource type="Texture2D" uid="uid://c0cl5b0sgvjsd" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
 
 [node name="PauseMenu" type="Sprite2D"]
 process_mode = 3
@@ -16,6 +16,7 @@ script = ExtResource("1_vjwev")
 metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -29,8 +30,34 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="ResumeButton" type="Button" parent="VBoxContainer"]
+[node name="LoadSaveButton" type="Button" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
+icon = ExtResource("5_pse8o")
+flat = true
+icon_alignment = 1
+
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+icon = ExtResource("6_e3kl3")
+flat = true
+icon_alignment = 1
+
+[node name="MainMenuButton" type="Button" parent="."]
+offset_left = 44.0
+offset_top = 78.0
+offset_right = 156.0
+offset_bottom = 151.0
+icon = ExtResource("6_5snvj")
+flat = true
+icon_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="."]
+offset_left = -169.0
+offset_top = 96.0
+offset_right = -4.0
+offset_bottom = 130.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("3_38g6u")
@@ -39,27 +66,7 @@ icon = ExtResource("4_hxch4")
 flat = true
 icon_alignment = 1
 
-[node name="LoadSaveButton" type="Button" parent="VBoxContainer"]
-visible = false
-layout_mode = 2
-icon = ExtResource("5_pse8o")
-flat = true
-icon_alignment = 1
-
-[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
-visible = false
-layout_mode = 2
-icon = ExtResource("6_5snvj")
-flat = true
-icon_alignment = 1
-
-[node name="QuitButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-icon = ExtResource("6_e3kl3")
-flat = true
-icon_alignment = 1
-
-[connection signal="pressed" from="VBoxContainer/ResumeButton" to="." method="_on_ResumeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoadSaveButton" to="." method="_on_LoadSaveButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/MainMenuButton" to="." method="_on_MainMenuButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="MainMenuButton" to="." method="_on_MainMenuButton_pressed"]
+[connection signal="pressed" from="ResumeButton" to="." method="_on_ResumeButton_pressed"]

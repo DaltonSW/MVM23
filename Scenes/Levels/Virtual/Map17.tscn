@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://do2sx70kdsepa"]
+[gd_scene load_steps=7 format=3 uid="uid://do2sx70kdsepa"]
 
 [ext_resource type="PackedScene" uid="uid://sxgx7tpwoibv" path="res://Scenes/Levels/Virtual/City3Background.tscn" id="1_eal3s"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_juke8"]
+[ext_resource type="PackedScene" uid="uid://dok4pmd8ygm37" path="res://Scenes/Levels/World Objects/Checkpoints/checkpoint.tscn" id="2_mer8j"]
 [ext_resource type="TileSet" uid="uid://djy0lkc0yngwk" path="res://Scenes/Levels/Virtual/tileset.tres" id="2_xdk4g"]
 [ext_resource type="PackedScene" uid="uid://bp2m8h76moghn" path="res://Scenes/Levels/World Objects/Door & Lever/door.tscn" id="4_key5y"]
 [ext_resource type="Texture2D" uid="uid://cvr4m0uj6jhgl" path="res://Scenes/Levels/World Objects/Door & Lever/w3Door.png" id="5_o4rn1"]
@@ -9,6 +10,9 @@
 [node name="Map17" type="Node2D"]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("1_eal3s")]
+
+[node name="Checkpoint" parent="." instance=ExtResource("2_mer8j")]
+position = Vector2(1197, 340)
 
 [node name="RoomInstance" parent="." instance=ExtResource("1_juke8")]
 
