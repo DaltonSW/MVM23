@@ -3,5 +3,5 @@ description: Key to World Two
 dialogues: 
     - name: 
       paragraphs: 
-        - You found a key.
-        - You get a strange feeling you can progress further in the virtual world...
+        - "[system]You found a key.[/system]"
+        - "[system]I get a strange feeling you can progress further in the virtual world...[/system]"
