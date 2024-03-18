@@ -318,7 +318,7 @@ public partial class Player : CharacterBody2D, IHittable {
             _sprite.Play(animation);
     }
 
-    public void QueueDeath() => GetTree().ChangeSceneToFile("res://Scenes/UI/MainMenu/MainMenu.tscn");
+    public void QueueDeath() => GetTree().ChangeSceneToFile("res://Scenes/UI/DeathScreen/DeathScreen.tscn");
 
     public void SetEmittingDashParticles(bool emit) => _dashParticles.Emitting = emit;
 
