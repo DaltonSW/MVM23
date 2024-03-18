@@ -25,9 +25,8 @@ public partial class MainMenu : Control {
         _loadGameButton.Disabled = !_fileManager.Call("does_save_file_exist").As<bool>();
     }
 
-    public override void _Process(double delta) {
-        if (!_creditsSprite.Visible ||
-            (!Input.IsActionJustPressed("pause") && !Input.IsActionJustPressed("close_menu"))) return;
+    public override void _Process(double _delta) {
+
     }
 
     private void _on_NewGameButton_pressed() {
