@@ -25,13 +25,13 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+    play_world_music()    
     if Input.is_action_just_pressed("pause"):
         show_pause_menu()
     pass
 
 func init_room():
     MetSys.get_current_room_instance().adjust_camera_limits($Player/Camera2D)
-    play_world_music()
 
 func get_main_font():
     return main_font
