@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ciq2ajuggd57m"]
+[gd_scene load_steps=6 format=3 uid="uid://ciq2ajuggd57m"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_fqe2o"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_r34iv"]
 [ext_resource type="PackedScene" uid="uid://db88ko1qw0fn" path="res://Scenes/Levels/World Objects/Pits/pit.tscn" id="3_1cuhg"]
+[ext_resource type="PackedScene" uid="uid://dok4pmd8ygm37" path="res://Scenes/Levels/World Objects/Checkpoints/checkpoint.tscn" id="4_5x3md"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qufks"]
 size = Vector2(536, 332)
@@ -28,3 +29,6 @@ shape = SubResource("RectangleShape2D_qufks")
 
 [node name="1" type="Marker2D" parent="Respawns"]
 position = Vector2(929, 268)
+
+[node name="Checkpoint" parent="." instance=ExtResource("4_5x3md")]
+position = Vector2(170, 208)

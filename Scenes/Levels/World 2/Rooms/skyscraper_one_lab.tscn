@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://6g7is4ybfi8v"]
+[gd_scene load_steps=8 format=3 uid="uid://6g7is4ybfi8v"]
 
 [ext_resource type="TileSet" uid="uid://bmo8t3e2bd8y6" path="res://Scenes/Levels/World 2/World 2 Tileset.tres" id="1_7o5fh"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_vn0f6"]
 [ext_resource type="PackedScene" uid="uid://dvuoj5b4kbpsi" path="res://Scenes/Levels/World 2/SnowCity.tscn" id="3_wpkoc"]
 [ext_resource type="PackedScene" uid="uid://dr1jncv75nkx" path="res://Scenes/Levels/World Objects/Teleporter/teleporter.tscn" id="4_aqhp1"]
 [ext_resource type="PackedScene" uid="uid://cpn4gpvmfivah" path="res://Scenes/Levels/World Objects/Ability Unlock/ability_unlock.tscn" id="5_73kvn"]
+[ext_resource type="PackedScene" uid="uid://dok4pmd8ygm37" path="res://Scenes/Levels/World Objects/Checkpoints/checkpoint.tscn" id="6_8g2n0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4j127"]
 size = Vector2(20, 330)
@@ -32,3 +33,6 @@ _myUnlock = "TeleporterTutorial"
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="AbilityUnlock"]
 position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_4j127")
+
+[node name="Checkpoint" parent="." instance=ExtResource("6_8g2n0")]
+position = Vector2(472, 320)

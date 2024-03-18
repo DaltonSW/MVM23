@@ -36,8 +36,7 @@ position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_yjdum")
 
 [node name="Checkpoint" parent="." instance=ExtResource("4_24bd1")]
-visible = false
-position = Vector2(65, 111)
+position = Vector2(65, 112)
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("5_v24v4")]
 

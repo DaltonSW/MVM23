@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://2xip4abacihi"]
+[gd_scene load_steps=6 format=3 uid="uid://2xip4abacihi"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_ac2tw"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_67ltl"]
 [ext_resource type="PackedScene" uid="uid://gpdxpxul7dov" path="res://Scenes/Levels/World 1/Wood Background.tscn" id="3_1dg4a"]
 [ext_resource type="PackedScene" uid="uid://l1pht3bvo7gc" path="res://Scenes/Enemies/ConeWalker.tscn" id="4_fy56x"]
+[ext_resource type="PackedScene" uid="uid://dok4pmd8ygm37" path="res://Scenes/Levels/World Objects/Checkpoints/checkpoint.tscn" id="5_b3ost"]
 
 [node name="CrossRoadsHallway" type="Node2D"]
 metadata/_edit_vertical_guides_ = [1280.0, 640.0]
@@ -21,3 +22,6 @@ layer_0/tile_data = PackedInt32Array(1376295, 1572864, 1, 1310759, 1572864, 0, 1
 
 [node name="ConeWalker" parent="." instance=ExtResource("4_fy56x")]
 position = Vector2(274, 293)
+
+[node name="Checkpoint" parent="." instance=ExtResource("5_b3ost")]
+position = Vector2(875, 304)

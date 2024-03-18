@@ -16,6 +16,6 @@ layer_0/tile_data = PackedInt32Array(0, 1572864, 1, 65536, 1572864, 1, 131072, 1
 
 [node name="Checkpoint" parent="." instance=ExtResource("3_glqek")]
 visible = false
-position = Vector2(1164, 305)
+position = Vector2(1164, 304)
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("4_pub8f")]

@@ -1,12 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://chou73030ey8c"]
+[gd_scene load_steps=5 format=3 uid="uid://chou73030ey8c"]
 
 [ext_resource type="PackedScene" uid="uid://sxgx7tpwoibv" path="res://Scenes/Levels/Virtual/City3Background.tscn" id="1_kbbn5"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_w7l5c"]
 [ext_resource type="TileSet" uid="uid://djy0lkc0yngwk" path="res://Scenes/Levels/Virtual/tileset.tres" id="2_cq6ve"]
+[ext_resource type="PackedScene" uid="uid://dok4pmd8ygm37" path="res://Scenes/Levels/World Objects/Checkpoints/checkpoint.tscn" id="2_t21yr"]
 
 [node name="Map15" type="Node2D"]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("1_kbbn5")]
+
+[node name="Checkpoint" parent="." instance=ExtResource("2_t21yr")]
+position = Vector2(316, 470)
 
 [node name="RoomInstance" parent="." instance=ExtResource("1_w7l5c")]
 
