@@ -11,6 +11,14 @@ public partial class PlayerHealth : CanvasLayer {
     private const int HeartRowSize = 6;
     private const int HeartPixelOffset = 18;
 
+   
+    // What seems simplest is to instantiate
+    // heart sprites dynamically based on health, but that seems
+    // too inefficient. Maybe if we used Draw instead of sprites.
+    //
+    // TODO: maybe just call AddHeart from the health upgrade script.
+    private const int MORE_THAN_MAX_POSSIBLE_HEARTS = 100;
+
     private Player _player;
     private Sprite2D _baseHeart;
     private Node _hearts;
@@ -21,23 +29,23 @@ public partial class PlayerHealth : CanvasLayer {
         _baseHeart = GetNode<Sprite2D>("baseHeart");
         _baseHeart.Visible = false;
             
-        for (var i = 0; i < _player.MaxHealth; i++) {
+        for (var i = 0; i < MORE_THAN_MAX_POSSIBLE_HEARTS; i++) {
             AddHeart();
         }
     }
 
     public override void _Process(double delta) {
-        var lastHeart = Mathf.Floor(_player.CurrentHealth); 
+        var numHearts = _player.CurrentHealth; 
+        var i = 0;
         foreach (var node in _hearts.GetChildren()) {
-            var heart = (Sprite2D)node;
-            var index = heart.GetIndex(); // What heart after the first it is
+            var heart = (Node2D)node;
             
-            var xPos = (index % HeartRowSize) * HeartPixelOffset + HeartPixelOffset / 2;
-            var yPos = (index / HeartRowSize) * HeartPixelOffset + HeartPixelOffset / 2;
+            var xPos = (i % HeartRowSize) * HeartPixelOffset + HeartPixelOffset / 2;
+            var yPos = (i / HeartRowSize) * HeartPixelOffset + HeartPixelOffset / 2;
             heart.Position = new Vector2(xPos, yPos);
-            
-            if (index > lastHeart)
-                heart.Visible = false;
+            heart.Visible = i < numHearts;
+
+            i++;
         }
     }
 
