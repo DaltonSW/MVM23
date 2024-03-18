@@ -20,7 +20,7 @@ public partial class TextField : Panel {
     private Font _font;
 
     private bool _textRemaining;
-    private const float AlphaIncrement = 0.15F;
+    private const float AlphaIncrement = 0.2F;
     private int _curCharIndex;
     private float _curAlpha;
     private float _curLinePos;
@@ -42,7 +42,17 @@ public partial class TextField : Panel {
         _drawMode = drawMode;
         _initialTokens = TokenizeString(paragraph);
         _drawMode = drawMode;
-        foreach (var token in _initialTokens) {
+        for (var i = 0; i < _initialTokens.Count; i++) {
+            var token = _initialTokens[i];
+            var nextToken = new Token("", TokenFlags.Undefined);
+            if (i + 1 < _initialTokens.Count) {
+                nextToken = _initialTokens[i + 1];
+            }
+            if (nextToken.Flags != TokenFlags.Undefined && !nextToken.IsPunctuation) {
+                token.Text += " ";
+                token.UpdateStringSize();
+            }
+                
             _remainingTokens.Add(token);
         }
 
@@ -86,7 +96,7 @@ public partial class TextField : Panel {
     }
 
     private void DrawCharByChar() {
-        var height = ThemeConsts.RegularText.GetHeight(ThemeConsts.RegularTextSize);
+        var height = ThemeConsts.RegularText.GetHeight(ThemeConsts.RegularTextSize + 6);
 
         foreach (var visToken in _visibleTokens) {
             DrawString(visToken.Font, new Vector2(_curLinePos, height * _curLineNum), visToken.Text,

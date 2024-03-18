@@ -1,14 +1,14 @@
 dialogues: 
     - name: Demon
       paragraphs: 
-        - What do you hope to achieve in my defeat?
-        - You’re a weapon now. You’ll never be able to return to your calling.  
-        - You’re a failure. All you’ve done is destroy me. I’m bigger than this world. I’m bigger than god!
+        - "[demon]What do you hope to achieve in my defeat?[/demon]"
+        - "[demon]You’re a weapon now. You’ll never be able to return to your calling.[/demon]"
+        - "[demon]You’re a failure. All you’ve done is destroy me. I’m bigger than this world. I’m bigger than [god]god[/god]![/demon]"
     - name: You
       paragraphs:
-        - You’re right. I’m a weapon now.
-        - First, a weapon to create god. Now, a weapon to protect- 
-        - god.
-    - name: 
+        - "You’re right. I’m a weapon now."
+        - "First, a weapon to create [god]god[/god]. Now, a weapon to protect- "
+        - "[god]god[/god]."
+    - name: The System
       paragraphs:
-        - greater operating directive override entered. restart system? 
+        - "[system]greater operating directive override entered. restart system?[/system]" 

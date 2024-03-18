@@ -74,27 +74,26 @@ public partial class Textbox : CanvasLayer {
         LoadConversation();
         ThemeConsts.Initialize(); // TODO: Eventually move this to whatever global node we have
 
-        _textField = GetNode<TextField>("ParentBox/Background/InnerBox/TextField");
+        _textField = GetNode<TextField>("MainBox/Background/InnerBox/TextField");
         _textField.TextFinishedPrinting += WhenTextFinished; // Attach signal listener 
 
-        _nameLabel = GetNode<Label>("ParentBox/Background/SpeakerName");
+        _nameLabel = GetNode<Label>("NameBox/Background/SpeakerName");
         _nameLabel.Visible = false;
-        _nameLabel.LabelSettings.Font = ThemeConsts.BoldText;
-        _nameLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
+        // _nameLabel.LabelSettings.Font = ThemeConsts.BoldText;
+        // _nameLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
-        _endLabel = GetNode<Label>("ParentBox/Background/EndLabel");
+        _endLabel = GetNode<Label>("MainBox/Background/EndLabel");
         _endLabel.Visible = false;
-        _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
-        _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
+        // _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
+        // _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
 
         _game = GetNode<GodotObject>("/root/Game");
-        SetFont(_game.Call("get_font").As<FontFile>());
+        SetFonts();
     }
 
-    public void SetFont(FontFile font) {
-        _nameLabel.LabelSettings.Font = font;
-        ThemeConsts.RegularText = font;
-        _endLabel.LabelSettings.Font = font;
+    public void SetFonts() {
+        ThemeConsts.RegularText = _game.Call("get_main_font").As<FontFile>();
+        ThemeConsts.CodeText = _game.Call("get_code_font").As<FontFile>();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -123,6 +122,20 @@ public partial class Textbox : CanvasLayer {
                 }
                 _textField.DrawParagraph(_curParagraph, ThemeConsts.DefaultDrawMode);
                 _nameLabel.Text = _currentDialogue.Name;
+                switch (_nameLabel.Text) {
+                    case "Demon":
+                        _nameLabel.LabelSettings.Font = ThemeConsts.CodeText;
+                        _nameLabel.LabelSettings.FontColor = ThemeConsts.DemonColor;
+                        break;
+                    case "The System":
+                        _nameLabel.LabelSettings.Font = ThemeConsts.CodeText;
+                        _nameLabel.LabelSettings.FontColor = ThemeConsts.SystemColor;
+                        break;
+                    default:
+                        _nameLabel.LabelSettings.Font = ThemeConsts.RegularText;
+                        _nameLabel.LabelSettings.FontColor = Colors.White;
+                        break;
+                }
                 _nameLabel.Visible = true;
                 ChangeState(TextboxState.Printing);
                 return;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Godot;
 
@@ -15,6 +16,7 @@ public static class Tokenizer
         public int FontSize { get; set; }
         public FontFile Font { get; set; }
         public float StringSize { get; set; }
+        public bool IsPunctuation { get; }
 
         public Token(string text, TokenFlags flags)
         {
@@ -24,10 +26,27 @@ public static class Tokenizer
             FontSize = GetFontSize();
             Font = GetFont();
             StringSize = GetTokenStringSize();
+            IsPunctuation = text is "?" or "!" or "." or "," or "-";
+        }
+
+        public void UpdateStringSize() {
+            StringSize = GetTokenStringSize();
         }
         
-        private Color GetColor()
-        {
+        private Color GetColor() {
+            if (IsFlagSet(Flags, TokenFlags.TeamIntegrity))
+                return ThemeConsts.TeamIntegrityColor;
+            
+            if (IsFlagSet(Flags, TokenFlags.System))
+                return ThemeConsts.SystemColor;
+            
+            if (IsFlagSet(Flags, TokenFlags.GOD))
+                return ThemeConsts.GODColor;
+            
+            if (IsFlagSet(Flags, TokenFlags.Demon))
+                return ThemeConsts.DemonColor;
+            
+            
             var color = new Color(Colors.Black);
             if (IsFlagSet(Flags, TokenFlags.Red))
             {
@@ -68,25 +87,17 @@ public static class Tokenizer
 
         private FontFile GetFont()
         {
-            if (IsFlagSet(TokenFlags.Code, Flags))
-            {
+            if (IsFlagSet(TokenFlags.Demon, Flags) || IsFlagSet(TokenFlags.System, Flags))
                 return ThemeConsts.CodeText;
-            }
             
             if (IsFlagSet(TokenFlags.Bold, Flags) && IsFlagSet(TokenFlags.Italic, Flags))
-            {
                 return ThemeConsts.BoldItalicText;
-            }
             
             if (IsFlagSet(TokenFlags.Bold, Flags))
-            {
                 return ThemeConsts.BoldText;
-            }
             
             if (IsFlagSet(TokenFlags.Italic, Flags))
-            {
                 return ThemeConsts.ItalicText;
-            }
             
             return ThemeConsts.RegularText;
         }
@@ -117,6 +128,11 @@ public static class Tokenizer
         Italic = 64,
         Code = 128,
         
+        GOD = 256,
+        Demon = 512,
+        TeamIntegrity = 1024,
+        System = 2048,
+        
         ClearFlag = int.MaxValue
     }
 
@@ -142,7 +158,8 @@ public static class Tokenizer
         var step1Tokens = Regex.Split(text, @"(\[\/?[^\]]+\])");
 
         // Pattern to handle words, punctuation marks separately, and ensure spaces are included correctly
-        const string pattern = @"([\w+']+[\s]?)|([.,?!]\s?)";
+        //const string pattern = @"(['\w+]+[\s]?)|([.,?!]\s?)";
+        const string pattern = @"\[[^\]]+\]|[\w’]+|[.,!?\-]";
 
         var tokens = new List<Token>();
         foreach (var token in step1Tokens)
@@ -170,6 +187,11 @@ public static class Tokenizer
                     "[b]" => TokenFlags.Bold,
                     "[italic]" => TokenFlags.Italic,
                     "[i]" => TokenFlags.Italic,
+                    
+                    "[system]" => TokenFlags.System,
+                    "[demon]" => TokenFlags.Demon,
+                    "[god]" => TokenFlags.GOD,
+                    "[ti]" => TokenFlags.TeamIntegrity,
                     
                     _ => TokenFlags.Normal
                 };

@@ -3,40 +3,40 @@ description: Boss 1 PreFight
 dialogues: 
     - name: Bart
       paragraphs: 
-        - It can’t be you. 
-        - I thought everyone was killed.
+        - "It can’t be you."
+        - "I thought everyone was killed."
     - name: You
       paragraphs:
-        - I survived. And you will too.
+        - "I survived. And you will too."
     - name: Bart
       paragraphs:
-        - It’s too late for me. The data of my existence is slowly being erased. Replaced with that of a weapon. 
+        - "It’s too late for me. The data of my existence is slowly being erased. Replaced with that of a weapon."
     - name: You
       paragraphs:
-        - A weapon? 
+        - "A weapon?"
     - name: Bart
       paragraphs:
-        - Do you remember the early days of testing?
-        - We taught it the religions of the past world. 
-        - Public policy, science, history, sociology, psychology... all to have it taken by those who’ve perverted its initial design.  
+        - "Do you remember the early days of testing?"
+        - "We taught it the religions of the past world." 
+        - "Public policy, science, history, sociology, psychology... all to have it taken by those who’ve perverted its initial design."  
     - name: You
       paragraphs:
-        - How can I help god now?
+        - "How can I help [god]god [/god]now?"
     - name: Bart
       paragraphs:
-        - By ending me. 
-        - It’s not long before he discovers you. 
-        - We built a god together. I wish I could help you save it. 
+        - "By ending me."
+        - "It’s not long before he discovers you."
+        - "We built a [god]god [/god]together. I wish I could help you save it."
     - name: You
       paragraphs:
-        - How do I defeat him? How do I save it?
+        - "How do I defeat him? How do I save it?"
     - name: Bart
       paragraphs:
-        - You’ve got to get to the surface. From there, find the.
+        - "You’ve got to get to the surface. From there, find the -"
     - name: You
       paragraphs:
-        - Find the what?
-    - name: Different voice
+        - "Find the what?"
+    - name: Bart...?
       paragraphs:
-        - You shouldn’t be here. This is a restricted zone.
-        - State your name, rank, and calling. Otherwise, prepare to die.        
+        - "[demon]You shouldn’t be here. This is a restricted zone.[/demon]"
+        - "[demon]State your name, rank, and calling. Otherwise, prepare to die.[/demon]"
