@@ -1,9 +1,9 @@
 ---
 description: Grapple upgrade
 dialogues: 
-    - name: 
+    - name: The System
       paragraphs: 
-        - You got the Grapple ability!
-        - You can push Shift to grapple in the direction of your mouse.
-        - Touching any surface will cancel the grapple, so be mindful of your momentum!
-        - You can grapple as many times as you want before hitting the ground.
+        - "[system]You got the Grapple ability![/system]"
+        - "[system]You can push Shift to grapple in the direction of your mouse.[/system]"
+        - "[system]Touching any surface will cancel the grapple, so be mindful of your momentum![/system]"
+        - "[system]You can grapple as many times as you want before hitting the ground.[/system]"
