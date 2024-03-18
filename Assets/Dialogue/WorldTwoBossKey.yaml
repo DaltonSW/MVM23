@@ -4,4 +4,4 @@ dialogues:
     - name: 
       paragraphs: 
         - "[system]You found a key.[/system]"
-        - "[system]You get a strange feeling you can progress further outside...[/system]"
+        - "[system]I get a strange feeling you can progress further outside...[/system]"
