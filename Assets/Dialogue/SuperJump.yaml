@@ -1,9 +1,9 @@
 ---
 description: Super Jump upgrade
 dialogues: 
-    - name: 
+    - name: The System
       paragraphs: 
-        - You got the Super Jump ability!
-        - You can now charge up a super jump by holding S after dashing into the ground.
-        - Continue holding S for a short time to charge. Once you're red, you're ready to launch!
-        - You can dash out of the jump, or press S to drop straight down.
+        - "[system]You got the Super Jump ability![/system]"
+        - "[system]You can now charge up a super jump by holding S after dashing into the ground.[/system]"
+        - "[system]Continue holding S for a short time to charge. Once you're red, you're ready to launch![/system]"
+        - "[system]You can dash out of the jump, or press S to drop straight down.[/system]"

@@ -1,7 +1,7 @@
 ---
 description: Sword upgrade
 dialogues: 
-    - name: 
+    - name: The System
       paragraphs: 
-        - You got a Stick!
-        - You can now defend yourself with this sturdy stick. Click LMB to swing it toward your mouse cursor.
+        - "[system]You got a Sword![/system]"
+        - "[system]You can now defend yourself with this sturdy sword. Click LMB to swing it toward your mouse cursor.[/system]"

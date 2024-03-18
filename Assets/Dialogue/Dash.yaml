@@ -1,8 +1,8 @@
 ---
 description: Dash upgrade
 dialogues: 
-    - name: 
+    - name: The System
       paragraphs: 
-        - You got the Dash ability!
-        - Click RMB to dash in the direction currently held by WASD.
-        - Dashing through enemies will deal damage to them.
+        - "[system]You got the Dash ability![/system]"
+        - "[system]Click RMB to dash in the direction currently held by WASD.[/system]"
+        - "[system]Dashing through enemies will deal damage to them.[/system]"

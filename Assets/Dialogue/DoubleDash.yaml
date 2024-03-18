@@ -1,7 +1,7 @@
 ---
 description: Double Dash upgrade
 dialogues: 
-    - name: 
+    - name: The System
       paragraphs: 
-        - You got the Double Dash ability!
-        - You can now dash twice before hitting the ground.
+        - "[system]You got the Double Dash ability![/system]"
+        - "[system]You can now dash twice before hitting the ground.[/system]"
