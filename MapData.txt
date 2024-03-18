@@ -99,7 +99,7 @@
 [1,6,0]
 1,0,1,0|ffd700,c38000,c38000,c38000,c38000|1|Scenes/Levels/World 1/Rooms/superjump_room.tscn
 [0,6,0]
-1,0,1,0|ffd700,c38000,c38000,c38000,c38000|5|Scenes/Levels/World 1/Rooms/miniboss_arena.tscn
+1,0,1,0|ffd700,c38000,c38000,c38000,c38000||Scenes/Levels/World 1/Rooms/miniboss_arena.tscn
 [-1,1,0]
 -1,-1,1,0|ffd700,,,c38000,c38000||Scenes/Levels/World 1/Rooms/bridge.tscn
 [-1,2,0]

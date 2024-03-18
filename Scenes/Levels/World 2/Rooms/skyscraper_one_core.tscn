@@ -25,7 +25,7 @@ position = Vector2(320, 406)
 
 [node name="Respawns" type="Node" parent="."]
 
-[node name="Marker2D" type="Marker2D" parent="Respawns"]
+[node name="1" type="Marker2D" parent="Respawns"]
 position = Vector2(1216, 391)
 
 [node name="Pit" parent="." instance=ExtResource("5_5w5l0")]

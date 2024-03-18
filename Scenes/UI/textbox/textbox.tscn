@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://Scenes/UI/textbox/TextField.cs" id="1_jxaen"]
 [ext_resource type="Script" path="res://Scenes/UI/textbox/Textbox.cs" id="1_lb83q"]
-[ext_resource type="StyleBox" uid="uid://cktc03yaal815" path="res://Scenes/UI/textbox/textbox.tres" id="2_5yado"]
-[ext_resource type="FontFile" uid="uid://b7j844exsr3c4" path="res://Assets/Fonts/Dogica.otf" id="3_4murk"]
-[ext_resource type="FontFile" uid="uid://f50ypqba7ast" path="res://Assets/Fonts/EASVHS.ttf" id="3_d04rh"]
+[ext_resource type="StyleBox" uid="uid://b5d68mf3gqlgq" path="res://Scenes/UI/textbox/textbox.tres" id="2_5yado"]
+[ext_resource type="FontFile" uid="uid://dn2if6227jtw2" path="res://Assets/Fonts/Dogica.otf" id="3_4murk"]
+[ext_resource type="FontFile" uid="uid://bvc4q5lvtned7" path="res://Assets/Fonts/EASVHS.ttf" id="3_d04rh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ec8u2"]
 bg_color = Color(0.6, 0.6, 0.6, 0.2)
@@ -74,8 +74,9 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
 offset_top = -147.0
-offset_right = -485.0
+offset_right = -486.0
 offset_bottom = -98.0
 grow_horizontal = 2
 grow_vertical = 0

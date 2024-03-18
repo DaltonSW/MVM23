@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_7cmdt"]
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="2_lbiw1"]
 [ext_resource type="PackedScene" uid="uid://bp2m8h76moghn" path="res://Scenes/Levels/World Objects/Door & Lever/door.tscn" id="3_3viyy"]
-[ext_resource type="Texture2D" uid="uid://d2nqcilf7iyfr" path="res://Scenes/Levels/World Objects/Door & Lever/door.png" id="4_goc8t"]
+[ext_resource type="Texture2D" uid="uid://wjqfe37hxxsv" path="res://Scenes/Levels/World Objects/Door & Lever/w1Door.png" id="4_3lnpb"]
 
 [node name="DungeonEntrance" type="Node2D"]
 
@@ -19,4 +19,5 @@ position = Vector2(138, 208)
 ObjectID = "DoorToWorldTwo"
 
 [node name="Sprite2D2" type="Sprite2D" parent="Door"]
-texture = ExtResource("4_goc8t")
+position = Vector2(-2, 0)
+texture = ExtResource("4_3lnpb")

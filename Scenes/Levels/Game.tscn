@@ -40,32 +40,28 @@ position = Vector2(760, 130)
 offset_left = 562.0
 offset_right = 640.0
 offset_bottom = 78.0
-color = Color(0.4, 0.4, 0.4, 1)
+color = Color(0, 0, 0, 1)
 
 [node name="Border Left" type="ColorRect" parent="UI/Node2D"]
 offset_left = 562.0
 offset_right = 565.0
 offset_bottom = 78.0
-color = Color(0.2, 0.2, 0.2, 1)
 
 [node name="Border Right" type="ColorRect" parent="UI/Node2D"]
 offset_left = 637.0
 offset_right = 640.0
 offset_bottom = 78.0
-color = Color(0.2, 0.2, 0.2, 1)
 
 [node name="Border Top" type="ColorRect" parent="UI/Node2D"]
 offset_left = 562.0
 offset_right = 640.0
 offset_bottom = 3.0
-color = Color(0.2, 0.2, 0.2, 1)
 
-[node name="Border Top2" type="ColorRect" parent="UI/Node2D"]
+[node name="Bottom" type="ColorRect" parent="UI/Node2D"]
 offset_left = 563.0
 offset_top = 75.0
 offset_right = 640.0
 offset_bottom = 78.0
-color = Color(0.2, 0.2, 0.2, 1)
 
 [node name="Minimap" parent="UI" instance=ExtResource("4_6haxt")]
 offset_left = 565.0
