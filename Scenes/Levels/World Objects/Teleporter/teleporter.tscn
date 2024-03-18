@@ -1,18 +1,74 @@
-[gd_scene load_steps=4 format=3 uid="uid://dr1jncv75nkx"]
+[gd_scene load_steps=16 format=3 uid="uid://dr1jncv75nkx"]
 
 [ext_resource type="Script" path="res://Scenes/Levels/World Objects/Teleporter/Teleporter.cs" id="1_hgr63"]
-[ext_resource type="Texture2D" uid="uid://bywpjdy3omq3x" path="res://Scenes/Levels/World Objects/Teleporter/Teleporter.png" id="2_m4c6g"]
+[ext_resource type="Texture2D" uid="uid://c7hpqscgtpsjy" path="res://Scenes/Levels/World Objects/Teleporter/Teleporter.png" id="2_m4c6g"]
+[ext_resource type="Texture2D" uid="uid://cqq0xlj52s5us" path="res://Scenes/UI/textbox/IndicatorSprites/E0.png" id="3_ia84t"]
+[ext_resource type="Texture2D" uid="uid://dbn8nd42emr7r" path="res://Scenes/UI/textbox/IndicatorSprites/E10.png" id="4_wxn0h"]
+[ext_resource type="Texture2D" uid="uid://c3c2mnne18wjj" path="res://Scenes/UI/textbox/IndicatorSprites/E20.png" id="5_xvrpv"]
+[ext_resource type="Texture2D" uid="uid://d2w7khprdbxf" path="res://Scenes/UI/textbox/IndicatorSprites/E30.png" id="6_qv7qn"]
+[ext_resource type="Texture2D" uid="uid://bpv8cphkiplmq" path="res://Scenes/UI/textbox/IndicatorSprites/E40.png" id="7_tuxg4"]
+[ext_resource type="Texture2D" uid="uid://bv4h43qo2434j" path="res://Scenes/UI/textbox/IndicatorSprites/E50.png" id="8_dgq26"]
+[ext_resource type="Texture2D" uid="uid://issgcf3kvowo" path="res://Scenes/UI/textbox/IndicatorSprites/E60.png" id="9_uh4qi"]
+[ext_resource type="Texture2D" uid="uid://jnv6egjyl6d0" path="res://Scenes/UI/textbox/IndicatorSprites/E70.png" id="10_6pujs"]
+[ext_resource type="Texture2D" uid="uid://bsr681hpa1lig" path="res://Scenes/UI/textbox/IndicatorSprites/E80.png" id="11_ob2k8"]
+[ext_resource type="Texture2D" uid="uid://7rou26vckean" path="res://Scenes/UI/textbox/IndicatorSprites/E90.png" id="12_2be8f"]
+[ext_resource type="Texture2D" uid="uid://c1cmt41im4lb3" path="res://Scenes/UI/textbox/IndicatorSprites/E100.png" id="13_q7bu5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qvhu"]
-size = Vector2(18, 28)
+size = Vector2(22, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q12g6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ia84t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_wxn0h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_xvrpv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_qv7qn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_tuxg4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_dgq26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_uh4qi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_6pujs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ob2k8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_2be8f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_q7bu5")
+}],
+"loop": false,
+"name": &"fade-in",
+"speed": 15.0
+}]
 
 [node name="Teleporter" type="Area2D"]
 script = ExtResource("1_hgr63")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 2)
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_3qvhu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
 texture = ExtResource("2_m4c6g")
+
+[node name="Indicator" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -30)
+sprite_frames = SubResource("SpriteFrames_q12g6")
+animation = &"fade-in"
