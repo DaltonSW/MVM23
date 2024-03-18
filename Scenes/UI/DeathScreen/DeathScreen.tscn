@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://5ktad3seywqv"]
 
 [ext_resource type="Script" path="res://Scenes/UI/DeathScreen/DeathScreen.cs" id="1_kl3ox"]
-[ext_resource type="Texture2D" uid="uid://cotl5rohyyafm" path="res://Scenes/UI/DeathScreen/DeathScreen.png" id="2_eowky"]
-[ext_resource type="Texture2D" uid="uid://dwloqio4tba4m" path="res://Scenes/UI/MainMenu/Buttons/LoadGame.png" id="4_bnmbf"]
-[ext_resource type="Texture2D" uid="uid://bgmtelth7gron" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_6wxkh"]
+[ext_resource type="Texture2D" uid="uid://dou7lmgtk6xty" path="res://Scenes/UI/DeathScreen/DeathScreen.png" id="2_eowky"]
+[ext_resource type="Texture2D" uid="uid://sdee1hn5fgnv" path="res://Scenes/UI/DeathScreen/Buttons/LoadGame.png" id="3_1o1r4"]
+[ext_resource type="Texture2D" uid="uid://bngiavyy6cqip" path="res://Scenes/UI/DeathScreen/Buttons/QuitGame.png" id="4_4crh8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s8pkj"]
 
@@ -29,16 +29,12 @@ position = Vector2(317.5, 184.5)
 scale = Vector2(1.00156, 1.00278)
 texture = ExtResource("2_eowky")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-offset_left = -3.0
-offset_top = 163.0
-offset_right = 637.0
-offset_bottom = 365.0
-alignment = 1
-
-[node name="LoadSaveButton" type="Button" parent="HBoxContainer"]
+[node name="LoadSaveButton" type="Button" parent="."]
 layout_mode = 2
+offset_left = 175.0
+offset_top = 259.0
+offset_right = 299.0
+offset_bottom = 296.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_colors/icon_pressed_color = Color(0.431373, 1, 0.721569, 1)
@@ -46,22 +42,25 @@ theme_override_colors/icon_hover_color = Color(0.145098, 0.941176, 0.992157, 1)
 theme_override_colors/icon_focus_color = Color(0.145098, 0.941176, 0.992157, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.239216)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_s8pkj")
-disabled = true
-icon = ExtResource("4_bnmbf")
+icon = ExtResource("3_1o1r4")
 flat = true
 icon_alignment = 1
 
-[node name="MainMenuButton" type="Button" parent="HBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="."]
 layout_mode = 2
+offset_left = 344.0
+offset_top = 239.0
+offset_right = 456.0
+offset_bottom = 312.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_colors/icon_pressed_color = Color(0.431373, 1, 0.721569, 1)
 theme_override_colors/icon_hover_color = Color(0.145098, 0.941176, 0.992157, 1)
 theme_override_colors/icon_focus_color = Color(0.145098, 0.941176, 0.992157, 1)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_q0dw1")
-icon = ExtResource("6_6wxkh")
+icon = ExtResource("4_4crh8")
 flat = true
 icon_alignment = 1
 
-[connection signal="pressed" from="HBoxContainer/LoadSaveButton" to="." method="_on_LoadSaveButton_pressed"]
-[connection signal="pressed" from="HBoxContainer/MainMenuButton" to="." method="_on_MainMenuButton_pressed"]
+[connection signal="pressed" from="LoadSaveButton" to="." method="_on_LoadSaveButton_pressed"]
+[connection signal="pressed" from="MainMenuButton" to="." method="_on_MainMenuButton_pressed"]
