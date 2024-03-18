@@ -30,4 +30,4 @@ shape = SubResource("RectangleShape2D_ja1hm")
 [node name="Respawns" type="Node" parent="."]
 
 [node name="1" type="Marker2D" parent="Respawns"]
-position = Vector2(345, 584)
+position = Vector2(275, 380)
