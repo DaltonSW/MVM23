@@ -17,7 +17,8 @@ func _ready():
     get_script().set_meta(&"singleton", self)
     
     room_loaded.connect(init_room, CONNECT_DEFERRED)    
-    
+    MetSys.reset_state()
+    set_player($Player)
     load_game()
     
     add_module("RoomTransitions.gd")
@@ -58,9 +59,6 @@ func play_world_music():
             $AudioManager.play_music("W3")
 
 func load_game():
-    MetSys.reset_state()
-    set_player($Player)
-    
     if FileAccess.file_exists(SAVE_PATH):
         var save_manager := SaveManager.new()
         save_manager.load_from_text(SAVE_PATH)

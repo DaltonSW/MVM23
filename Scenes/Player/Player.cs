@@ -51,6 +51,7 @@ public partial class Player : CharacterBody2D, IHittable {
     private GodotObject _audioManager;
     private RayCast2D _grappleCheck;
     private PlayerState _currentState;
+    [Export] private string _currentStateName;
     private Sword _sword;
     private bool _canThrowGrapple;
     private double _timeSinceStartHoldingJump;
@@ -317,10 +318,7 @@ public partial class Player : CharacterBody2D, IHittable {
             _sprite.Play(animation);
     }
 
-    public void QueueDeath() {
-        // TODO: load saved game                
-        GetTree().Paused = true;
-    }
+    public void QueueDeath() => GetTree().ChangeSceneToFile("res://Scenes/UI/DeathScreen/DeathScreen.tscn");
 
     public void SetEmittingDashParticles(bool emit) => _dashParticles.Emitting = emit;
 
@@ -353,6 +351,7 @@ public partial class Player : CharacterBody2D, IHittable {
     private void ChangeState(PlayerState newState) {
         GD.Print($"Changing from {_currentState.Name} to {newState.Name}");
         _currentState = newState;
+        _currentStateName = newState.Name;
     }
 
     private static InputInfo GetInputs() {
