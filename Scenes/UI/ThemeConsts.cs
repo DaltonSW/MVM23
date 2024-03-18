@@ -15,7 +15,7 @@ public class ThemeConsts {
     
     public static Color DemonColor = Color.Color8(184, 17, 25);
     public static Color GODColor = Color.Color8(255, 174, 244);
-    public static Color SystemColor = Color.Color8(17, 255, 25);
+    public static Color SystemColor = Color.Color8(255, 255, 255);
     public static Color TeamIntegrityColor = Color.Color8(120, 255, 254);
 
     public static TextField.DrawModes DefaultDrawMode { get; private set; }

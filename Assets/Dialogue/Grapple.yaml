@@ -4,6 +4,6 @@ dialogues:
     - name: The System
       paragraphs: 
         - "[system]You got the Grapple ability![/system]"
-        - "[system]You can push Shift to grapple in the direction of your mouse.[/system]"
+        - "[system]While in the air, you can push Shift to grapple in the direction of your mouse.[/system]"
         - "[system]Touching any surface will cancel the grapple, so be mindful of your momentum![/system]"
         - "[system]You can grapple as many times as you want before hitting the ground.[/system]"

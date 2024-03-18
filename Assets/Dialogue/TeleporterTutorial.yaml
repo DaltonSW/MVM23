@@ -5,4 +5,4 @@ dialogues:
       paragraphs: 
         - "[system]This looks like a teleporter![/system]"
         - "[system]By using it, you can transport yourself to the virtual world. Walk up to it and press E to use it.[/system]"
-        - "[system]Be careful though. Who knows what may reside in the AI's realm...[/system]"
+        - "[system]Be careful though. Who knows what may reside in the [god]god's [/god]realm...[/system]"
