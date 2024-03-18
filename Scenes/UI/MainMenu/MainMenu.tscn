@@ -1,15 +1,22 @@
-[gd_scene load_steps=11 format=3 uid="uid://bifuw6ucq8mqh"]
+[gd_scene load_steps=14 format=3 uid="uid://bifuw6ucq8mqh"]
 
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu/MainMenu.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://bxvn4ycdpuvum" path="res://Scenes/UI/MainMenu/Title Screen No Button.png" id="2_ppush"]
-[ext_resource type="FontFile" uid="uid://bvc4q5lvtned7" path="res://Assets/Fonts/EASVHS.ttf" id="3_38g6u"]
-[ext_resource type="AudioStream" uid="uid://bdhamhsksvsos" path="res://Assets/Music/Cult_Title_Screen.wav" id="3_hh26o"]
-[ext_resource type="Texture2D" uid="uid://mn4dqswtqonw" path="res://Scenes/UI/MainMenu/Buttons/NewGame.png" id="4_7sv3k"]
-[ext_resource type="Texture2D" uid="uid://bbg3fmilvx3r2" path="res://Scenes/UI/MainMenu/Buttons/LoadGameDisabled.png" id="4_gival"]
-[ext_resource type="Texture2D" uid="uid://c85qc2sxhkuax" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
-[ext_resource type="Texture2D" uid="uid://c0cl5b0sgvjsd" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
-[ext_resource type="Texture2D" uid="uid://c7sd2dmbhwev6" path="res://Scenes/UI/MainMenu/Credits.png" id="9_2j3nf"]
+[ext_resource type="Texture2D" uid="uid://dkrh6ng2ynrbu" path="res://Scenes/UI/MainMenu/Title Screen No Button.png" id="2_ppush"]
+[ext_resource type="AudioStream" uid="uid://j5e354m8qay1" path="res://Assets/Music/Cult_Title_Screen.wav" id="3_hh26o"]
+[ext_resource type="Texture2D" uid="uid://dh2ygep808gc2" path="res://Scenes/UI/MainMenu/Buttons/NewGame.png" id="4_7sv3k"]
+[ext_resource type="Texture2D" uid="uid://buduvm4a86jr" path="res://Scenes/UI/MainMenu/Buttons/Credits.png" id="5_do6qw"]
+[ext_resource type="Texture2D" uid="uid://dwloqio4tba4m" path="res://Scenes/UI/MainMenu/Buttons/LoadGame.png" id="5_ft4yi"]
+[ext_resource type="Texture2D" uid="uid://bgmtelth7gron" path="res://Scenes/UI/MainMenu/Buttons/QuitGame.png" id="6_e3kl3"]
+[ext_resource type="Texture2D" uid="uid://clemiyeiue2pa" path="res://Scenes/UI/MainMenu/Credits.png" id="9_2j3nf"]
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu/file_manager.gd" id="11_mtcpa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j0cfe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s8pkj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x75ct"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q0dw1"]
 
 [node name="Menu" type="Control"]
 process_mode = 3
@@ -43,26 +50,48 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_fonts/font = ExtResource("3_38g6u")
-theme_override_font_sizes/font_size = 24
+theme_override_colors/icon_pressed_color = Color(0.431373, 1, 0.721569, 1)
+theme_override_colors/icon_hover_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_colors/icon_focus_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_j0cfe")
 icon = ExtResource("4_7sv3k")
 flat = true
 icon_alignment = 1
 
 [node name="LoadGameButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-icon = ExtResource("4_gival")
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/icon_pressed_color = Color(0.431373, 1, 0.721569, 1)
+theme_override_colors/icon_hover_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_colors/icon_focus_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.239216)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s8pkj")
+disabled = true
+icon = ExtResource("5_ft4yi")
 flat = true
 icon_alignment = 1
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/icon_pressed_color = Color(0.431373, 1, 0.721569, 1)
+theme_override_colors/icon_hover_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_colors/icon_focus_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x75ct")
 icon = ExtResource("5_do6qw")
 flat = true
 icon_alignment = 1
 
 [node name="QuitButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/icon_pressed_color = Color(0.431373, 1, 0.721569, 1)
+theme_override_colors/icon_hover_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_colors/icon_focus_color = Color(0.145098, 0.941176, 0.992157, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_q0dw1")
 icon = ExtResource("6_e3kl3")
 flat = true
 icon_alignment = 1

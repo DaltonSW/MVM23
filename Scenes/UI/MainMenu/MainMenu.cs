@@ -22,11 +22,7 @@ public partial class MainMenu : Control {
         _quitButton = GetNode<Button>("HBoxContainer/QuitButton");
         _closeCreditsButton = GetNode<Button>("CloseCreditsButton");
 
-        if (_fileManager.Call("does_save_file_exist").As<bool>())
-            _loadGameButton.Icon = _fileManager.Call("get_save_available_texture").As<Texture2D>();
-        else {
-            GD.Print("No save file found!");
-        }
+        _loadGameButton.Disabled = !_fileManager.Call("does_save_file_exist").As<bool>();
     }
 
     public override void _Process(double delta) {
