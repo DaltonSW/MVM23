@@ -64,7 +64,9 @@ public partial class Textbox : CanvasLayer {
     [Export] public string DialogueID = "sample";
 
     private GodotObject _game;
+    private GodotObject _fontHelper;
 
+    public bool UseGameObject = false;
     
 
     // Called when the node enters the scene tree for the first time.
@@ -86,18 +88,24 @@ public partial class Textbox : CanvasLayer {
         _endLabel.Visible = false;
         // _endLabel.LabelSettings.Font = ThemeConsts.BoldText;
         // _endLabel.LabelSettings.FontSize = ThemeConsts.RegularTextSize;
+    }
 
-        _game = GetNode<GodotObject>("/root/Game");
+    public void SetFontHelper(GodotObject helper) {
+        _fontHelper = helper;
         SetFonts();
     }
 
     public void SetFonts() {
-        ThemeConsts.RegularText = _game.Call("get_main_font").As<FontFile>();
-        ThemeConsts.CodeText = _game.Call("get_code_font").As<FontFile>();
+        ThemeConsts.RegularText = _fontHelper.Call("get_main_font").As<FontFile>();
+        ThemeConsts.CodeText = _fontHelper.Call("get_code_font").As<FontFile>();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
+        if (UseGameObject) {
+            _game = GetNode<GodotObject>("/root/Game");
+            SetFontHelper(_game);
+        }
         switch (_currentState) {
             case TextboxState.Empty:
                 Visible = false;

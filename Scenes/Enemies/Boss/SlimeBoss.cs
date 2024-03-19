@@ -232,6 +232,7 @@ public partial class SlimeBoss : CharacterBody2D, IHittable {
     private void SpawnTextbox(string dialogue) {
         var textbox = _textboxScene.Instantiate<Textbox>();
         textbox.DialogueID = dialogue;
+        textbox.UseGameObject = true;
         GetParent().AddChild(textbox);
         GetTree().Paused = true;
     }
