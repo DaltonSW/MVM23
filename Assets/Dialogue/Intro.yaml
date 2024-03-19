@@ -54,3 +54,10 @@ dialogues:
       - "Newly initiated recruits are to report to the main hall for a thorough physical examination followed by worship."
       - "The initiation schedule is tedious, but I won't let that deter me from the directive."
       - "Blend in and save god, recruit."
+  - name: "..."
+    paragraphs:
+      - "...?"
+      - "...?!"
+      - "...!!!!"
+      - "The floor beneath you shakes. You notice cracks forming. Horrible memories of a dark day fill you. And like that..."
+      - "Darkness."
