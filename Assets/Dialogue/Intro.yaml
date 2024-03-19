@@ -53,7 +53,7 @@ dialogues:
       - "Being discovered is detrimental to the objective."
       - "Newly initiated recruits are to report to the main hall for a thorough physical examination followed by worship."
       - "The initiation schedule is tedious, but I won't let that deter me from the directive."
-      - "Blend in and save god, recruit."
+      - "Blend in and save [god]god[/god], recruit."
   - name: "..."
     paragraphs:
       - "...?"
