@@ -324,7 +324,11 @@ public partial class Player : CharacterBody2D, IHittable {
 
     public void TakeDamage(int amount = 1) => _hitManager.TakeDamage(amount);
 
-    public void TakeHit(Vector2 initialKnockbackVelocity) => _hitManager.TakeHit(initialKnockbackVelocity);
+    public void TakeHit(Vector2 initialKnockbackVelocity)
+    {
+        Vector2 reducedKnockbackVelocity = initialKnockbackVelocity / 1.3f;
+        _hitManager.TakeHit(reducedKnockbackVelocity);
+    }
 
     public bool DeathQueued() => false; // Necessary to implement HitManager
 

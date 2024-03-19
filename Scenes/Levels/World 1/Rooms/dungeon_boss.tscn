@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://qoxft6p4yjm5"]
+[gd_scene load_steps=7 format=3 uid="uid://qoxft6p4yjm5"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_dnppg"]
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="2_xhhtj"]
 [ext_resource type="PackedScene" uid="uid://d4c3b4l58cefj" path="res://Scenes/Enemies/Boss/slime_boss.tscn" id="3_kj4f6"]
 [ext_resource type="PackedScene" uid="uid://bp2m8h76moghn" path="res://Scenes/Levels/World Objects/Door & Lever/door.tscn" id="4_3w84k"]
 [ext_resource type="Texture2D" uid="uid://wjqfe37hxxsv" path="res://Scenes/Levels/World Objects/Door & Lever/w1Door.png" id="5_x87tq"]
+[ext_resource type="PackedScene" uid="uid://btibtwbmjrcvf" path="res://Scenes/Levels/World 1/Blue Background.tscn" id="6_iwkdp"]
 
 [node name="DungeonBoss" type="Node2D"]
 
@@ -37,3 +38,5 @@ ObjectID = "Boss1Exit"
 position = Vector2(-10.5263, 1.04606e-05)
 scale = Vector2(0.75188, 0.758459)
 texture = ExtResource("5_x87tq")
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("6_iwkdp")]
