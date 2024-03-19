@@ -48,12 +48,12 @@ func play_world_music():
         else:
             $AudioManager.play_music("W1")
     elif "World 2" in current_room_name:
-        if "Boss" in current_room_name:
+        if "roof" in current_room_name:
             $AudioManager.play_music("W2_Boss")
         else:
             $AudioManager.play_music("W2")
     elif "Virtual" in current_room_name:
-        if "Boss" in current_room_name:
+        if "Map24" in current_room_name:
             $AudioManager.play_music("W3_Boss")
         else:
             $AudioManager.play_music("W3")
