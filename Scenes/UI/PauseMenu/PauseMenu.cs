@@ -13,8 +13,8 @@ public partial class PauseMenu : Sprite2D {
     public override void _Ready() {
         GetTree().Paused = true;
         
-        _resumeButton = GetNode<Button>("VBoxContainer/ResumeButton");
-        _mainMenuButton = GetNode<Button>("VBoxContainer/MainMenuButton");
+        _resumeButton = GetNode<Button>("ResumeButton");
+        _mainMenuButton = GetNode<Button>("MainMenuButton");
     }
 
     public override void _Process(double delta) {
@@ -35,6 +35,7 @@ public partial class PauseMenu : Sprite2D {
     }
     
     private void _on_MainMenuButton_pressed() {
+        GetTree().Paused = false;
         GetTree().ChangeSceneToFile("res://Scenes/UI/MainMenu/MainMenu.tscn");
     }
 }
