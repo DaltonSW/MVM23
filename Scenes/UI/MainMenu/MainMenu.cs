@@ -32,7 +32,7 @@ public partial class MainMenu : Control {
     private void _on_NewGameButton_pressed() {
         if (_fileManager.Call("does_save_file_exist").As<bool>())
             _fileManager.Call("delete_save_file");
-        GetTree().ChangeSceneToFile("res://Scenes/Levels/Game.tscn");
+        GetTree().ChangeSceneToFile("res://Scenes/UI/Intro/Intro.tscn");
     }
     
     private void _on_LoadGameButton_pressed() {
