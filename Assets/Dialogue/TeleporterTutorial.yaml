@@ -1,7 +1,7 @@
 ---
 description: Teleporter Tutorial
 dialogues: 
-    - name: 
+    - name: The System
       paragraphs: 
         - "[system]This looks like a teleporter![/system]"
         - "[system]By using it, you can transport yourself to the virtual world. Walk up to it and press E to use it.[/system]"
