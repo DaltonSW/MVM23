@@ -327,7 +327,6 @@ public partial class Player : CharacterBody2D, IHittable {
     public void TakeHit(Vector2 initialKnockbackVelocity)
     {
         Vector2 reducedKnockbackVelocity = initialKnockbackVelocity / 1.3f;
-        GD.Print("Initial Knockback Velocity: ", reducedKnockbackVelocity);
         _hitManager.TakeHit(reducedKnockbackVelocity);
     }
 
