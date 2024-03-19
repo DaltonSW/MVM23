@@ -29,6 +29,7 @@ public partial class PauseMenu : Sprite2D {
 
         if (Input.IsActionJustPressed("pause")) {
             GetTree().Paused = false;
+            _game.Call("play_world_music");
             QueueFree();
         }
     }
