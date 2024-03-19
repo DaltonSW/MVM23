@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c6lh5ra6aepd8"]
+[gd_scene load_steps=6 format=3 uid="uid://c6lh5ra6aepd8"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_7nurq"]
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="2_jrwlt"]
 [ext_resource type="PackedScene" uid="uid://bxmn2bkeaqomj" path="res://Scenes/Enemies/RandomFlyer.tscn" id="3_y7itm"]
 [ext_resource type="PackedScene" uid="uid://l1pht3bvo7gc" path="res://Scenes/Enemies/ConeWalker.tscn" id="4_mjbaj"]
+[ext_resource type="PackedScene" uid="uid://btibtwbmjrcvf" path="res://Scenes/Levels/World 1/Blue Background.tscn" id="5_ypwke"]
 
 [node name="DungeonLongLower" type="Node2D"]
 
@@ -19,3 +20,5 @@ position = Vector2(260, 165)
 
 [node name="ConeWalker" parent="." instance=ExtResource("4_mjbaj")]
 position = Vector2(703, 323)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("5_ypwke")]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bim61vo7dskjt"]
+[gd_scene load_steps=6 format=3 uid="uid://bim61vo7dskjt"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_6hd5r"]
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="2_0sdhj"]
 [ext_resource type="PackedScene" uid="uid://cpn4gpvmfivah" path="res://Scenes/Levels/World Objects/Ability Unlock/ability_unlock.tscn" id="3_d5oig"]
 [ext_resource type="Texture2D" uid="uid://boi455e8i5ghv" path="res://Scenes/Abilities/key/key.png" id="4_ag288"]
+[ext_resource type="PackedScene" uid="uid://btibtwbmjrcvf" path="res://Scenes/Levels/World 1/Blue Background.tscn" id="5_70u6j"]
 
 [node name="DungeonTreasure" type="Node2D"]
 
@@ -20,3 +21,5 @@ _myUnlock = "KeyToWorldTwo"
 
 [node name="Sprite2D" type="Sprite2D" parent="AbilityUnlock"]
 texture = ExtResource("4_ag288")
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("5_70u6j")]

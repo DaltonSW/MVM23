@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cujxkbclm0mgm"]
+[gd_scene load_steps=5 format=3 uid="uid://cujxkbclm0mgm"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_bruxh"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_m2vju"]
 [ext_resource type="PackedScene" uid="uid://calvd3fseh7l4" path="res://Scenes/Levels/World Objects/Health Upgrade/health_upgrade.tscn" id="3_42rs8"]
+[ext_resource type="PackedScene" uid="uid://dnhi8aa2175t3" path="res://Scenes/Levels/World 1/Gray Background.tscn" id="4_de84p"]
 
 [node name="LongFall" type="Node2D"]
 
@@ -16,3 +17,5 @@ layer_0/tile_data = PackedInt32Array(5963815, 65536, 12, 5898279, 65536, 12, 583
 [node name="HealthUpgrade" parent="." instance=ExtResource("3_42rs8")]
 position = Vector2(175, 157)
 HealthUpgradeID = "Health6"
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("4_de84p")]

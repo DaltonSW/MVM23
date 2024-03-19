@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://btibtwbmjrcvf"]
+
+[ext_resource type="Texture2D" uid="uid://15xvjurberbg" path="res://Scenes/Levels/World 1/blue.png" id="1_pdpgv"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 0.5)
+motion_mirroring = Vector2(640, 320)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+texture = ExtResource("1_pdpgv")
+centered = false

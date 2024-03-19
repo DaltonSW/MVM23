@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b70x8il7g8ote"]
+[gd_scene load_steps=7 format=3 uid="uid://b70x8il7g8ote"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_c53sw"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_30ktn"]
 [ext_resource type="PackedScene" uid="uid://bxmn2bkeaqomj" path="res://Scenes/Enemies/RandomFlyer.tscn" id="3_2dw1h"]
 [ext_resource type="PackedScene" uid="uid://db88ko1qw0fn" path="res://Scenes/Levels/World Objects/Pits/pit.tscn" id="4_k4br2"]
+[ext_resource type="PackedScene" uid="uid://dnhi8aa2175t3" path="res://Scenes/Levels/World 1/Gray Background.tscn" id="5_xo6d6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmbdt"]
 size = Vector2(542, 58)
@@ -32,3 +33,5 @@ AssociatedRespawn = "1"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pit"]
 position = Vector2(75, 13)
 shape = SubResource("RectangleShape2D_pmbdt")
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("5_xo6d6")]

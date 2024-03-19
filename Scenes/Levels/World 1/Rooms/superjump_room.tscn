@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnoj6gbui7kiw"]
+[gd_scene load_steps=6 format=3 uid="uid://cnoj6gbui7kiw"]
 
 [ext_resource type="TileSet" uid="uid://bystn4ufm61lg" path="res://Scenes/Levels/World 1/World 1 Tileset.tres" id="1_mdodg"]
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="2_wnrom"]
 [ext_resource type="PackedScene" uid="uid://cpn4gpvmfivah" path="res://Scenes/Levels/World Objects/Ability Unlock/ability_unlock.tscn" id="3_kot2d"]
 [ext_resource type="Texture2D" uid="uid://b0roxy8mha3f0" path="res://Scenes/Abilities/super_jump/super_jump.png" id="4_0qn7k"]
+[ext_resource type="PackedScene" uid="uid://dnhi8aa2175t3" path="res://Scenes/Levels/World 1/Gray Background.tscn" id="5_j1e40"]
 
 [node name="SuperjumpRoom" type="Node2D"]
 
@@ -20,3 +21,5 @@ _myUnlock = "SuperJump"
 
 [node name="Sprite2D" type="Sprite2D" parent="AbilityUnlock"]
 texture = ExtResource("4_0qn7k")
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("5_j1e40")]
