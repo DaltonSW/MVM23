@@ -389,7 +389,7 @@
 [3,-3,0]
 0,1,-1,-1|abded1,4f819c,4f819c,,||Scenes/Levels/World 2/Rooms/skyscraper_one.tscn
 [2,-6,0]
--1,-1,1,1|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_core.tscn
+-1,-1,1,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_core.tscn
 [2,-5,0]
 -1,0,1,-1|abded1,,4f819c,4f819c,||Scenes/Levels/World 2/Rooms/skyscraper_one_core.tscn
 [3,-6,0]
@@ -449,7 +449,7 @@
 [-1,-8,0]
 -1,-1,0,0|abded1,,,4f819c,4f819c||Scenes/Levels/World 2/Rooms/large_gap_upper.tscn
 [2,-7,0]
--1,1,1,0|cba3ec,,4f819c,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn
+-1,0,1,0|cba3ec,,4f819c,4f819c,4f819c||Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn
 [3,-7,0]
 0,0,-1,1|cba3ec,4f819c,4f819c,,4f819c|4|Scenes/Levels/World 2/Rooms/skyscraper_one_lab.tscn
 [2,-9,0]
