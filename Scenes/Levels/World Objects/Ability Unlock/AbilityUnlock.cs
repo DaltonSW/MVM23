@@ -49,6 +49,7 @@ public partial class AbilityUnlock : Area2D
     private void SpawnTextbox() {
         var textbox = _textboxScene.Instantiate<Textbox>();
         textbox.DialogueID = _myUnlock;
+        textbox.UseGameObject = true;
         GetParent().AddChild(textbox);
         GetTree().Paused = true;
     }

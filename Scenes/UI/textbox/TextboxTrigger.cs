@@ -37,6 +37,7 @@ public partial class TextboxTrigger : Area2D {
     private void SpawnTextbox() {
         var textbox = _textboxScene.Instantiate<Textbox>();
         textbox.DialogueID = TextboxID;
+        textbox.UseGameObject = true;
         GetParent().AddChild(textbox);
         GetTree().Paused = true;
     }

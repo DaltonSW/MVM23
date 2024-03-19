@@ -19,7 +19,7 @@ public partial class Teleporter : Area2D
     public override void _Ready() {
         _player = GetNode<Player>("/root/Game/Player");
         _worldStateManager = GetNode<WorldStateManager>("/root/Game/WSM");
-        //_game = GetNode<GodotObject>("/root/Game");
+        _game = GetNode<GodotObject>("/root/Game");
         _indicator = GetNode<AnimatedSprite2D>("Indicator");
     }
 
@@ -39,6 +39,6 @@ public partial class Teleporter : Area2D
 
         _indicator.Frame = 0;
         _indicator.Stop();
-        //_game.Call("teleport_player", _sceneToLoad, _teleportPosition);
+        _game.Call("teleport_player", _sceneToLoad, _teleportPosition);
     }
 }
